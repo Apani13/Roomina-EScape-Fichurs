@@ -7,7 +7,6 @@ public class Room {
     private int level;
     private double price;
 
-
     public Room(String name, String theme, int level) {
         this.name = name;
         this.theme = theme;
@@ -19,31 +18,28 @@ public class Room {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getTheme() {
         return theme;
-    }
-
-    public void setTheme(String theme) {
-        this.theme = theme;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Room that = (Room) o;
+        return name != null && name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
     }
 }
