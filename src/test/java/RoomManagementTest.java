@@ -5,17 +5,15 @@ import cat.itcademy.services.RoomManagement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.naming.InvalidNameException;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RommManagementTest {
+public class RoomManagementTest {
 
     private RoomManagement roomManagement;
 
     @BeforeEach
-    void setUp() throws DuplicateRoomException, InvalidRoomAtributeException {
+    void setUp() {
         roomManagement = new RoomManagement();
     }
 
