@@ -1,8 +1,8 @@
 
 package cat.itcademy.services;
 
-import cat.itcademy.exceptions.DuplicateRoomException;
-import cat.itcademy.exceptions.InvalidRoomAtributeException;
+import cat.itcademy.exceptions.room.DuplicateRoomException;
+import cat.itcademy.exceptions.room.InvalidRoomAtributeException;
 import cat.itcademy.models.Room;
 
 import java.util.ArrayList;

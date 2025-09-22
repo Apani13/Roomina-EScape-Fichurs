@@ -1,5 +1,5 @@
-import cat.itcademy.exceptions.DuplicateRoomException;
-import cat.itcademy.exceptions.InvalidRoomAtributeException;
+import cat.itcademy.exceptions.room.DuplicateRoomException;
+import cat.itcademy.exceptions.room.InvalidRoomAtributeException;
 import cat.itcademy.models.Room;
 import cat.itcademy.services.RoomManagement;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ public class RoomManagementTest {
     }
 
     @Test
-    public void whenCreatedRoomWithEmptyAtributes_thenInvalidNameExceptionIsThrown() throws InvalidRoomAtributeException {
+    public void whenCreatedRoomWithEmptyAtributes_thenInvalidNameExceptionIsThrown() {
 
         Room roomWithEmptyName = new Room("", "Terror", 2);
         Room roomWithNullTheme = new Room("Chuky", null, 2);
