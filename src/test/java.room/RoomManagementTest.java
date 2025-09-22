@@ -38,7 +38,7 @@ public class RoomManagementTest {
     }
 
     @Test
-    public void whenCreatedRoomIfAlreadyExists_thenDuplicatedRoomExceptionIsThrown() throws InvalidRoomAtributeException {
+    public void whenCreatedRoomIfAlreadyExists_thenDuplicatedRoomExceptionIsThrown() {
         Room room1 = new Room("Chucky", "Terror", 2);
         Room room2 = new Room("Chucky", "Terror", 2);
 
