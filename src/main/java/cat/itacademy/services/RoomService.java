@@ -1,9 +1,10 @@
 
-package cat.itcademy.services;
+package cat.itacademy.services;
 
-import cat.itcademy.exceptions.room.DuplicateRoomException;
-import cat.itcademy.exceptions.room.InvalidRoomAtributeException;
-import cat.itcademy.models.Room;
+import cat.itacademy.exceptions.room.DuplicateRoomException;
+import cat.itacademy.exceptions.room.InvalidRoomAtributeException;
+import cat.itacademy.models.Room;
+import cat.itacademy.utils.ErrorMessages;
 
 import java.util.ArrayList;
 
@@ -17,20 +18,21 @@ public class RoomService {
 
     public void addRoom(Room room) throws InvalidRoomAtributeException, DuplicateRoomException {
         if (rooms.contains(room))  {
-            throw new DuplicateRoomException("La sala ha ya existe.");
+            throw new DuplicateRoomException(ErrorMessages.ROOM_DUPLICATED);
         }
 
         if (room.getName() == null || room.getName().isEmpty()) {
-            throw new InvalidRoomAtributeException("El nombre de la sala está vacío o es nulo");
+            throw new InvalidRoomAtributeException(ErrorMessages.ROOM_NAME_NULL_EMPTY);
         }
 
         if (room.getTheme() == null || room.getTheme().isEmpty()) {
-            throw new InvalidRoomAtributeException("El tema de la sala está vacío o es nulo");
+            throw new InvalidRoomAtributeException(ErrorMessages.ROOM_THEME_NULL_EMPTY);
         }
 
         if (room.getLevel() == 0 || room.getLevel() < 0 ) {
-            throw new InvalidRoomAtributeException("La sala tiene un nivel invalido.");
+            throw new InvalidRoomAtributeException(ErrorMessages.ROOM_LEVEL_INVALID);
         }
+
         rooms.add(room);
         System.out.println("The room " + room.getName() + " was created succesfully");
     }

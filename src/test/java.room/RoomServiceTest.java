@@ -1,7 +1,7 @@
-import cat.itcademy.exceptions.room.DuplicateRoomException;
-import cat.itcademy.exceptions.room.InvalidRoomAtributeException;
-import cat.itcademy.models.Room;
-import cat.itcademy.services.RoomService;
+import cat.itacademy.exceptions.room.DuplicateRoomException;
+import cat.itacademy.exceptions.room.InvalidRoomAtributeException;
+import cat.itacademy.models.Room;
+import cat.itacademy.services.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
