@@ -1,20 +1,20 @@
 import cat.itcademy.exceptions.room.DuplicateRoomException;
 import cat.itcademy.exceptions.room.InvalidRoomAtributeException;
 import cat.itcademy.models.Room;
-import cat.itcademy.services.RoomManagement;
+import cat.itcademy.services.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RoomManagementTest {
+public class RoomServiceTest {
 
-    private RoomManagement roomManagement;
+    private RoomService roomService;
 
     @BeforeEach
     void setUp() {
-        roomManagement = new RoomManagement();
+        roomService = new RoomService();
     }
 
     @Test
@@ -26,13 +26,13 @@ public class RoomManagementTest {
 
         assertAll("Probando que se lanzan las excepciones correctamente:",
                 () -> assertThrows(InvalidRoomAtributeException.class,
-                        () -> roomManagement.addRoom(roomWithEmptyName),
+                        () -> roomService.addRoom(roomWithEmptyName),
                         "Debería lanzar excepción InvalidAtributeException"),
                 () -> assertThrows(InvalidRoomAtributeException.class,
-                        () -> roomManagement.addRoom(roomWithNullTheme),
+                        () -> roomService.addRoom(roomWithNullTheme),
                         "Debería lanzar excepción InvalidAtributeException"),
                 () -> assertThrows(InvalidRoomAtributeException.class,
-                        () -> roomManagement.addRoom(roomWithInvalidLevel),
+                        () -> roomService.addRoom(roomWithInvalidLevel),
                         "Debería lanzar excepción InvalidAtributeException")
         );
     }
@@ -42,8 +42,8 @@ public class RoomManagementTest {
         Room room1 = new Room("Chucky", "Terror", 2);
         Room room2 = new Room("Chucky", "Terror", 2);
 
-        roomManagement.addRoom(room1);
-        assertThrows(DuplicateRoomException.class, () -> roomManagement.addRoom(room2));
+        roomService.addRoom(room1);
+        assertThrows(DuplicateRoomException.class, () -> roomService.addRoom(room2));
     }
 }
 

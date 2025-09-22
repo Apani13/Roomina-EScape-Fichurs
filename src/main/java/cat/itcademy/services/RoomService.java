@@ -7,11 +7,11 @@ import cat.itcademy.models.Room;
 
 import java.util.ArrayList;
 
-public class RoomManagement {
+public class RoomService {
 
     ArrayList<Room> rooms;
 
-    public RoomManagement () {
+    public RoomService() {
         this.rooms = new ArrayList<>();
     }
 
