@@ -1,8 +1,8 @@
 package cat.itacademy.utils;
 
-public class ErrorMessages {
+public class RoomErrorMessages {
 
-    private ErrorMessages() {
+    private RoomErrorMessages() {
     }
 
     public static final String ROOM_DUPLICATED = "La sala ya existe.";

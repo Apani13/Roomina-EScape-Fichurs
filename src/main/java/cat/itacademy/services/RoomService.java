@@ -1,10 +1,10 @@
 
 package cat.itacademy.services;
 
-import cat.itacademy.exceptions.room.DuplicateRoomException;
-import cat.itacademy.exceptions.room.InvalidRoomAtributeException;
+import cat.itacademy.exceptions.DuplicateException;
+import cat.itacademy.exceptions.InvalidAtributeException;
 import cat.itacademy.models.Room;
-import cat.itacademy.utils.ErrorMessages;
+import cat.itacademy.utils.RoomErrorMessages;
 
 import java.util.ArrayList;
 
@@ -16,21 +16,21 @@ public class RoomService {
         this.rooms = new ArrayList<>();
     }
 
-    public void addRoom(Room room) throws InvalidRoomAtributeException, DuplicateRoomException {
+    public void addRoom(Room room) throws InvalidAtributeException, DuplicateException {
         if (rooms.contains(room))  {
-            throw new DuplicateRoomException(ErrorMessages.ROOM_DUPLICATED);
+            throw new DuplicateException(RoomErrorMessages.ROOM_DUPLICATED);
         }
 
         if (room.getName() == null || room.getName().isEmpty()) {
-            throw new InvalidRoomAtributeException(ErrorMessages.ROOM_NAME_NULL_EMPTY);
+            throw new InvalidAtributeException(RoomErrorMessages.ROOM_NAME_NULL_EMPTY);
         }
 
         if (room.getTheme() == null || room.getTheme().isEmpty()) {
-            throw new InvalidRoomAtributeException(ErrorMessages.ROOM_THEME_NULL_EMPTY);
+            throw new InvalidAtributeException(RoomErrorMessages.ROOM_THEME_NULL_EMPTY);
         }
 
         if (room.getLevel() == 0 || room.getLevel() < 0 ) {
-            throw new InvalidRoomAtributeException(ErrorMessages.ROOM_LEVEL_INVALID);
+            throw new InvalidAtributeException(RoomErrorMessages.ROOM_LEVEL_INVALID);
         }
 
         rooms.add(room);
