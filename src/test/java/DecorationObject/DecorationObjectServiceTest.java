@@ -1,5 +1,6 @@
 package DecorationObject;
 
+import cat.itcademy.exceptions.DuplicateException;
 import cat.itcademy.exceptions.InvalidAtributeException;
 import cat.itcademy.models.DecorationObject;
 import cat.itcademy.services.DecorationObjectService;
@@ -32,5 +33,15 @@ public class DecorationObjectServiceTest {
             () -> assertThrows(InvalidAtributeException.class,
                     () -> decorationObjectService.addDecorationObject(objectWithInvalidQuantity)));
         }
+
+
+    @Test
+    public void whenCreatedADecorationObjectAlreadyExists_thenThrownDuplicatedException() {
+        DecorationObject decorationObject = new DecorationObject("Lámpara", "Plástico", 10);
+        DecorationObject decorationObject1 = new DecorationObject("Lámpara", "Plástico", 10);
+
+        decorationObjectService.addDecorationObject(decorationObject);
+        assertThrows(DuplicateException.class, () -> decorationObjectService.addDecorationObject(decorationObject1));
+    }
 }
 

@@ -20,7 +20,6 @@ public class DecorationObjectService {
         if (decorationObjects.contains(decorationObject)) {
             throw new DuplicateException(ObjectErrorMessages.OBJECT_DUPLICATED);
         }
-
         if (decorationObject.getName() == null || decorationObject.getName().isEmpty()) {
             throw new InvalidAtributeException(ObjectErrorMessages.OBJECT_NAME_NULL_EMPTY);
         }
@@ -30,5 +29,9 @@ public class DecorationObjectService {
         if (decorationObject.getQuantity() < 0) {
             throw new InvalidAtributeException(ObjectErrorMessages.OBJECT_QUANTITY_INVALID);
         }
+
+        decorationObjects.add(decorationObject);
+        System.out.println("The decoration object: " + decorationObject.getName() + " se ha creado" +
+                "correctamente.");
     }
 }
