@@ -1,9 +1,9 @@
 package DecorationObject;
 
-import cat.itcademy.exceptions.DuplicateException;
-import cat.itcademy.exceptions.InvalidAttributeException;
-import cat.itcademy.models.DecorationObject;
-import cat.itcademy.services.DecorationObjectService;
+import cat.itacademy.exceptions.DuplicateException;
+import cat.itacademy.exceptions.InvalidAttributeException;
+import cat.itacademy.models.DecorationObject;
+import cat.itacademy.services.DecorationObjectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,6 @@
 package DecorationObject;
 
-import cat.itcademy.models.DecorationObject;
+import cat.itacademy.models.DecorationObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
