@@ -1,9 +1,9 @@
+import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Clue;
 import cat.itacademy.services.ClueManagement;
 import cat.itacademy.exceptions.DuplicateClueException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ClueManagementTest {
 
     private ClueManagement management;
+    private static final double EPS = 1e-9;
 
     @BeforeEach
     void setUp() {
@@ -22,7 +23,7 @@ public class ClueManagementTest {
         return new Clue(
                 name,
                 "puzzle",
-                "Seems like the colors follow a pattern...",
+                "Parece que las manchas siguen un patrón...",
                 10.45
         );
     }
@@ -33,33 +34,36 @@ public class ClueManagementTest {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        try {
-            Clue clue = new Clue(
-                    "Grandma's Portrait",
-                    "Photo",
-                    "This photo has something written in the back...",
-                    3.95
-            );
-            management.addClue(clue);
+            management.addClue(newValidClue("Sangre en la pared"));
 
-        } finally {
-            System.setOut(originalOut); // Capturamos System.out y usamos try/finally para restaurarlo SIEMPRE,
-                                        // incluso si addClue lanza una excepción. Así evitamos dejar la salida
-                                        // estándar redirigida y provocar efectos secundarios en otros tests.
-        }
-
-        assertEquals("The clue 'Grandma's Portrait' has been successfully added!",
+        assertEquals("La pista 'Sangre en la pared' se ha añadido correctamente!",
                 outContent.toString().trim());
     }
 
 
     @Test
     void whenAddingDuplicateName_thenThrowsDuplicateClueException() {
-        management.addClue(newValidClue("Grandma's Portrait"));
+        management.addClue(newValidClue("Sangre en la pared"));
 
         assertThrows(DuplicateClueException.class,
-                () -> management.addClue(newValidClue("Grandma's Portrait")),
-                "A clue with this name already exists");
+                () -> management.addClue(newValidClue("Sangre en la pared")),
+                "Ya existe una pista con este nombre...");
     }
+
+    @Test
+    void whenPriceIsNegative_thenInvalidAttributeExceptionIsThrown() {
+
+    }
+
+    @Test
+    void whenNameIsBlank_thenInvalidAttributeExceptionIsThrown() {
+        assertThrows(InvalidAttributeException.class,
+                () -> new Clue("   ", "carta", "Lorem ipsum...", 1.55),
+                "The clue is null or empty");
+
+
+    }
+
+
 
 }

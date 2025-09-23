@@ -1,7 +1,7 @@
 package cat.itacademy.exceptions;
 
-public class InvalidTextException extends RuntimeException {
-    public InvalidTextException(String message) {
+public class InvalidAttributeException extends RuntimeException {
+    public InvalidAttributeException(String message) {
         super(message);
     }
 }
