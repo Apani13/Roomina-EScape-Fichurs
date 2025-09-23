@@ -1,7 +1,7 @@
 package DecorationObject;
 
 import cat.itcademy.exceptions.DuplicateException;
-import cat.itcademy.exceptions.InvalidAtributeException;
+import cat.itcademy.exceptions.InvalidAttributeException;
 import cat.itcademy.models.DecorationObject;
 import cat.itcademy.services.DecorationObjectService;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,11 +26,11 @@ public class DecorationObjectServiceTest {
         DecorationObject objectWithInvalidQuantity = new DecorationObject("Candle", "Plastic", -1);
 
         assertAll("Probando que se lanzan las excepciones correctamente",
-            () -> assertThrows(InvalidAtributeException.class,
+            () -> assertThrows(InvalidAttributeException.class,
                     () -> decorationObjectService.addDecorationObject(objectWithNoName)),
-            () -> assertThrows(InvalidAtributeException.class,
+            () -> assertThrows(InvalidAttributeException.class,
                     () -> decorationObjectService.addDecorationObject(objectWithNoMaterial)),
-            () -> assertThrows(InvalidAtributeException.class,
+            () -> assertThrows(InvalidAttributeException.class,
                     () -> decorationObjectService.addDecorationObject(objectWithInvalidQuantity)));
         }
 

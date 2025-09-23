@@ -1,9 +1,10 @@
 package cat.itcademy.services;
 
 import cat.itcademy.exceptions.DuplicateException;
-import cat.itcademy.exceptions.InvalidAtributeException;
+import cat.itcademy.exceptions.InvalidAttributeException;
 import cat.itcademy.models.DecorationObject;
 import cat.itcademy.utils.ObjectErrorMessages;
+import cat.itcademy.utils.ObjectSuccessMessages;
 
 import java.util.ArrayList;
 
@@ -21,17 +22,16 @@ public class DecorationObjectService {
             throw new DuplicateException(ObjectErrorMessages.OBJECT_DUPLICATED);
         }
         if (decorationObject.getName() == null || decorationObject.getName().isEmpty()) {
-            throw new InvalidAtributeException(ObjectErrorMessages.OBJECT_NAME_NULL_EMPTY);
+            throw new InvalidAttributeException(ObjectErrorMessages.OBJECT_NAME_NULL_EMPTY);
         }
         if (decorationObject.getMaterial() == null || decorationObject.getMaterial().isEmpty()) {
-            throw new InvalidAtributeException(ObjectErrorMessages.OBJECT_MATERIAL_NULL_EMPTY);
+            throw new InvalidAttributeException(ObjectErrorMessages.OBJECT_MATERIAL_NULL_EMPTY);
         }
         if (decorationObject.getQuantity() < 0) {
-            throw new InvalidAtributeException(ObjectErrorMessages.OBJECT_QUANTITY_INVALID);
+            throw new InvalidAttributeException(ObjectErrorMessages.OBJECT_QUANTITY_INVALID);
         }
 
         decorationObjects.add(decorationObject);
-        System.out.println("The decoration object: " + decorationObject.getName() + " se ha creado" +
-                "correctamente.");
+        System.out.println(ObjectSuccessMessages.OBJECT_SUCCES);
     }
 }
