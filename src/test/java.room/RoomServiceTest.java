@@ -1,5 +1,5 @@
 import cat.itacademy.exceptions.DuplicateException;
-import cat.itacademy.exceptions.InvalidAtributeException;
+import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Room;
 import cat.itacademy.services.RoomService;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,13 +25,13 @@ public class RoomServiceTest {
         Room roomWithInvalidLevel = new Room("Chuky", "Terror", 0);
 
         assertAll("Probando que se lanzan las excepciones correctamente:",
-                () -> assertThrows(InvalidAtributeException.class,
+                () -> assertThrows(InvalidAttributeException.class,
                         () -> roomService.addRoom(roomWithEmptyName),
                         "Debería lanzar excepción InvalidAtributeException"),
-                () -> assertThrows(InvalidAtributeException.class,
+                () -> assertThrows(InvalidAttributeException.class,
                         () -> roomService.addRoom(roomWithNullTheme),
                         "Debería lanzar excepción InvalidAtributeException"),
-                () -> assertThrows(InvalidAtributeException.class,
+                () -> assertThrows(InvalidAttributeException.class,
                         () -> roomService.addRoom(roomWithInvalidLevel),
                         "Debería lanzar excepción InvalidAtributeException")
         );
