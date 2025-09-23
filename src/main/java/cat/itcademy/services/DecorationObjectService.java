@@ -27,7 +27,7 @@ public class DecorationObjectService {
         if (decorationObject.getMaterial() == null || decorationObject.getMaterial().isEmpty()) {
             throw new InvalidAttributeException(ObjectErrorMessages.OBJECT_MATERIAL_NULL_EMPTY);
         }
-        if (decorationObject.getQuantity() < 0) {
+        if (decorationObject.getQuantity() >= 0) {
             throw new InvalidAttributeException(ObjectErrorMessages.OBJECT_QUANTITY_INVALID);
         }
 
