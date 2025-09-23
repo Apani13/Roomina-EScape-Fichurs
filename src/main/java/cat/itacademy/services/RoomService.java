@@ -5,6 +5,7 @@ import cat.itacademy.exceptions.DuplicateException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Room;
 import cat.itacademy.utils.RoomErrorMessages;
+import cat.itacademy.utils.RoomSuccessMessages;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,6 @@ public class RoomService {
         }
 
         rooms.add(room);
-        System.out.println();
+        System.out.println(RoomSuccessMessages.ROOM_CREATED);
     }
 }

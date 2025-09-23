@@ -1,8 +1,8 @@
 package cat.itacademy.utils;
 
-public class RoomSuccesMessages {
+public class RoomSuccessMessages {
 
-    private RoomSuccesMessages() {
+    private RoomSuccessMessages() {
     }
 
     public static final String ROOM_CREATED =  "la sala ha sido creada correctamente!";
