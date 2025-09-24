@@ -1,11 +1,14 @@
 package cat.itacademy.services;
 
-import cat.itacademy.exceptions.DuplicateException;
-import cat.itacademy.exceptions.InvalidAttributeException;
+import cat.itacademy.exceptions.*;
+
 import cat.itacademy.models.Clue;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static cat.itacademy.utils.ClueErrorMessages.*;
+import static cat.itacademy.utils.ClueSuccessMessages.*;
 
 public class ClueService {
 
@@ -16,25 +19,31 @@ public class ClueService {
     }
 
     public void addClue(Clue clue) throws DuplicateException, InvalidAttributeException {
-        if (clue.getPrice() == Double.NaN) {
-            throw new InvalidAttributeException("Price has to be a number");
+        if (clue == null) {
+            throw new InvalidAttributeException("Clue cannot be null");
         }
 
-        if (clue.getPrice() <= 0) {
-            throw new InvalidAttributeException("Price has to be greater than 0");
+        double price = clue.getPrice();
+        if (Double.isNaN(price) || price <= 0) {
+            throw new InvalidAttributeException(CLUE_PRICE_INVALID);
         }
 
-        if (clue.getName().isEmpty() || clue.getName().equals(null)) {
-            throw new InvalidAttributeException("The Name of the clue is null or empty");
+        String name = clue.getName();
+        if (name == null || name.isBlank()) {
+            throw new InvalidAttributeException(CLUE_NAME_NULL_EMPTY);
+        }
+
+        String description = clue.getDescription();
+        if (description == null || description.isBlank()) {
+            throw new InvalidAttributeException(CLUE_DESC_NULL_EMPTY);
         }
 
         if (clues.contains(clue)) {
-            throw new DuplicateException("Ya existe una pista con este nombre...");
+            throw new DuplicateException(CLUE_DUPLICATED);
         }
 
-       clues.add(clue);
-
-        System.out.println("La pista '" + clue.getName() + "' se ha creado correctamente!");
+        clues.add(clue);
+        System.out.println(CLUE_CREATED);
     }
 
 }
