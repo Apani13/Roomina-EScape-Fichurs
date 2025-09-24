@@ -1,40 +1,37 @@
 package cat.itacademy.models;
 
-public class Room {
+public class DecorationObject {
 
     private String name;
-    private String theme;
-    private int level;
+    private String material;
     private double price;
+    private long quantity;
 
-    public Room(String name, String theme, int level) {
+    public DecorationObject(String name, String material, long quantity) {
         this.name = name;
-        this.theme = theme;
-        this.level = level;
-        this.price = 25.0;
+        this.material = material;
+        this.quantity = quantity;
+        this.price = 5;
+
     }
 
     public String getName() {
         return name;
     }
 
-    public String getTheme() {
-        return theme;
+    public String getMaterial() {
+        return material;
     }
 
-    public int getLevel() {
-        return level;
-    }
-
-    public double getPrice() {
-        return price;
+    public long getQuantity() {
+        return quantity;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Room that = (Room) o;
+        DecorationObject that = (DecorationObject) o;
         return name != null && name.equals(that.name);
     }
 
@@ -43,3 +40,5 @@ public class Room {
         return name != null ? name.hashCode() : 0;
     }
 }
+
+
