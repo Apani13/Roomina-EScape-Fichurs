@@ -1,21 +1,21 @@
 package cat.itacademy.services;
 
-import cat.itacademy.exceptions.DuplicateClueException;
+import cat.itacademy.exceptions.DuplicateException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Clue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClueManagement {
+public class ClueService {
 
     private List<Clue> clues;
 
-    public ClueManagement() {
+    public ClueService() {
         this.clues = new ArrayList<>();
     }
 
-    public void addClue(Clue clue) throws DuplicateClueException, InvalidAttributeException {
+    public void addClue(Clue clue) throws DuplicateException, InvalidAttributeException {
         if (clue.getPrice() == Double.NaN) {
             throw new InvalidAttributeException("Price has to be a number");
         }
@@ -29,7 +29,7 @@ public class ClueManagement {
         }
 
         if (clues.contains(clue)) {
-            throw new DuplicateClueException("Ya existe una pista con este nombre...");
+            throw new DuplicateException("Ya existe una pista con este nombre...");
         }
 
        clues.add(clue);

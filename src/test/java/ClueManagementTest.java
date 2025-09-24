@@ -1,7 +1,7 @@
+import cat.itacademy.exceptions.DuplicateException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Clue;
-import cat.itacademy.services.ClueManagement;
-import cat.itacademy.exceptions.DuplicateClueException;
+import cat.itacademy.services.ClueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
@@ -11,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ClueManagementTest {
 
-    private ClueManagement management;
+    private ClueService management;
     private static final double EPS = 1e-9;
 
     @BeforeEach
     void setUp() {
-        management = new ClueManagement();
+        management = new ClueService();
     }
 
     private Clue newValidClue(String name) {
@@ -45,7 +45,7 @@ public class ClueManagementTest {
     void whenAddingDuplicateName_thenThrowsDuplicateClueException() {
         management.addClue(newValidClue("Sangre en la pared"));
 
-        assertThrows(DuplicateClueException.class,
+        assertThrows(DuplicateException.class,
                 () -> management.addClue(newValidClue("Sangre en la pared")),
                 "Ya existe una pista con este nombre...");
     }
