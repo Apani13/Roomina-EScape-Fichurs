@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS ticket (
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     room_id INT,
     total_price DECIMAL(10,2) DEFAULT 0.0,
-    FOREIGN KEY (room_id) REFERENCES room(id)
+    FOREIGN KEY (room_id) REFERENCES room(id),
+    FOREIGN KEY (client_id) REFERENCES client(id)
 );
 
 -- Insertar datos para provar
@@ -190,38 +191,7 @@ INSERT INTO ticket (client_id, room_id, total_price) VALUES
 (5, 9, 38.00),   -- Sofia en Cámara de Criogenia
 (6, 4, 28.00);   -- David en Sala de Experimentos
 
--- Consultas para verificar los datos insertados
-SELECT '=== ESCAPE ROOMS ===' as '';
-SELECT * FROM escape_room;
 
-SELECT '=== SALAS ===' as '';
-SELECT r.id, r.name, r.theme, r.level, r.price, er.name as escape_room_name
-FROM room r
-LEFT JOIN escape_room er ON r.escape_room_id = er.id;
 
-SELECT '=== OBJETOS DE DECORACIÓN ===' as '';
-SELECT * FROM decoration_object;
 
-SELECT '=== PISTAS ===' as '';
-SELECT c.name, c.theme, c.price, r.name as sala
-FROM clue c
-JOIN room r ON c.room_id = r.id;
 
-SELECT '=== CLIENTES ===' as '';
-SELECT * FROM client;
-
-SELECT '=== TICKETS ===' as '';
-SELECT t.id, c.user_name, r.name as sala, t.total_price, t.date_creation
-FROM ticket t
-JOIN client c ON t.client_id = c.id
-JOIN room r ON t.room_id = r.id;
-
-SELECT '=== INVENTARIO POR SALA ===' as '';
-SELECT r.name as sala,
-       COUNT(DISTINCT ro.decoration_object_id) as objetos_diferentes,
-       SUM(ro.quantity) as total_objetos,
-       SUM(ro.quantity * do.price) as valor_total
-FROM room r
-JOIN room_objects ro ON r.id = ro.room_id
-JOIN decoration_object do ON ro.decoration_object_id = do.id
-GROUP BY r.id, r.name;
