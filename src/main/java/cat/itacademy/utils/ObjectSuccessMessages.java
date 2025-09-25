@@ -1,4 +1,4 @@
-package cat.itcademy.utils;
+package cat.itacademy.utils;
 
 public class ObjectSuccessMessages {
 

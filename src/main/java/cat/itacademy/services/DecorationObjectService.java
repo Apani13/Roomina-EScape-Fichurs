@@ -1,12 +1,12 @@
-package cat.itcademy.services;
-
-import cat.itcademy.exceptions.DuplicateException;
-import cat.itcademy.exceptions.InvalidAttributeException;
-import cat.itcademy.models.DecorationObject;
-import cat.itcademy.utils.ObjectErrorMessages;
-import cat.itcademy.utils.ObjectSuccessMessages;
+package cat.itacademy.services;
 
 import java.util.ArrayList;
+
+import cat.itacademy.exceptions.DuplicateException;
+import cat.itacademy.exceptions.InvalidAttributeException;
+import cat.itacademy.models.DecorationObject;
+import cat.itacademy.utils.ObjectErrorMessages;
+import cat.itacademy.utils.ObjectSuccessMessages;
 
 public class DecorationObjectService {
 
@@ -27,7 +27,7 @@ public class DecorationObjectService {
         if (decorationObject.getMaterial() == null || decorationObject.getMaterial().isEmpty()) {
             throw new InvalidAttributeException(ObjectErrorMessages.OBJECT_MATERIAL_NULL_EMPTY);
         }
-        if (decorationObject.getQuantity() >= 0) {
+        if (decorationObject.getQuantity() <= 0) {
             throw new InvalidAttributeException(ObjectErrorMessages.OBJECT_QUANTITY_INVALID);
         }
 

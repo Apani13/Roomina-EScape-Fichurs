@@ -1,4 +1,4 @@
-package cat.itcademy.models;
+package cat.itacademy.models;
 
 public class DecorationObject {
 
