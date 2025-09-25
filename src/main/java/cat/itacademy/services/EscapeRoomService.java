@@ -1,34 +1,36 @@
 package cat.itacademy.services;
 
+import cat.itacademy.exceptions.DuplicateException;
+import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.controllers.EscapeRoomDAO;
 import cat.itacademy.repositories.DatabaseConnection;
-import cat.itacademy.exceptions.DuplicateEscapeRoomException;
-import cat.itacademy.exceptions.InvalidNameException;
 import cat.itacademy.models.EscapeRoom;
+import cat.itacademy.utils.EscapeRoomErrorMessages;
+import cat.itacademy.utils.EscapeRoomSuccessMessages;
 
+import java.util.ArrayList;
 import java.sql.SQLException;
 
-public class EscapeRoomManagement {
+public class EscapeRoomService {
     private EscapeRoomDAO escapeRoomDAO;
+    private ArrayList<EscapeRoom> escapeRooms;
 
-    public EscapeRoomManagement() {
+    public EscapeRoomService() {
         this.escapeRoomDAO = new EscapeRoomDAO();
     }
 
-    public void addEscapeRoom(EscapeRoom escapeRoom) throws InvalidNameException, DuplicateEscapeRoomException {
-
-        if (escapeRoom.getName() == null || escapeRoom.getName().isEmpty()) {
-            throw new InvalidNameException("El nombre no puede ser vacio o nulo");
-        }
-
+    public void addEscapeRoom(EscapeRoom escapeRoom) throws InvalidAttributeException, DuplicateException {
         try {
+            if (escapeRoom.getName() == null || escapeRoom.getName().isEmpty()) {
+                throw new InvalidAttributeException(EscapeRoomErrorMessages.ESCAPEROOM_NAME_NULL_EMPTY);
+            }
             if(escapeRoomDAO.existsByName(escapeRoom.getName())){
-                throw new DuplicateEscapeRoomException("El nombre del escape room ya existe");
+                throw new DuplicateException(EscapeRoomErrorMessages.ESCAPEROOM_DUPLICATED);
             }
             escapeRoomDAO.insert(escapeRoom);
 
-            System.out.println("El escape room " + escapeRoom.getName() + " se registro correctamente");
-        } catch (DuplicateEscapeRoomException | InvalidNameException e) {
+            System.out.println(String.format(EscapeRoomSuccessMessages.ESCAPEROOM_CREATED, escapeRoom.getName()));
+        } catch (DuplicateException | InvalidAttributeException e) {
             // Re-lanzar las excepciones personalizadas para que los tests las capturen
             throw e;
         } catch (Exception e) {
