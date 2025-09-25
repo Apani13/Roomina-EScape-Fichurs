@@ -1,6 +1,5 @@
--- Crear la base de datos (por si acaso)
-CREATE DATABASE IF NOT EXISTS escape_room_db;
-USE escape_room_db;
+
+USE escaperoom;
 
 -- Tabla Escape Room
 CREATE TABLE IF NOT EXISTS escape_room (
