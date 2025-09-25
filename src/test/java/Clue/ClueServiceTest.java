@@ -1,3 +1,4 @@
+package Clue;
 import cat.itacademy.exceptions.DuplicateException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Clue;
