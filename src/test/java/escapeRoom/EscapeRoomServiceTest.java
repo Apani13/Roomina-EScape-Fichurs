@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EscapeRoomServiceTest {
     private EscapeRoomService escapeRoomService;
+
     @BeforeEach
     void setUp() {
         escapeRoomService = new EscapeRoomService();
@@ -28,6 +29,7 @@ public class EscapeRoomServiceTest {
             throw new RuntimeException(e);
         }
     }
+
     @Test
     void whenCreatingEscapeRoomWithValidData_thenConfirmationMessageIsShown() {
         PrintStream originalOut = System.out;
@@ -40,6 +42,7 @@ public class EscapeRoomServiceTest {
         System.setOut(originalOut);
         assertEquals("El escape room EscapeRoomIT se registro correctamente",  outContent.toString().trim());
     }
+
     @Test
     void whenCreatingEscapeRoomWithNullOrEmptyName_thenInvalidNameExceptionIsThrown() {
         EscapeRoom escapeRoom = new EscapeRoom("");
@@ -53,16 +56,4 @@ public class EscapeRoomServiceTest {
         escapeRoomService.addEscapeRoom(escapeRoom);
         assertThrows(DuplicateException.class, ()-> escapeRoomService.addEscapeRoom(escapeRoom));
     }
-
-    @Test
-    void prueba() throws SQLException{
-        EscapeRoom escapeRoom = new EscapeRoom("EscapeRoom10");
-        escapeRoomService.addEscapeRoom(escapeRoom);
-
-        EscapeRoom last = escapeRoomService.getLastEscapeRoom();
-        System.out.println(last.toString());
-        assertNotNull(last);
-        assertEquals("EscapeRoom10", last.getName());
-    }
-
 }

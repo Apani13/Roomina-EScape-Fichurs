@@ -66,12 +66,3 @@ CREATE TABLE IF NOT EXISTS ticket (
     FOREIGN KEY (room_id) REFERENCES room(id),
     FOREIGN KEY (client_id) REFERENCES client(id)
 );
-
-
-
-
-
-
-
-
-

@@ -10,10 +10,10 @@ import cat.itacademy.utils.EscapeRoomSuccessMessages;
 
 import java.util.ArrayList;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class EscapeRoomService {
     private EscapeRoomDAO escapeRoomDAO;
-    private ArrayList<EscapeRoom> escapeRooms;
 
     public EscapeRoomService() {
         this.escapeRoomDAO = new EscapeRoomDAO();
@@ -27,6 +27,7 @@ public class EscapeRoomService {
             if(escapeRoomDAO.existsByName(escapeRoom.getName())){
                 throw new DuplicateException(EscapeRoomErrorMessages.ESCAPEROOM_DUPLICATED);
             }
+
             escapeRoomDAO.insert(escapeRoom);
 
             System.out.println(String.format(EscapeRoomSuccessMessages.ESCAPEROOM_CREATED, escapeRoom.getName()));
@@ -34,7 +35,8 @@ public class EscapeRoomService {
             // Re-lanzar las excepciones personalizadas para que los tests las capturen
             throw e;
         } catch (Exception e) {
-            e.printStackTrace(); // Solo loggear errores inesperados
+            Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
+            logger.severe("Error inesperado: " + e.getMessage());
         }
     }
 
