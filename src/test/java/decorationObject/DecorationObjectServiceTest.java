@@ -1,4 +1,4 @@
-package DecorationObject;
+package decorationObject;
 
 import cat.itacademy.exceptions.DuplicateException;
 import cat.itacademy.exceptions.InvalidAttributeException;

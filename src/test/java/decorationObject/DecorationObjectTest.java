@@ -1,4 +1,4 @@
-package DecorationObject;
+package decorationObject;
 
 import cat.itacademy.models.DecorationObject;
 import org.junit.jupiter.api.Assertions;
