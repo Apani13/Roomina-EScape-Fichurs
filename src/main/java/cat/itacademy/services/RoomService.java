@@ -1,6 +1,7 @@
 
 package cat.itacademy.services;
 
+import cat.itacademy.controllers.RoomDAO;
 import cat.itacademy.exceptions.DuplicateException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Room;
@@ -8,19 +9,18 @@ import cat.itacademy.utils.RoomErrorMessages;
 import cat.itacademy.utils.RoomSuccessMessages;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class RoomService {
+    private RoomDAO roomDAO;
 
-    ArrayList<Room> rooms;
 
     public RoomService() {
-        this.rooms = new ArrayList<>();
+        this.roomDAO =  new RoomDAO();
     }
 
     public void addRoom(Room room) throws InvalidAttributeException, DuplicateException {
-        if (rooms.contains(room))  {
-            throw new DuplicateException(RoomErrorMessages.ROOM_DUPLICATED);
-        }
+        try{
 
         if (room.getName() == null || room.getName().isEmpty()) {
             throw new InvalidAttributeException(RoomErrorMessages.ROOM_NAME_NULL_EMPTY);
@@ -34,7 +34,18 @@ public class RoomService {
             throw new InvalidAttributeException(RoomErrorMessages.ROOM_LEVEL_INVALID);
         }
 
-        rooms.add(room);
+        if (roomDAO.existsByName(room.getName()))  {
+            throw new DuplicateException(RoomErrorMessages.ROOM_DUPLICATED);
+        }
+
+        roomDAO.insert(room);
         System.out.println(RoomSuccessMessages.ROOM_CREATED);
+
+        } catch (DuplicateException | InvalidAttributeException e) {
+            throw e;
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
+            logger.severe("Error inesperado: " + e.getMessage());
+        }
     }
 }
