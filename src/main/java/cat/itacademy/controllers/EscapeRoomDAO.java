@@ -23,8 +23,8 @@ public class EscapeRoomDAO {
         String sql = "SELECT id, name FROM escape_room";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 escapeRooms.add(new EscapeRoom(
@@ -59,7 +59,6 @@ public class EscapeRoomDAO {
         String sql = "SELECT COUNT(*) FROM escape_room WHERE name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, name);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;
@@ -70,19 +69,19 @@ public class EscapeRoomDAO {
     }
 
     public EscapeRoom getLastEscapeRoom() throws SQLException {
-        EscapeRoom escapeRoom = null;
-        String sql = "SELECT * FROM escape_room ORDER BY id DESC LIMIT 1";
-        try (Connection conn = DatabaseConnection.getConnection();){
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+        String sql = "SELECT id, name FROM escape_room ORDER BY id DESC LIMIT 1";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery();){
 
             if(rs.next()){
-                escapeRoom = new EscapeRoom(
+                return new EscapeRoom(
                         rs.getInt("id"),
                         rs.getString("name")
                 );
             }
+            return null;
         }
-        return escapeRoom;
     }
 }
