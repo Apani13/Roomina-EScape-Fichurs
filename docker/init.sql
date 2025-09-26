@@ -53,7 +53,8 @@ CREATE TABLE IF NOT EXISTS client (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_name VARCHAR(100),
     email VARCHAR(50),
-    phone VARCHAR(15)
+    phone VARCHAR(15),
+    accepts_notifications TINYINT(1) NOT NULL DEFAULT 0
 );
 
 -- Tabla Ticket

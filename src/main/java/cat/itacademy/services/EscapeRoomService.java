@@ -29,8 +29,8 @@ public class EscapeRoomService {
             }
 
             escapeRoomDAO.insert(escapeRoom);
-
-            System.out.println(String.format(EscapeRoomSuccessMessages.ESCAPEROOM_CREATED, escapeRoom.getName()));
+            EscapeRoom escapeRoomDB = getLastEscapeRoom();
+            System.out.println(String.format(EscapeRoomSuccessMessages.ESCAPEROOM_CREATED, escapeRoomDB.getName()));
         } catch (DuplicateException | InvalidAttributeException e) {
             throw e;
         } catch (Exception e) {
