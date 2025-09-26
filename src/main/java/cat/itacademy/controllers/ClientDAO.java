@@ -22,7 +22,7 @@ public class ClientDAO {
         }
     }
 
-    public List<EscapeRoom> findAll() throws SQLException {
+    public List<Client> findAll() throws SQLException {
         List<Client> clients = new ArrayList<>();
         String sql = "SELECT id, user_name, email, phone, accepts_notifications FROM client";
 
@@ -40,21 +40,23 @@ public class ClientDAO {
                 ));
             }
         }
-        return escapeRooms;
+        return clients;
     }
 
-    public void update(EscapeRoom escapeRoom) throws SQLException {
-        String sql = "UPDATE escape_room SET name=? WHERE id=?";
+    public void update(Client client) throws SQLException {
+        String sql = "UPDATE escape_room SET user_name=?, email=?, phone=? WHERE id=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, escapeRoom.getName());
-            stmt.setInt(2, escapeRoom.getId());
+            stmt.setString(1, client.getUserName());
+            stmt.setString(2, client.getEmail());
+            stmt.setString(3, client.getPhone());
+            stmt.setInt(4, client.getId());
             stmt.executeUpdate();
         }
     }
 
     public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM escape_room WHERE id=?";
+        String sql = "DELETE FROM client WHERE id=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -62,11 +64,11 @@ public class ClientDAO {
         }
     }
 
-    public boolean existsByName(String name) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM escape_room WHERE name = ?";
+    public boolean existsByUserName(String userName) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM client WHERE user_name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, name);
+            stmt.setString(1, userName);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;
@@ -76,20 +78,23 @@ public class ClientDAO {
         return false;
     }
 
-    public EscapeRoom getLastEscapeRoom() throws SQLException {
-        EscapeRoom escapeRoom = null;
-        String sql = "SELECT * FROM escape_room ORDER BY id DESC LIMIT 1";
+    public Client getLastClient() throws SQLException {
+
+        String sql = "SELECT * FROM client ORDER BY id DESC LIMIT 1";
         try (Connection conn = DatabaseConnection.getConnection();){
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
             if(rs.next()){
-                escapeRoom = new EscapeRoom(
+                return new Client(
                         rs.getInt("id"),
-                        rs.getString("name")
+                        rs.getString("user_name"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getBoolean("accepts_notifications")
                 );
             }
         }
-        return escapeRoom;
+        return null;
     }
 }

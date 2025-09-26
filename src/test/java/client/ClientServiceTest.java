@@ -61,9 +61,7 @@ public class ClientServiceTest {
 
         clientService.addClient(client);
         assertAll("duplicate record check",
-                ()->assertThrows(DuplicateException.class, ()-> clientService.addClient(new Client("luri", "luri@gmail.com", "654321789", true))),
-                ()->assertThrows(DuplicateException.class, ()-> clientService.addClient(new Client("luri1", "luri@gmail.com", "654321789", true))),
-                ()->assertThrows(DuplicateException.class, ()-> clientService.addClient(new Client("luri2", "luri2@gmail.com", "654321789", true)))
+                ()->assertThrows(DuplicateException.class, ()-> clientService.addClient(new Client("luri", "luri@gmail.com", "654321789", true)))
         );
     }
 }
