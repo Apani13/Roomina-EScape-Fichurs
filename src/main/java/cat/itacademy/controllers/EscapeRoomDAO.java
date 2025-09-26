@@ -59,6 +59,7 @@ public class EscapeRoomDAO {
         String sql = "SELECT COUNT(*) FROM escape_room WHERE name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;
