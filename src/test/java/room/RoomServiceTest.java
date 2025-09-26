@@ -3,9 +3,14 @@ package room;
 import cat.itacademy.exceptions.DuplicateException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Room;
+import cat.itacademy.repositories.DatabaseConnection;
 import cat.itacademy.services.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,6 +22,12 @@ public class RoomServiceTest {
     @BeforeEach
     void setUp() {
         roomService = new RoomService();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("DELETE FROM room")) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -40,7 +51,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void whenCreatedRoomIfAlreadyExists_thenDuplicatedRoomExceptionIsThrown() {
+    public void whenCreatedRoomIfAlreadyExists_thenDuplicatedRoomExceptionIsThrown()  {
         Room room1 = new Room("Chucky", "Terror", 2);
         Room room2 = new Room("Chucky", "Terror", 2);
 
