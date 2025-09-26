@@ -19,8 +19,9 @@ public class ClueService {
     }
 
     public void addClue(Clue clue) throws DuplicateException, InvalidAttributeException {
+
         if (clue == null) {
-            throw new InvalidAttributeException("Clue cannot be null");
+            throw new NullObjectException(CLUE_NULL_OBJECT);
         }
 
         double price = clue.getPrice();
@@ -45,5 +46,4 @@ public class ClueService {
         clues.add(clue);
         System.out.println(CLUE_CREATED);
     }
-
 }
