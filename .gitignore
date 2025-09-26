@@ -15,6 +15,7 @@ buildNumber.properties
 *.iml
 *.ipr
 .idea/
+.Docus/
 
 ### Eclipse ###
 .apt_generated
