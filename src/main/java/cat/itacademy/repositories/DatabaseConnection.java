@@ -1,5 +1,7 @@
 package cat.itacademy.repositories;
 
+import cat.itacademy.utils.DBErrorMessages;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,16 +11,14 @@ import java.io.IOException;
 
 public class DatabaseConnection {
 
-    private DatabaseConnection() {
-        // Evitar instanciación
-    }
+    private DatabaseConnection() { }
 
     public static Connection getConnection() {
         try (InputStream input = DatabaseConnection.class.getClassLoader()
                 .getResourceAsStream("db.properties")) {
 
             if (input == null) {
-                throw new RuntimeException("❌ No se encontró el archivo db.properties en el classpath");
+                throw new RuntimeException(DBErrorMessages.ERROR_DB_PROPERTIES_NOT_FOUND);
             }
 
             Properties props = new Properties();
@@ -30,21 +30,20 @@ public class DatabaseConnection {
             String driver = props.getProperty("db.driver");
 
             if (url == null || user == null || password == null || driver == null) {
-                throw new RuntimeException("❌ Faltan propiedades de conexión en db.properties");
+                throw new RuntimeException(DBErrorMessages.ERROR_DB_PROPERTIES_MISSING_FIELDS);
             }
 
             Class.forName(driver);
 
             Connection connection = DriverManager.getConnection(url, user, password);
-            //System.out.println("✅ Conexión exitosa a la base de datos");
             return connection;
 
         } catch (IOException e) {
-            throw new RuntimeException("❌ Error al leer db.properties: " + e.getMessage(), e);
+            throw new RuntimeException(String.format(DBErrorMessages.ERROR_READING_PROPERTIES, e.getMessage()), e);
         } catch (SQLException e) {
-            throw new RuntimeException("❌ Error de SQL: " + e.getMessage(), e);
+            throw new RuntimeException(String.format(DBErrorMessages.ERROR_DB_PROPERTIES_READ, e.getMessage()), e);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("❌ Driver JDBC no encontrado: " + e.getMessage(), e);
+            throw new RuntimeException(String.format(DBErrorMessages.ERROR_DB_DRIVER_NOT_FOUND, e.getMessage()), e);
         }
     }
 }

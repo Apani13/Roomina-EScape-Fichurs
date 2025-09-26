@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EscapeRoomDAO {
     public void insert(EscapeRoom escapeRoom) throws SQLException {
-        String sql = "INSERT INTO escaperoom(name) VALUES (?)";
+        String sql = "INSERT INTO escape_room(name) VALUES (?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -20,7 +20,7 @@ public class EscapeRoomDAO {
 
     public List<EscapeRoom> findAll() throws SQLException {
         List<EscapeRoom> escapeRooms = new ArrayList<>();
-        String sql = "SELECT id, name FROM escaperoom";
+        String sql = "SELECT id, name FROM escape_room";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -37,7 +37,7 @@ public class EscapeRoomDAO {
     }
 
     public void update(EscapeRoom escapeRoom) throws SQLException {
-        String sql = "UPDATE escaperoom SET name=? WHERE id=?";
+        String sql = "UPDATE escape_room SET name=? WHERE id=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, escapeRoom.getName());
@@ -47,7 +47,7 @@ public class EscapeRoomDAO {
     }
 
     public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM escaperoom WHERE id=?";
+        String sql = "DELETE FROM escape_room WHERE id=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -56,7 +56,7 @@ public class EscapeRoomDAO {
     }
 
     public boolean existsByName(String name) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM escaperoom WHERE name = ?";
+        String sql = "SELECT COUNT(*) FROM escape_room WHERE name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name);
@@ -71,7 +71,7 @@ public class EscapeRoomDAO {
 
     public EscapeRoom getLastEscapeRoom() throws SQLException {
         EscapeRoom escapeRoom = null;
-        String sql = "SELECT * FROM escaperoom ORDER BY id DESC LIMIT 1";
+        String sql = "SELECT * FROM escape_room ORDER BY id DESC LIMIT 1";
         try (Connection conn = DatabaseConnection.getConnection();){
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
