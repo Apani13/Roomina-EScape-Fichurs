@@ -1,7 +1,11 @@
 package client;
 
+import cat.itacademy.exceptions.DuplicateException;
+import cat.itacademy.exceptions.InvalidAttributeException;
+import cat.itacademy.models.Client;
 import cat.itacademy.models.EscapeRoom;
 import cat.itacademy.repositories.DatabaseConnection;
+import cat.itacademy.services.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ClientServiceTest {
     private ClientService clientService;
@@ -21,7 +25,7 @@ public class ClientServiceTest {
         clientService = new ClientService();
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM escape_room")) {
+             PreparedStatement stmt = conn.prepareStatement("DELETE FROM client")) {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -42,5 +46,24 @@ public class ClientServiceTest {
     }
 
     @Test
-    void whenCreatingEscapeRoomWithInvalidData_thenConfirmationMessageIsShown() {}
+    void whenCreatingClientWithNullOrEmptyAttribute_thenInvalidAttributeExceptionIsThrown() {
+        EscapeRoom escapeRoom = new EscapeRoom("");
+        assertAll("Validate attributes",
+                ()->assertThrows(InvalidAttributeException.class, ()-> clientService.addClient(new Client("", "luri@gmail.com", "654321789", true))),
+                ()->assertThrows(InvalidAttributeException.class, ()-> clientService.addClient(new Client("luri1", "", "654321783", true))),
+                ()->assertThrows(InvalidAttributeException.class, ()-> clientService.addClient(new Client("luri2", "luri2@gmail.com", "", true)))
+        );
+    }
+
+    @Test
+    void whenCreatingDuplicateClient_thenDuplicateExceptionIsThrown() {
+        Client client = new Client("luri", "luri@gmail.com", "698765432", true);
+
+        clientService.addClient(client);
+        assertAll("duplicate record check",
+                ()->assertThrows(DuplicateException.class, ()-> clientService.addClient(new Client("luri", "luri@gmail.com", "654321789", true))),
+                ()->assertThrows(DuplicateException.class, ()-> clientService.addClient(new Client("luri1", "luri@gmail.com", "654321789", true))),
+                ()->assertThrows(DuplicateException.class, ()-> clientService.addClient(new Client("luri2", "luri2@gmail.com", "654321789", true)))
+        );
+    }
 }

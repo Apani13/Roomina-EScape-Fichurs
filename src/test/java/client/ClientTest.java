@@ -1,5 +1,6 @@
 package client;
 
+import cat.itacademy.models.Client;
 import cat.itacademy.models.EscapeRoom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,8 @@ public class ClientTest {
                 ()->assertEquals("luri", client.getUserName()),
                 ()->assertEquals("luri@gmail.com", client.getEmail()),
                 ()->assertEquals("698765432", client.getPhone()),
-                ()->assertEquals(true, client.getAcceptsNotifications())
+                ()->assertEquals(true, client.isAcceptsNotifications())
         );
     }
+
 }
