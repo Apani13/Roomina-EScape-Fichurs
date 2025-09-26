@@ -4,12 +4,12 @@ package cat.itacademy.services;
 import cat.itacademy.controllers.RoomDAO;
 import cat.itacademy.exceptions.DuplicateException;
 import cat.itacademy.exceptions.InvalidAttributeException;
+import cat.itacademy.exceptions.NullObjectException;
 import cat.itacademy.models.Room;
 import cat.itacademy.utils.RoomErrorMessages;
 import cat.itacademy.utils.RoomSuccessMessages;
-
-import java.util.ArrayList;
 import java.util.logging.Logger;
+
 
 public class RoomService {
     private RoomDAO roomDAO;
@@ -19,27 +19,30 @@ public class RoomService {
         this.roomDAO =  new RoomDAO();
     }
 
-    public void addRoom(Room room) throws InvalidAttributeException, DuplicateException {
+    public void addRoom(Room room) throws InvalidAttributeException, DuplicateException, NullObjectException {
         try{
+            if (room == null) {
+                throw new NullObjectException(RoomErrorMessages.ROOM_NULL_OBJECT);
+            }
 
-        if (room.getName() == null || room.getName().isEmpty()) {
+            if (room.getName() == null || room.getName().isEmpty()) {
             throw new InvalidAttributeException(RoomErrorMessages.ROOM_NAME_NULL_EMPTY);
-        }
+            }
 
-        if (room.getTheme() == null || room.getTheme().isEmpty()) {
+            if (room.getTheme() == null || room.getTheme().isEmpty()) {
             throw new InvalidAttributeException(RoomErrorMessages.ROOM_THEME_NULL_EMPTY);
-        }
+            }
 
-        if (room.getLevel() <= 0 ) {
+            if (room.getLevel() <= 0 ) {
             throw new InvalidAttributeException(RoomErrorMessages.ROOM_LEVEL_INVALID);
-        }
+             }
 
-        if (roomDAO.existsByName(room.getName()))  {
+            if (roomDAO.existsByName(room.getName()))  {
             throw new DuplicateException(RoomErrorMessages.ROOM_DUPLICATED);
-        }
+             }
 
-        roomDAO.insert(room);
-        System.out.println(RoomSuccessMessages.ROOM_CREATED);
+            roomDAO.insert(room);
+            System.out.println(RoomSuccessMessages.ROOM_CREATED);
 
         } catch (DuplicateException | InvalidAttributeException e) {
             throw e;
