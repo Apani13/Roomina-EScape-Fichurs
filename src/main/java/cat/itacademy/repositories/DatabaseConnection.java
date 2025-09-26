@@ -36,7 +36,6 @@ public class DatabaseConnection {
             Class.forName(driver);
 
             Connection connection = DriverManager.getConnection(url, user, password);
-            //System.out.println("✅ Conexión exitosa a la base de datos");
             return connection;
 
         } catch (IOException e) {

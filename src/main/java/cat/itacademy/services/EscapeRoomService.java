@@ -32,7 +32,6 @@ public class EscapeRoomService {
 
             System.out.println(String.format(EscapeRoomSuccessMessages.ESCAPEROOM_CREATED, escapeRoom.getName()));
         } catch (DuplicateException | InvalidAttributeException e) {
-            // Re-lanzar las excepciones personalizadas para que los tests las capturen
             throw e;
         } catch (Exception e) {
             Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
