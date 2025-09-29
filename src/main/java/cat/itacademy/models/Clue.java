@@ -30,16 +30,4 @@ public class Clue {
         return price;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Clue that = (Clue) o;
-        return name != null && name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
-    }
 }
