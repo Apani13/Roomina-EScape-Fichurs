@@ -8,4 +8,5 @@ public class DBErrorMessages {
     public static final String ERROR_READING_PROPERTIES = "Error al leer db.properties: %s";
     public static final String ERROR_DB_PROPERTIES_READ = "Error de SQL: %s";
     public static final String ERROR_DB_DRIVER_NOT_FOUND = "Driver JDBC no encontrado: %s";
+    public static final String ERROR_DB_UNEXPECTED_PROBLEM = "Error inesperado: %s";
 }
