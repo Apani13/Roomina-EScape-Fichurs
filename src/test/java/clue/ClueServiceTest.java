@@ -1,5 +1,6 @@
 package clue;
 import cat.itacademy.exceptions.DuplicateException;
+import cat.itacademy.exceptions.EmptyListException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Clue;
 import cat.itacademy.services.ClueService;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.sql.SQLException;
 
 import static cat.itacademy.utils.ClueSuccessMessages.CLUE_CREATED;
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,6 +81,8 @@ public class ClueServiceTest {
 
     }
 
-
-
+    @Test
+    public void whenClueListIsEmpty_thenThrowsEmptyListException() throws SQLException {
+        assertThrows(EmptyListException.class, ()->management.getClues());
+    }
 }

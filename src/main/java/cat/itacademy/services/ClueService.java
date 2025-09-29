@@ -1,16 +1,16 @@
 package cat.itacademy.services;
 
 import cat.itacademy.controllers.ClueDAO;
-import cat.itacademy.controllers.EscapeRoomDAO;
 import cat.itacademy.exceptions.*;
 
 import cat.itacademy.models.Clue;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static cat.itacademy.utils.ClueErrorMessages.*;
+import static cat.itacademy.utils.ClueUIMessages.*;
 import static cat.itacademy.utils.ClueSuccessMessages.*;
 
 public class ClueService {
@@ -60,7 +60,28 @@ public class ClueService {
             Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
             logger.severe("Error inesperado: " + e.getMessage());
         }
+    }
 
-
+    public List<Clue> getClues() throws SQLException {
+        if(clueDAO.getAllNames().isEmpty()){
+            throw new EmptyListException(CLUE_LIST_EMPTY);
+        }
+        return clueDAO.getAllNames();
+    }
+    public void showClue() throws SQLException {
+        if(clueDAO.getAllNames().isEmpty()){
+            throw new EmptyListException(CLUE_LIST_EMPTY);
+        }
+        System.out.println(CLUEUI_LIST_HEADER);
+        for(Clue clue: clueDAO.getAllNames()){
+            System.out.println(String.format(CLUEUI_LIST_BODY, clue.getId(), clue.getName()));
+        }
+        System.out.println(CLUEUI_LIST_FOOTER);
+    }
+    public Clue getLastClue() throws SQLException {
+        return clueDAO.getLastClue();
+    }
+    public Clue getClueById(int id) throws SQLException {
+        return clueDAO.getById(id);
     }
 }

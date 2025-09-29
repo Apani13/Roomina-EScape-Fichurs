@@ -1,5 +1,6 @@
 package cat.itacademy.controllers;
 
+import cat.itacademy.models.EscapeRoom;
 import cat.itacademy.models.Room;
 import cat.itacademy.repositories.DatabaseConnection;
 
@@ -7,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoomDAO {
 
@@ -38,4 +41,51 @@ public class RoomDAO {
 
     }
 
+    public List<Room> getAllNames() throws SQLException {
+        List<Room> rooms = new ArrayList<>();
+        String sql = "SELECT id, name FROM room";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                rooms.add(new Room(
+                        rs.getInt("id"),
+                        rs.getString("name")
+                ));
+            }
+        }
+        return rooms;
+    }
+
+    public void updateRoomIdClue(int roomId, int clueId) throws SQLException {
+        String sql = "UPDATE clue SET room_id = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, roomId);
+            stmt.setInt(2, clueId);
+            stmt.executeUpdate();
+        }
+    }
+
+    public Room getLastRoom() throws SQLException {
+        String sql = "SELECT id, name, theme, level, price FROM room ORDER BY id DESC LIMIT 1";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery();){
+
+            if(rs.next()){
+                return new Room(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("theme"),
+                        rs.getInt("level"),
+                        rs.getDouble("price")
+                );
+            }
+            return null;
+        }
+    }
 }
