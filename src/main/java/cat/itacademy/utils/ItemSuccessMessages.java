@@ -1,8 +1,8 @@
 package cat.itacademy.utils;
 
-public class ObjectSuccessMessages {
+public class ItemSuccessMessages {
 
-    private ObjectSuccessMessages() {
+    private ItemSuccessMessages() {
     }
 
     public static final String OBJECT_SUCCES = "El objecto ha sido creado correctamente!";

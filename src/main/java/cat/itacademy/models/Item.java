@@ -1,18 +1,17 @@
 package cat.itacademy.models;
 
-public class DecorationObject {
+public class Item {
 
     private String name;
     private String material;
     private double price;
     private long quantity;
 
-    public DecorationObject(String name, String material, long quantity) {
+    public Item(String name, String material, long quantity) {
         this.name = name;
         this.material = material;
         this.quantity = quantity;
         this.price = 5;
-
     }
 
     public String getName() {
@@ -27,11 +26,15 @@ public class DecorationObject {
         return quantity;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DecorationObject that = (DecorationObject) o;
+        Item that = (Item) o;
         return name != null && name.equals(that.name);
     }
 
