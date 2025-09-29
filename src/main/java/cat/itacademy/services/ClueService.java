@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import static cat.itacademy.utils.ClueErrorMessages.*;
 import static cat.itacademy.utils.ClueSuccessMessages.*;
+import static cat.itacademy.utils.DBErrorMessages.ERROR_DB_UNEXPECTED_PROBLEM;
 
 public class ClueService {
 
@@ -58,7 +59,7 @@ public class ClueService {
             throw e;
         } catch (Exception e) {
             Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
-            logger.severe("Error inesperado: " + e.getMessage());
+            logger.severe(String.format(ERROR_DB_UNEXPECTED_PROBLEM, e.getMessage()));
         }
 
 
