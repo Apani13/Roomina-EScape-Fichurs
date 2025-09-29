@@ -12,17 +12,21 @@ import java.util.List;
 public class ClueDAO {
 
     public void insert(Clue clue) throws SQLException {
-        String sql = "INSERT INTO clue(name, theme, description, price) VALUES (?)";
+        String sql = "INSERT INTO clue(name, theme, description, price) VALUES (?, ?. ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, clue.getName());
+            stmt.setString(1, clue.getTheme());
+            stmt.setString(1, clue.getDescription());
+            stmt.setDouble(1, clue.getPrice());
+
             stmt.executeUpdate();
         }
     }
 
     public boolean existsByName(String name) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM escape_room WHERE name = ?";
+        String sql = "SELECT COUNT(*) FROM clue WHERE name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name);

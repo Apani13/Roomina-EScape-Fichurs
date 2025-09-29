@@ -29,19 +29,22 @@ public class ClueService {
                 throw new NullObjectException(CLUE_NULL_OBJECT);
             }
 
-            double price = clue.getPrice();
-            if (Double.isNaN(price) || price <= 0) {
+
+            if (Double.isNaN(clue.getPrice()) || clue.getPrice() <= 0) {
                 throw new InvalidAttributeException(CLUE_PRICE_INVALID);
             }
 
-            String name = clue.getName();
-            if (name == null || name.isBlank()) {
+
+            if (clue.getName() == null || clue.getName().isBlank()) {
                 throw new InvalidAttributeException(CLUE_NAME_NULL_EMPTY);
             }
 
-            String description = clue.getDescription();
-            if (description == null || description.isBlank()) {
+            if (clue.getDescription() == null || clue.getDescription().isBlank()) {
                 throw new InvalidAttributeException(CLUE_DESC_NULL_EMPTY);
+            }
+
+            if (clue.getTheme() == null || clue.getTheme().isBlank()) {
+                throw new InvalidAttributeException(CLUE_THEME_NULL_EMPTY);
             }
 
             if (clueDAO.existsByName(clue.getName())) {
