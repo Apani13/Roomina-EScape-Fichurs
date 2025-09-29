@@ -1,7 +1,7 @@
 package cat.itacademy.models;
 
 public class Room {
-
+    private int id;
     private String name;
     private String theme;
     private int level;
@@ -13,6 +13,21 @@ public class Room {
         this.level = level;
         this.price = 25.0;
     }
+
+    public Room(int id, String name, String theme, int level,  double price) {
+        this.id = id;
+        this.name = name;
+        this.theme = theme;
+        this.level = level;
+        this.price = price;
+    }
+
+    public Room(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {return id;}
 
     public String getName() {
         return name;

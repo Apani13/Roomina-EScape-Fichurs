@@ -3,11 +3,15 @@ package cat.itacademy.services;
 
 import cat.itacademy.controllers.RoomDAO;
 import cat.itacademy.exceptions.DuplicateException;
+import cat.itacademy.exceptions.EmptyListException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.exceptions.NullObjectException;
 import cat.itacademy.models.Room;
 import cat.itacademy.utils.RoomErrorMessages;
 import cat.itacademy.utils.RoomSuccessMessages;
+
+import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -50,5 +54,27 @@ public class RoomService {
             Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
             logger.severe("Error inesperado: " + e.getMessage());
         }
+    }
+
+    public List<Room> getAllRooms() throws SQLException {
+        if(roomDAO.getAllNames().isEmpty()){
+            throw new EmptyListException(RoomErrorMessages.ROOM_LIST_EMPTY);
+        }
+        return roomDAO.getAllNames();
+    }
+
+    public void showRooms() throws SQLException {
+        System.out.println("---------Lista de salas----------");
+        for(Room room: getAllRooms()){
+            System.out.println("Cod: " + room.getId() + " Nombre: " + room.getName());
+        }
+    }
+
+    public void addClueToRoom(int roomId, int clueId) throws SQLException {
+        roomDAO.updateRoomIdClue(roomId, clueId);
+    }
+
+    public Room getLastRoom() throws SQLException {
+        return roomDAO.getLastRoom();
     }
 }
