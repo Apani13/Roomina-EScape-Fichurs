@@ -20,28 +20,28 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void whenCreatedaDecorationObjectWhithInvalidAtributes_thenInvalidDecorationAtributesEsceptionIsThrown() {
+    public void whenCreatedItemWhithInvalidAtributes_thenInvalidDecorationAtributesEsceptionIsThrown() {
         Item objectWithNoName = new Item("", "Plastic", 10);
         Item objectWithNoMaterial = new Item("Candle", "", 10);
         Item objectWithInvalidQuantity = new Item("Candle", "Plastic", -1);
 
         assertAll("Probando que se lanzan las excepciones correctamente",
             () -> assertThrows(InvalidAttributeException.class,
-                    () -> itemService.addItemt(objectWithNoName)),
+                    () -> itemService.addItem(objectWithNoName)),
             () -> assertThrows(InvalidAttributeException.class,
-                    () -> itemService.addItemt(objectWithNoMaterial)),
+                    () -> itemService.addItem(objectWithNoMaterial)),
             () -> assertThrows(InvalidAttributeException.class,
-                    () -> itemService.addItemt(objectWithInvalidQuantity)));
+                    () -> itemService.addItem(objectWithInvalidQuantity)));
         }
 
 
     @Test
-    public void whenCreatedADecorationObjectAlreadyExists_thenThrownDuplicatedException() {
+    public void whenCreatedItemAlreadyExists_thenThrownDuplicatedException() {
         Item item = new Item("Lámpara", "Plástico", 10);
         Item item1 = new Item("Lámpara", "Plástico", 10);
 
-        itemService.addItemt(item);
-        assertThrows(DuplicateException.class, () -> itemService.addItemt(item1));
+        itemService.addItem(item);
+        assertThrows(DuplicateException.class, () -> itemService.addItem(item1));
     }
 }
 

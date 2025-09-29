@@ -17,7 +17,7 @@ public class ItemTest {
     }
 
     @Test
-    public void createDecorationObject_Succes() {
+    public void createItem_Succes() {
         assertAll("Probando se crea un objecto de decoración con los atributos correctos",
                 () -> Assertions.assertEquals("Candle", item.getName()),
                 () -> Assertions.assertEquals("Plastic", item.getMaterial()),

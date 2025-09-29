@@ -17,7 +17,7 @@ public class ItemDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1,item.getName());
             stmt.setString(2, item.getMaterial());
-            stmt.setLong(3, item.getQuantity());
+            stmt.setInt(3, item.getQuantity());
             stmt.setDouble(4,item.getPrice());
             stmt.executeUpdate();
         }

@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import cat.itacademy.controllers.ItemDAO;
 import cat.itacademy.exceptions.DuplicateException;
 import cat.itacademy.exceptions.InvalidAttributeException;
+import cat.itacademy.exceptions.NullObjectException;
 import cat.itacademy.models.Item;
 import cat.itacademy.utils.ItemErrorMessages;
 import cat.itacademy.utils.ItemSuccessMessages;
@@ -17,12 +18,11 @@ public class ItemService {
         this.itemDAO = new ItemDAO();
     }
 
-    public void addItemt(Item item) throws InvalidAttributeException, DuplicateException, NullPointerException {
+    public void addItem(Item item) throws InvalidAttributeException, DuplicateException, NullObjectException {
 
         try {
-
             if (item == null) {
-                throw new NullPointerException(ItemErrorMessages.ITEM_NULL_OBJECT);
+                throw new NullObjectException(ItemErrorMessages.ITEM_NULL_OBJECT);
             }
 
             if (item.getName() == null || item.getName().isEmpty()) {
