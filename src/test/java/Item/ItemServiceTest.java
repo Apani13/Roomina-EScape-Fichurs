@@ -20,7 +20,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void whenCreatedItemWhithInvalidAtributes_thenInvalidDecorationAtributesEsceptionIsThrown() {
+    public void whenCreateItemWithInvalidAttributes_thenInvalidItemAttributesExceptionIsThrown() {
         Item objectWithNoName = new Item("", "Plastic", 10);
         Item objectWithNoMaterial = new Item("Candle", "", 10);
         Item objectWithInvalidQuantity = new Item("Candle", "Plastic", -1);
@@ -36,7 +36,7 @@ public class ItemServiceTest {
 
 
     @Test
-    public void whenCreatedItemAlreadyExists_thenThrownDuplicatedException() {
+    public void whenCreateItemAlreadyExists_thenThrownDuplicatedException() {
         Item item = new Item("Lámpara", "Plástico", 10);
         Item item1 = new Item("Lámpara", "Plástico", 10);
 
