@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS clue (
 );
 
 -- Tabla Objeto Decoración
-CREATE TABLE IF NOT EXISTS decoration_object (
+CREATE TABLE IF NOT EXISTS item (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     material VARCHAR(50),
@@ -43,17 +43,18 @@ CREATE TABLE IF NOT EXISTS decoration_object (
 -- Tabla de asignación de objectos a salas
 CREATE TABLE IF NOT EXISTS room_objects (
     room_id INT NOT NULL,
-    decoration_object_id INT NOT NULL,
+    item_id INT NOT NULL,
     quantity INT,
     FOREIGN KEY (room_id) REFERENCES room(id),
-    FOREIGN KEY (decoration_object_id) REFERENCES decoration_object(id)
+    FOREIGN KEY (item_id) REFERENCES item(id)
 );
 -- Tabla cliente
 CREATE TABLE IF NOT EXISTS client (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_name VARCHAR(100),
     email VARCHAR(50),
-    phone VARCHAR(15)
+    phone VARCHAR(15),
+    accepts_notifications TINYINT(1) NOT NULL DEFAULT 0
 );
 
 -- Tabla Ticket
