@@ -53,8 +53,8 @@ public class ClueService {
             }
 
             clueDAO.insert(clue);
-
             System.out.println(String.format(CLUE_CREATED, clue.getName()));
+
         } catch (DuplicateException | InvalidAttributeException e) {
             throw e;
         } catch (Exception e) {

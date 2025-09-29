@@ -7,19 +7,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 public class ClueDAO {
 
     public void insert(Clue clue) throws SQLException {
-        String sql = "INSERT INTO clue(name, theme, description, price) VALUES (?, ?. ?, ?)";
+        String sql = "INSERT INTO clue(name, theme, description, price) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, clue.getName());
-            stmt.setString(1, clue.getTheme());
-            stmt.setString(1, clue.getDescription());
-            stmt.setDouble(1, clue.getPrice());
+            stmt.setString(2, clue.getTheme());
+            stmt.setString(3, clue.getDescription());
+            stmt.setDouble(4, clue.getPrice());
 
             stmt.executeUpdate();
         }
