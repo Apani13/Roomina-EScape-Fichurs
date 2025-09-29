@@ -77,4 +77,8 @@ public class RoomService {
     public Room getLastRoom() throws SQLException {
         return roomDAO.getLastRoom();
     }
+
+    public Room getRoomById(int id) throws SQLException {
+        return roomDAO.getById(id);
+    }
 }
