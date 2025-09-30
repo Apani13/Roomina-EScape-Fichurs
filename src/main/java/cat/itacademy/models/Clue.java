@@ -29,9 +29,7 @@ public class Clue {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
     public String getName() {
         return name;
@@ -49,7 +47,5 @@ public class Clue {
         return price;
     }
 
-    public int getRoomId() {
-        return roomId;
-    }
+    public int getRoomId() { return roomId; }
 }

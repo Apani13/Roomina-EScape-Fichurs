@@ -6,11 +6,13 @@ import cat.itacademy.services.ClueService;
 import cat.itacademy.services.RoomService;
 
 import java.sql.SQLException;
+import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws SQLException {
+        Scanner sc = new Scanner(System.in);
         RoomService roomService = new RoomService();
         ClueService clueService = new ClueService();
         Room room = new Room("room1", "Terror", 1);
@@ -20,15 +22,18 @@ public class Main {
         Clue clue2 = new Clue("pista4", "terror","iuwdiqwuduqwuqw", 10.3);
 
         //roomService.addRoom(room);
-        //roomService.addRoom(room1);
-        //clueService.addClue(clue);
-        //clueService.addClue(clue2);
+        roomService.addRoom(room1);
+        clueService.addClue(clue);
+        clueService.addClue(clue2);
 
         roomService.showRooms();
+        System.out.println("seleccione una sala: ");
+        int roomId = sc.nextInt();
         clueService.showClue();
-
+        System.out.println("seleccione una pista: ");
+        int clueId = sc.nextInt();
         //roomService.addHintToEscapeRoom(1, 2);
         //roomService.addHintToEscapeRoom(2, 1);
-
+        roomService.addClueToRoom(roomId, clueId);
     }
 }

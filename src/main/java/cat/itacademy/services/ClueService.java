@@ -24,16 +24,13 @@ public class ClueService {
     public void addClue(Clue clue) throws DuplicateException, InvalidAttributeException {
 
         try {
-
             if (clue == null) {
                 throw new NullObjectException(CLUE_NULL_OBJECT);
             }
 
-
             if (Double.isNaN(clue.getPrice()) || clue.getPrice() <= 0) {
                 throw new InvalidAttributeException(CLUE_PRICE_INVALID);
             }
-
 
             if (clue.getName() == null || clue.getName().isBlank()) {
                 throw new InvalidAttributeException(CLUE_NAME_NULL_EMPTY);
@@ -68,6 +65,7 @@ public class ClueService {
         }
         return clueDAO.getAllNames();
     }
+
     public void showClue() throws SQLException {
         if(clueDAO.getAllNames().isEmpty()){
             throw new EmptyListException(CLUE_LIST_EMPTY);
@@ -78,9 +76,11 @@ public class ClueService {
         }
         System.out.println(CLUEUI_LIST_FOOTER);
     }
+
     public Clue getLastClue() throws SQLException {
         return clueDAO.getLastClue();
     }
+
     public Clue getClueById(int id) throws SQLException {
         return clueDAO.getById(id);
     }
