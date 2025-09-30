@@ -1,6 +1,7 @@
 package cat.itacademy.services;
 
 import cat.itacademy.exceptions.DuplicateException;
+import cat.itacademy.exceptions.EmptyListException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.controllers.EscapeRoomDAO;
 import cat.itacademy.repositories.DatabaseConnection;
@@ -10,6 +11,7 @@ import cat.itacademy.utils.EscapeRoomSuccessMessages;
 
 import java.util.ArrayList;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class EscapeRoomService {
@@ -18,6 +20,7 @@ public class EscapeRoomService {
     public EscapeRoomService() {
         this.escapeRoomDAO = new EscapeRoomDAO();
     }
+
 
     public void addEscapeRoom(EscapeRoom escapeRoom) throws InvalidAttributeException, DuplicateException {
         try {
@@ -41,5 +44,21 @@ public class EscapeRoomService {
 
     public EscapeRoom getLastEscapeRoom() throws SQLException {
         return escapeRoomDAO.getLastEscapeRoom();
+    }
+
+    public List<EscapeRoom> getAllEscapeRooms() throws SQLException{
+        if(escapeRoomDAO.findAll().isEmpty()) {
+            throw new EmptyListException(EscapeRoomErrorMessages.ESCAPEROOM_LIST_EMPTY);
+        }
+        return escapeRoomDAO.findAll();
+    }
+
+    public EscapeRoom getEscapeRoomById(int id) throws SQLException {
+        return escapeRoomDAO.getById(id);
+    }
+
+    public void addRoomToEscapeRoom(int escapeRoomId, int roomId) throws SQLException {
+        escapeRoomDAO.updateEscapeRoomIdRoom(escapeRoomId, roomId);
+
     }
 }

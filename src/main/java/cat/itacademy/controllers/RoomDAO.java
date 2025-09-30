@@ -1,6 +1,4 @@
 package cat.itacademy.controllers;
-
-import cat.itacademy.models.EscapeRoom;
 import cat.itacademy.models.Room;
 import cat.itacademy.repositories.DatabaseConnection;
 
@@ -69,7 +67,7 @@ public class RoomDAO {
     }
 
     public Room getLastRoom() throws SQLException {
-        String sql = "SELECT id, name, theme, level, price FROM room ORDER BY id DESC LIMIT 1";
+        String sql = "SELECT id, name, theme, level, price, escape_room_id FROM room ORDER BY id DESC LIMIT 1";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -81,10 +79,54 @@ public class RoomDAO {
                         rs.getString("name"),
                         rs.getString("theme"),
                         rs.getInt("level"),
-                        rs.getDouble("price")
+                        rs.getDouble("price"),
+                        rs.getInt("escape_room_id")
                 );
             }
             return null;
         }
+    }
+
+    public Room getById(int id) throws SQLException {
+        String sql = "SELECT id, name, theme,level, price, escape_room_id FROM room WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Room(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("theme"),
+                            rs.getInt("level"),
+                            rs.getInt("price"),
+                            rs.getInt("escape_room_id")
+                    );
+                }
+             }
+        }
+        return null;
+    }
+
+
+    public List<Room> getAvailableRooms()throws SQLException  {
+        List<Room> rooms = new ArrayList<>();
+        String sql = "SELECT id, name FROM room WHERE escape_room_id IS NULL";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    rooms.add(new Room(
+                            rs.getInt("id"),
+                            rs.getString("name")
+                    ));
+                }
+            }
+        }
+        return rooms;
     }
 }

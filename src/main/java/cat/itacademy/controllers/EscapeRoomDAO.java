@@ -1,6 +1,7 @@
 package cat.itacademy.controllers;
 
 import cat.itacademy.models.EscapeRoom;
+import cat.itacademy.models.Room;
 import cat.itacademy.repositories.DatabaseConnection;
 
 import java.sql.*;
@@ -84,5 +85,36 @@ public class EscapeRoomDAO {
             }
             return null;
         }
+    }
+
+    public EscapeRoom getById(int id) throws SQLException {
+        String sql = "SELECT id, name FROM escaperoom WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new EscapeRoom(
+                            rs.getInt("id"),
+                            rs.getString("name")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    public void updateEscapeRoomIdRoom(int escapeRoomId, int roomId) throws SQLException{
+        String sql = "UPDATE room SET escape_room_id = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, escapeRoomId);
+            stmt.setInt(2, roomId);
+            stmt.executeUpdate();
+        }
+    
     }
 }

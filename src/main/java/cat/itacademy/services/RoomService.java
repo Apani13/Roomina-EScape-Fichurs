@@ -64,6 +64,13 @@ public class RoomService {
         return roomDAO.getAllNames();
     }
 
+    public List<Room> getAvailableRooms() throws SQLException {
+        if(roomDAO.getAllNames().isEmpty()) {
+            throw new  EmptyListException(RoomErrorMessages.ROOM_LIST_EMPTY);
+        }
+        return roomDAO.getAvailableRooms();
+    }
+
     public void showRooms() throws SQLException {
         System.out.println(RoomUIMessages.ROOMUI_LIST_HEADER);
         for(Room room: getAllRooms()){
@@ -78,5 +85,9 @@ public class RoomService {
 
     public Room getLastRoom() throws SQLException {
         return roomDAO.getLastRoom();
+    }
+
+    public Room getRoomById(int id) throws SQLException {
+        return roomDAO.getById(id);
     }
 }

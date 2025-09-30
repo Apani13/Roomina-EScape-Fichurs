@@ -6,6 +6,7 @@ public class Room {
     private String theme;
     private int level;
     private double price;
+    private int escapeRoomId;
 
     public Room(String name, String theme, int level) {
         this.name = name;
@@ -14,18 +15,20 @@ public class Room {
         this.price = 25.0;
     }
 
-    public Room(int id, String name, String theme, int level,  double price) {
+    public Room(int id, String name, String theme, int level,  double price, int escapeRoomId) {
         this.id = id;
         this.name = name;
         this.theme = theme;
         this.level = level;
         this.price = price;
+        this.escapeRoomId = escapeRoomId;
     }
 
     public Room(int id, String name){
         this.id = id;
         this.name = name;
     }
+
 
     public int getId() {return id;}
 
@@ -43,6 +46,10 @@ public class Room {
 
     public double getPrice() {
         return price;
+    }
+
+    public int getEscapeRoomId() {
+        return escapeRoomId;
     }
 
     @Override
