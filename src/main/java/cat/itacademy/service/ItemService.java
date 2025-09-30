@@ -31,7 +31,7 @@ public class ItemService {
             if (item.getMaterial() == null || item.getMaterial().isEmpty()) {
                 throw new InvalidAttributeException(ItemErrorMessages.ITEM_MATERIAL_NULL_EMPTY);
             }
-            if (item.getQuantity() <= 0) {
+            if (item.getStock() <= 0) {
                 throw new InvalidAttributeException(ItemErrorMessages.ITEM_QUANTITY_INVALID);
             }
 

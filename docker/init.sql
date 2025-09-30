@@ -34,19 +34,18 @@ CREATE TABLE IF NOT EXISTS item (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     material VARCHAR(50),
-    quantity INT DEFAULT 1,
-    price DECIMAL(10,2) DEFAULT 0.0,
-    room_id INT,
-    FOREIGN KEY (room_id) REFERENCES room(id) ON DELETE CASCADE
+    stock INT DEFAULT 1,
+    price DECIMAL(10,2) DEFAULT 0.0
 );
 
 -- Tabla de asignación de objectos a salas
-CREATE TABLE IF NOT EXISTS room_objects (
-    room_id INT NOT NULL,
-    item_id INT NOT NULL,
-    quantity INT,
-    FOREIGN KEY (room_id) REFERENCES room(id),
-    FOREIGN KEY (item_id) REFERENCES item(id)
+CREATE TABLE IF NOT EXISTS room_item (
+    room_id  INT NOT NULL,
+    item_id  INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (room_id, item_id),
+    FOREIGN KEY (room_id) REFERENCES room(id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE
 );
 -- Tabla cliente
 CREATE TABLE IF NOT EXISTS client (

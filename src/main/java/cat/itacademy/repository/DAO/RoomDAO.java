@@ -87,7 +87,7 @@ public class RoomDAO {
         }
     }
 
-    public Room getById(int id) throws SQLException {
+    public Room getRoomById(int id) throws SQLException {
         String sql = "SELECT id, name, theme,level, price, escape_room_id FROM room WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -102,7 +102,7 @@ public class RoomDAO {
                             rs.getString("name"),
                             rs.getString("theme"),
                             rs.getInt("level"),
-                            rs.getInt("price"),
+                            rs.getDouble("price"),
                             rs.getInt("escape_room_id")
                     );
                 }
@@ -113,12 +113,14 @@ public class RoomDAO {
 
 
     public List<Room> getAvailableRooms()throws SQLException  {
+
         List<Room> rooms = new ArrayList<>();
         String sql = "SELECT id, name FROM room WHERE escape_room_id IS NULL";
+
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            try(ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     rooms.add(new Room(
                             rs.getInt("id"),
@@ -129,4 +131,19 @@ public class RoomDAO {
         }
         return rooms;
     }
+
+    public boolean existsById(int id) throws SQLException {
+
+        String sql = "SELECT 1 FROM room WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next(); }
+        }
+    }
+
 }

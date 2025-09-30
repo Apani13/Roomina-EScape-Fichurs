@@ -86,6 +86,6 @@ public class RoomService {
     }
 
     public Room getRoomById(int id) throws SQLException {
-        return roomDAO.getById(id);
+        return roomDAO.getRoomById(id);
     }
 }
