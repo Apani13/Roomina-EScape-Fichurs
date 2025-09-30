@@ -3,6 +3,7 @@ import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.model.Clue;
+import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.service.ClueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,6 +96,6 @@ public class ClueServiceTest {
 
     @Test
     public void whenClueListIsEmpty_thenThrowsEmptyListException() throws SQLException {
-        assertThrows(EmptyListException.class, ()->management.getClues());
+        assertThrows(EmptyListException.class, ()-> clueService.getClues());
     }
 }
