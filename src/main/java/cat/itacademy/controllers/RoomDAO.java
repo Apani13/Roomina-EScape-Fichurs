@@ -1,6 +1,4 @@
 package cat.itacademy.controllers;
-
-import cat.itacademy.models.EscapeRoom;
 import cat.itacademy.models.Room;
 import cat.itacademy.repositories.DatabaseConnection;
 
@@ -111,5 +109,24 @@ public class RoomDAO {
              }
         }
         return null;
+    }
+
+
+    public List<Room> getAvailableRooms()throws SQLException  {
+        List<Room> rooms = new ArrayList<>();
+        String sql = "SELECT id, name FROM room WHERE escape_room_id IS NULL";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    rooms.add(new Room(
+                            rs.getInt("id"),
+                            rs.getString("name")
+                    ));
+                }
+            }
+        }
+        return rooms;
     }
 }

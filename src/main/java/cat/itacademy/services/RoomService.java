@@ -63,6 +63,13 @@ public class RoomService {
         return roomDAO.getAllNames();
     }
 
+    public List<Room> getAvailableRooms() throws SQLException {
+        if(roomDAO.getAllNames().isEmpty()) {
+            throw new  EmptyListException(RoomErrorMessages.ROOM_LIST_EMPTY);
+        }
+        return roomDAO.getAvailableRooms();
+    }
+
     public void showRooms() throws SQLException {
         System.out.println("---------Lista de salas----------");
         for(Room room: getAllRooms()){
