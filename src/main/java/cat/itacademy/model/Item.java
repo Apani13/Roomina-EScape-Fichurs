@@ -2,33 +2,35 @@ package cat.itacademy.model;
 
 public class Item {
 
+    private int id;
     private String name;
     private String material;
     private double price;
-    private int quantity;
+    private int stock;
 
-    public Item(String name, String material, int quantity) {
+    public Item(String name, String material, int stock) {
         this.name = name;
         this.material = material;
-        this.quantity = quantity;
-        this.price = 5;
+        this.stock = stock;
+        this.price = 5.0;
     }
 
-    public String getName() {
-        return name;
+    public Item(int id, String name, String material, int stock, double price) {
+        this.id = id;
+        this.name = name;
+        this.material = material;
+        this.stock = stock;
+        this.price = price;
     }
 
-    public String getMaterial() {
-        return material;
-    }
 
-    public int getQuantity() {
-        return quantity;
-    }
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getMaterial() { return material; }
+    public int getStock() { return stock; }
+    public double getPrice() { return price; }
 
-    public double getPrice() {
-        return price;
-    }
+    public void setId(int id) { this.id = id; }
 }
 
 
