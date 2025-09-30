@@ -1,5 +1,5 @@
 package clue;
-import cat.itacademy.models.Clue;
+import cat.itacademy.model.Clue;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;

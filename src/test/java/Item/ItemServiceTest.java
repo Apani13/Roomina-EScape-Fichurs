@@ -1,9 +1,9 @@
 package Item;
 
-import cat.itacademy.exceptions.DuplicateException;
-import cat.itacademy.exceptions.InvalidAttributeException;
-import cat.itacademy.models.Item;
-import cat.itacademy.services.ItemService;
+import cat.itacademy.exception.DuplicateException;
+import cat.itacademy.exception.InvalidAttributeException;
+import cat.itacademy.model.Item;
+import cat.itacademy.service.ItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

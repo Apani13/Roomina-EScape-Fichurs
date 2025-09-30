@@ -1,6 +1,6 @@
 package escapeRoom;
 
-import cat.itacademy.models.EscapeRoom;
+import cat.itacademy.model.EscapeRoom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

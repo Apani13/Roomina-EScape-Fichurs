@@ -1,13 +1,13 @@
 package room;
 
-import cat.itacademy.exceptions.DuplicateException;
-import cat.itacademy.exceptions.EmptyListException;
-import cat.itacademy.exceptions.InvalidAttributeException;
-import cat.itacademy.models.Clue;
-import cat.itacademy.models.Room;
-import cat.itacademy.repositories.DatabaseConnection;
-import cat.itacademy.services.ClueService;
-import cat.itacademy.services.RoomService;
+import cat.itacademy.exception.DuplicateException;
+import cat.itacademy.exception.EmptyListException;
+import cat.itacademy.exception.InvalidAttributeException;
+import cat.itacademy.model.Clue;
+import cat.itacademy.model.Room;
+import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.service.ClueService;
+import cat.itacademy.service.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

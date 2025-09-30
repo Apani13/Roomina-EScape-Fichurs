@@ -1,9 +1,9 @@
 package cat.itacademy;
 
-import cat.itacademy.models.Clue;
-import cat.itacademy.models.Room;
-import cat.itacademy.services.ClueService;
-import cat.itacademy.services.RoomService;
+import cat.itacademy.model.Clue;
+import cat.itacademy.model.Room;
+import cat.itacademy.service.ClueService;
+import cat.itacademy.service.RoomService;
 
 import java.sql.SQLException;
 

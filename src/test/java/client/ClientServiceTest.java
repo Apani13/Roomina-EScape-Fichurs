@@ -1,11 +1,11 @@
 package client;
 
-import cat.itacademy.exceptions.DuplicateException;
-import cat.itacademy.exceptions.InvalidAttributeException;
-import cat.itacademy.models.Client;
-import cat.itacademy.models.EscapeRoom;
-import cat.itacademy.repositories.DatabaseConnection;
-import cat.itacademy.services.ClientService;
+import cat.itacademy.exception.DuplicateException;
+import cat.itacademy.exception.InvalidAttributeException;
+import cat.itacademy.model.Client;
+import cat.itacademy.model.EscapeRoom;
+import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

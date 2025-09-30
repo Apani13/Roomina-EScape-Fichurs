@@ -1,6 +1,6 @@
 package Item;
 
-import cat.itacademy.models.Item;
+import cat.itacademy.model.Item;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
