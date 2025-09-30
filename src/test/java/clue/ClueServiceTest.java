@@ -1,5 +1,6 @@
 package clue;
 import cat.itacademy.exceptions.DuplicateException;
+import cat.itacademy.exceptions.EmptyListException;
 import cat.itacademy.exceptions.InvalidAttributeException;
 import cat.itacademy.models.Clue;
 import cat.itacademy.repositories.DatabaseConnection;
@@ -10,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
 import java.sql.SQLException;
 
 import static cat.itacademy.utils.ClueSuccessMessages.CLUE_CREATED;
@@ -92,6 +94,8 @@ public class ClueServiceTest {
 
     }
 
-
-
+    @Test
+    public void whenClueListIsEmpty_thenThrowsEmptyListException() throws SQLException {
+        assertThrows(EmptyListException.class, ()->management.getClues());
+    }
 }

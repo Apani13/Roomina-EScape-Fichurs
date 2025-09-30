@@ -1,17 +1,34 @@
 package cat.itacademy;
 
+import cat.itacademy.models.Clue;
+import cat.itacademy.models.Room;
+import cat.itacademy.services.ClueService;
+import cat.itacademy.services.RoomService;
+
+import java.sql.SQLException;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    public static void main(String[] args) throws SQLException {
+        RoomService roomService = new RoomService();
+        ClueService clueService = new ClueService();
+        Room room = new Room("room1", "Terror", 1);
+        Room room1 = new Room("room2", "Diversion", 2);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        Clue clue = new Clue("pista2", "terror","iuwdiqwuduqwuqw", 10.3);
+        Clue clue2 = new Clue("pista4", "terror","iuwdiqwuduqwuqw", 10.3);
+
+        //roomService.addRoom(room);
+        //roomService.addRoom(room1);
+        //clueService.addClue(clue);
+        //clueService.addClue(clue2);
+
+        roomService.showRooms();
+        clueService.showClue();
+
+        //roomService.addHintToEscapeRoom(1, 2);
+        //roomService.addHintToEscapeRoom(2, 1);
+
     }
 }
