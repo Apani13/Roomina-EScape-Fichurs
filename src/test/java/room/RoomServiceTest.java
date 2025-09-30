@@ -25,9 +25,9 @@ public class RoomServiceTest {
     @BeforeEach
     void setUp() {
         roomService = new RoomService();
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM room")) {
-            stmt.executeUpdate();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.prepareStatement("DELETE FROM clue").executeUpdate();
+            conn.prepareStatement("DELETE FROM room").executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
