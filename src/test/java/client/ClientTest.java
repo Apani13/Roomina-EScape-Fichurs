@@ -1,7 +1,6 @@
 package client;
 
-import cat.itacademy.models.Client;
-import cat.itacademy.models.EscapeRoom;
+import cat.itacademy.model.Client;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,15 +1,13 @@
 package escapeRoom;
 
-import cat.itacademy.exceptions.DuplicateException;
-import cat.itacademy.exceptions.EmptyListException;
-import cat.itacademy.exceptions.InvalidAttributeException;
-import cat.itacademy.models.Clue;
-import cat.itacademy.models.EscapeRoom;
-import cat.itacademy.models.Room;
-import cat.itacademy.repositories.DatabaseConnection;
-import cat.itacademy.services.ClueService;
-import cat.itacademy.services.EscapeRoomService;
-import cat.itacademy.services.RoomService;
+import cat.itacademy.exception.DuplicateException;
+import cat.itacademy.exception.EmptyListException;
+import cat.itacademy.exception.InvalidAttributeException;
+import cat.itacademy.model.EscapeRoom;
+import cat.itacademy.model.Room;
+import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.service.EscapeRoomService;
+import cat.itacademy.service.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +16,6 @@ import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.EmptyStackException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
