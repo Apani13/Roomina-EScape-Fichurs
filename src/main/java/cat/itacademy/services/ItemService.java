@@ -40,7 +40,7 @@ public class ItemService {
             }
 
             itemDAO.insert(item);
-            System.out.println(ItemSuccessMessages.OBJECT_SUCCES);
+            System.out.println(ItemSuccessMessages.ITEM_SUCCESS);
 
         } catch (DuplicateException | InvalidAttributeException e) {
             throw e;
