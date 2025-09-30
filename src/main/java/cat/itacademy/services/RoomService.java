@@ -9,6 +9,7 @@ import cat.itacademy.exceptions.NullObjectException;
 import cat.itacademy.models.Room;
 import cat.itacademy.utils.RoomErrorMessages;
 import cat.itacademy.utils.RoomSuccessMessages;
+import cat.itacademy.utils.RoomUIMessages;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -64,10 +65,11 @@ public class RoomService {
     }
 
     public void showRooms() throws SQLException {
-        System.out.println("---------Lista de salas----------");
+        System.out.println(RoomUIMessages.ROOMUI_LIST_HEADER);
         for(Room room: getAllRooms()){
-            System.out.println("Cod: " + room.getId() + " Nombre: " + room.getName());
+            System.out.println(String.format(RoomUIMessages.ROOMUI_LIST_BODY, room.getId(),room.getName()));
         }
+        System.out.println(RoomUIMessages.ROOMUI_LIST_FOOTER);
     }
 
     public void addClueToRoom(int roomId, int clueId) throws SQLException {
