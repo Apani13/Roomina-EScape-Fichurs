@@ -80,5 +80,19 @@ public class RoomServiceTest {
 
         assertEquals(roomId, clueService.getClueById(clueId).getRoomId());
     }
+
+    @Test
+    public void whenRoomWithClueListIsEmpty_thenThrowsEmptyListException() throws SQLException {
+        assertThrows(EmptyListException.class, ()->roomService.getRoomsWithClues());
+    }
+
+    @Test
+    public void whenRoomListWithClue_thenReturnARecord(){
+        roomService.addRoom(new Room("Slipknot", "music", 2));
+        roomService.addRoom(new Room("saw", "terror", 3));
+
+        ClueService clueService = new ClueService();
+
+    }
 }
 
