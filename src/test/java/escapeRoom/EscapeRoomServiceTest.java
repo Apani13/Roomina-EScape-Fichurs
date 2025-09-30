@@ -1,10 +1,13 @@
 package escapeRoom;
 
-import cat.itacademy.exceptions.DuplicateException;
-import cat.itacademy.exceptions.InvalidAttributeException;
-import cat.itacademy.models.EscapeRoom;
-import cat.itacademy.repositories.DatabaseConnection;
-import cat.itacademy.services.EscapeRoomService;
+import cat.itacademy.exception.DuplicateException;
+import cat.itacademy.exception.EmptyListException;
+import cat.itacademy.exception.InvalidAttributeException;
+import cat.itacademy.model.EscapeRoom;
+import cat.itacademy.model.Room;
+import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.service.EscapeRoomService;
+import cat.itacademy.service.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,8 +26,10 @@ public class EscapeRoomServiceTest {
     void setUp() {
         escapeRoomService = new EscapeRoomService();
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM escape_room")) {
+             PreparedStatement stmt = conn.prepareStatement("DELETE FROM room");
+            PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM escape_room")){
             stmt.executeUpdate();
+            stmt2.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -55,5 +60,24 @@ public class EscapeRoomServiceTest {
         EscapeRoom escapeRoom = new EscapeRoom("EscapeRoom1");
         escapeRoomService.addEscapeRoom(escapeRoom);
         assertThrows(DuplicateException.class, ()-> escapeRoomService.addEscapeRoom(escapeRoom));
+    }
+
+    @Test
+    public void whenEscapeRoomListIsEmpty_thenEmptyListExceptionIsThrown() throws SQLException {
+        assertThrows(EmptyListException.class, () -> escapeRoomService.getAllEscapeRooms());
+    }
+
+    @Test
+    public void shouldUpdateEscaperoomId_whenRoomIsAssignedToEscapeRoom() throws SQLException {
+        escapeRoomService.addEscapeRoom(new EscapeRoom ("ScaryRoom"));
+        RoomService roomService = new RoomService();
+        roomService.addRoom(new Room("Psicosis3", "Terror",  3));
+
+        int roomId = roomService.getLastRoom().getId();
+        int EscapeRoomId = escapeRoomService.getLastEscapeRoom().getId();
+
+        escapeRoomService.addRoomToEscapeRoom(EscapeRoomId, roomId);
+
+        assertEquals(EscapeRoomId, roomService.getRoomById(roomId).getEscapeRoomId());
     }
 }
