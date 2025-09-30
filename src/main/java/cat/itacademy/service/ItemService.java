@@ -7,8 +7,8 @@ import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.exception.NullObjectException;
 import cat.itacademy.model.Item;
-import cat.itacademy.messages.error.ItemErrorMessages;
-import cat.itacademy.messages.success.ItemSuccessMessages;
+import cat.itacademy.message.error.ItemErrorMessages;
+import cat.itacademy.message.success.ItemSuccessMessages;
 
 public class ItemService {
 

@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static cat.itacademy.messages.error.ClueErrorMessages.*;
-import static cat.itacademy.messages.ui.ClueUIMessages.*;
-import static cat.itacademy.messages.success.ClueSuccessMessages.*;
-import static cat.itacademy.messages.error.DBErrorMessages.ERROR_DB_UNEXPECTED_PROBLEM;
+import static cat.itacademy.message.error.ClueErrorMessages.*;
+import static cat.itacademy.message.ui.ClueUIMessages.*;
+import static cat.itacademy.message.success.ClueSuccessMessages.*;
+import static cat.itacademy.message.error.DBErrorMessages.ERROR_DB_UNEXPECTED_PROBLEM;
 
 public class ClueService {
 

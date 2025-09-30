@@ -7,8 +7,8 @@ import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.exception.NullObjectException;
 import cat.itacademy.model.Room;
-import cat.itacademy.messages.error.RoomErrorMessages;
-import cat.itacademy.messages.success.RoomSuccessMessages;
+import cat.itacademy.message.error.RoomErrorMessages;
+import cat.itacademy.message.success.RoomSuccessMessages;
 
 import java.sql.SQLException;
 import java.util.List;

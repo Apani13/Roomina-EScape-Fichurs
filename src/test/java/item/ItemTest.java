@@ -1,4 +1,4 @@
-package Item;
+package item;
 
 import cat.itacademy.model.Item;
 import org.junit.jupiter.api.Assertions;

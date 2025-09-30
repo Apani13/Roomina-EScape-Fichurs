@@ -4,8 +4,8 @@ import cat.itacademy.repository.DAO.ClientDAO;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.model.Client;
-import cat.itacademy.messages.error.ClientErrorMessages;
-import cat.itacademy.messages.success.ClienteSuccessMessages;
+import cat.itacademy.message.error.ClientErrorMessages;
+import cat.itacademy.message.success.ClienteSuccessMessages;
 
 import java.util.logging.Logger;
 

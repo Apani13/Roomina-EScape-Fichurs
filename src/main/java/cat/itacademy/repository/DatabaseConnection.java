@@ -1,6 +1,6 @@
 package cat.itacademy.repository;
 
-import cat.itacademy.messages.error.DBErrorMessages;
+import cat.itacademy.message.error.DBErrorMessages;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

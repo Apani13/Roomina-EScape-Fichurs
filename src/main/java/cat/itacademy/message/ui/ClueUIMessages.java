@@ -1,4 +1,4 @@
-package cat.itacademy.messages.ui;
+package cat.itacademy.message.ui;
 
 public class ClueUIMessages {
     public ClueUIMessages() {}

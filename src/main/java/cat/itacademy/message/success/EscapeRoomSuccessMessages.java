@@ -1,4 +1,4 @@
-package cat.itacademy.messages.success;
+package cat.itacademy.message.success;
 
 public class EscapeRoomSuccessMessages {
 

@@ -5,8 +5,8 @@ import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.repository.DAO.EscapeRoomDAO;
 import cat.itacademy.model.EscapeRoom;
-import cat.itacademy.messages.error.EscapeRoomErrorMessages;
-import cat.itacademy.messages.success.EscapeRoomSuccessMessages;
+import cat.itacademy.message.error.EscapeRoomErrorMessages;
+import cat.itacademy.message.success.EscapeRoomSuccessMessages;
 
 import java.sql.SQLException;
 import java.util.List;

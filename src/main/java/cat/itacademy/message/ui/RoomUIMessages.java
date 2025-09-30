@@ -1,4 +1,4 @@
-package cat.itacademy.messages.ui;
+package cat.itacademy.message.ui;
 
 public class RoomUIMessages {
     public static final String ROOMUI_LIST_HEADER = "---------Lista de salas----------";

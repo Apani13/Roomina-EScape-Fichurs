@@ -1,4 +1,4 @@
-package cat.itacademy.messages.error;
+package cat.itacademy.message.error;
 
 public class ItemErrorMessages {
 

@@ -10,7 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.SQLException;
 
-import static cat.itacademy.messages.success.ClueSuccessMessages.CLUE_CREATED;
+import static cat.itacademy.message.success.ClueSuccessMessages.CLUE_CREATED;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ClueServiceTest {

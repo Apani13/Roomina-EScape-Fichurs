@@ -1,4 +1,4 @@
-package Item;
+package item;
 
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.InvalidAttributeException;

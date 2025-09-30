@@ -1,4 +1,4 @@
-package cat.itacademy.messages.error;
+package cat.itacademy.message.error;
 
 public class ClueErrorMessages {
     public static final String CLUE_NULL_OBJECT = "El objeto pista es nulo...";
