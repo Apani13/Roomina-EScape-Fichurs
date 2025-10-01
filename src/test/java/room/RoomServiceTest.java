@@ -33,7 +33,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void whenCreatedRoomWithEmptyAtributes_thenInvalidNameExceptionIsThrown() {
+    public void whenCreatedRoomWithEmptyAttributes_thenInvalidNameExceptionIsThrown() {
 
         Room roomWithEmptyName = new Room("", "Terror", 2);
         Room roomWithNullTheme = new Room("Chuky", null, 2);
@@ -53,7 +53,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void whenCreatedRoomIfAlreadyExists_thenDuplicatedRoomExceptionIsThrown()  {
+    public void whenCreatedRoomThatAlreadyExists_thenDuplicatedRoomExceptionIsThrown()  {
         Room room1 = new Room("Chucky", "Terror", 2);
         Room room2 = new Room("Chucky", "Terror", 2);
 

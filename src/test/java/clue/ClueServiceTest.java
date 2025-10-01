@@ -96,6 +96,8 @@ public class ClueServiceTest {
 
     @Test
     public void whenClueListIsEmpty_thenThrowsEmptyListException() throws SQLException {
-        assertThrows(EmptyListException.class, ()->clueService.getClues());
+
+        assertThrows(EmptyListException.class, ()-> clueService.getClues());
+
     }
 }
