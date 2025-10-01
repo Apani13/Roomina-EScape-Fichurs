@@ -8,6 +8,7 @@ import cat.itacademy.message.error.ClientErrorMessages;
 import cat.itacademy.message.success.ClienteSuccessMessages;
 
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class ClientService {
@@ -33,7 +34,7 @@ public class ClientService {
             }
 
             clientDAO.insert(client);
-            Client lastClient = clientDAO.getLastClient();
+            Client lastClient = getLastClient();
             System.out.println(String.format(ClienteSuccessMessages.CLIENT_CREATED, lastClient.getUserName(), lastClient.getEmail(), lastClient.getPhone(), lastClient.isAcceptsNotifications()));
         } catch (DuplicateException | InvalidAttributeException e) {
             throw e;
@@ -44,6 +45,20 @@ public class ClientService {
     }
 
     public Client getLastClient() throws SQLException {
-        return clientDAO.getLastClient();
+        Optional<Client> client = clientDAO.getLastClient();
+        if (client.isPresent()) {
+            return client.get();
+        }else {
+            return null;
+        }
+    }
+
+    public Client getClientById(int id) throws SQLException {
+        Optional<Client> client = clientDAO.getById(id);
+        if (client.isPresent()) {
+            return client.get();
+        } else {
+            return null;
+        }
     }
 }
