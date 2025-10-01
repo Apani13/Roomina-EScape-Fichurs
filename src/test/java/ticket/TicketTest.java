@@ -25,7 +25,7 @@ public class TicketTest {
 
         RoomService roomService = new RoomService();
         roomService.addRoom(new Room("room1", "intriga", 2));
-        roomId = roomService.getLastRoom().getId();
+        roomId = roomService.getLastRoom().get().getId();
 
     }
 

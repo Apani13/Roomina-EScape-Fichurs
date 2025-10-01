@@ -1,5 +1,6 @@
 package cat.itacademy.repository.DAO;
 
+import cat.itacademy.dto.AvailableClueDTO;
 import cat.itacademy.model.Clue;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -101,6 +102,25 @@ public class ClueDAO {
             }
         }
         return null;
+    }
+
+    public List<AvailableClueDTO> getAvailableCluesWithDetails() throws SQLException {
+        List<AvailableClueDTO> clues = new ArrayList<>();
+        String sql = "SELECT name, theme FROM clue WHERE room_id IS NULL";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                AvailableClueDTO clue = new AvailableClueDTO(
+                        rs.getString("name"),
+                        rs.getString("theme")
+                );
+                clues.add(clue);
+            }
+        }
+        return clues;
     }
 
 }

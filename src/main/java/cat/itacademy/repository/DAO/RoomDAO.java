@@ -1,4 +1,5 @@
 package cat.itacademy.repository.DAO;
+import cat.itacademy.dto.AvailableRoomDTO;
 import cat.itacademy.model.Room;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -165,4 +166,25 @@ public class RoomDAO {
             stmt.executeUpdate();
         }
     }
+
+    public List<AvailableRoomDTO> getAvailableRoomsWithDetails() throws SQLException {
+        List<AvailableRoomDTO> rooms = new ArrayList<>();
+        String sql = "SELECT name, theme FROM room WHERE escape_room_id IS NULL";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                AvailableRoomDTO room = new AvailableRoomDTO(
+                        rs.getString("name"),
+                        rs.getString("theme")
+                );
+                rooms.add(room);
+            }
+        }
+        return rooms;
+    }
+
+
 }

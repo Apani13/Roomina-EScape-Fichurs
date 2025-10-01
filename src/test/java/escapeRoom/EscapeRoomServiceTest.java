@@ -95,16 +95,17 @@ public class EscapeRoomServiceTest {
 
         escapeRoomService.addRoomToEscapeRoom(escapeRoomId, roomId);
 
-        Optional<Room> roomBeforeOpt = roomService.getRoomById(roomId);
-        assertTrue(roomBeforeOpt.isPresent());
-        assertEquals(Integer.valueOf(escapeRoomId), roomBeforeOpt.get().getEscapeRoomId());
+        Optional<Room> roomBeforeRemove = roomService.getRoomById(roomId);
+
+        assertTrue(roomBeforeRemove.isPresent());
+        assertEquals(Integer.valueOf(escapeRoomId), roomBeforeRemove.get().getEscapeRoomId());
 
         escapeRoomService.removeRoomFromEscapeRoom(roomId);
 
-        Optional<Room> roomAfterOpt = roomService.getRoomById(roomId);
+        Optional<Room> roomAfterRemove = roomService.getRoomById(roomId);
 
-        assertTrue(roomAfterOpt.isPresent());
-        assertTrue(roomAfterOpt.get().getEscapeRoomIdOpt().isEmpty());
+        assertTrue(roomAfterRemove.isPresent());
+        assertTrue(roomAfterRemove.get().getEscapeRoomIdOpt().isEmpty());
     }
 }
 
