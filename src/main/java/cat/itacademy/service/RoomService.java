@@ -13,6 +13,7 @@ import cat.itacademy.message.success.RoomSuccessMessages;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.Optional;
 
 
 public class RoomService {
@@ -81,11 +82,11 @@ public class RoomService {
         roomDAO.updateRoomIdClue(roomId, clueId);
     }
 
-    public Room getLastRoom() throws SQLException {
+    public Optional<Room> getLastRoom() throws SQLException {
         return roomDAO.getLastRoom();
     }
 
-    public Room getRoomById(int id) throws SQLException {
+    public Optional<Room> getRoomById(int id) throws SQLException {
         return roomDAO.getById(id);
     }
 

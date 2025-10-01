@@ -3,6 +3,7 @@ package cat.itacademy.service;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.exception.InvalidAttributeException;
+import cat.itacademy.message.success.RoomSuccessMessages;
 import cat.itacademy.repository.DAO.EscapeRoomDAO;
 import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.message.error.EscapeRoomErrorMessages;
@@ -10,6 +11,7 @@ import cat.itacademy.message.success.EscapeRoomSuccessMessages;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class EscapeRoomService {
@@ -30,8 +32,13 @@ public class EscapeRoomService {
             }
 
             escapeRoomDAO.insert(escapeRoom);
-            EscapeRoom escapeRoomDB = getLastEscapeRoom();
-            System.out.println(String.format(EscapeRoomSuccessMessages.ESCAPEROOM_CREATED, escapeRoomDB.getName()));
+            Optional<EscapeRoom> escapeRoomDB = getLastEscapeRoom();
+
+            String escapeRoomName = escapeRoomDB
+                    .map(EscapeRoom::getName)
+                    .orElse("Nombre no disponible");
+            
+            System.out.println(String.format(EscapeRoomSuccessMessages.ESCAPEROOM_CREATED, escapeRoomName));
         } catch (DuplicateException | InvalidAttributeException e) {
             throw e;
         } catch (Exception e) {
@@ -40,7 +47,7 @@ public class EscapeRoomService {
         }
     }
 
-    public EscapeRoom getLastEscapeRoom() throws SQLException {
+    public Optional<EscapeRoom> getLastEscapeRoom() throws SQLException {
         return escapeRoomDAO.getLastEscapeRoom();
     }
 
@@ -51,7 +58,7 @@ public class EscapeRoomService {
         return escapeRoomDAO.findAll();
     }
 
-    public EscapeRoom getEscapeRoomById(int id) throws SQLException {
+    public Optional<EscapeRoom> getEscapeRoomById(int id) throws SQLException {
         return escapeRoomDAO.getById(id);
     }
 
@@ -59,4 +66,21 @@ public class EscapeRoomService {
         escapeRoomDAO.updateEscapeRoomIdRoom(escapeRoomId, roomId);
 
     }
+
+    public void removeRoomFromEscapeRoom(int roomId) throws SQLException {
+        try {
+            escapeRoomDAO.removeRoomFromEscapeRoom(roomId);
+
+            System.out.println(RoomSuccessMessages.ROOM_REMOVED_FROM_ESCAPEROOM);
+
+        } catch (SQLException e) {
+            Logger logger = Logger.getLogger(RoomService.class.getName());
+            logger.severe("Error al retirar sala del Escape Room: " + e.getMessage());
+            throw e;
+        }
+    }
+
+
+
+
 }

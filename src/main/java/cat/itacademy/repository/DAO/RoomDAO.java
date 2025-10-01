@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RoomDAO {
 
@@ -66,7 +67,7 @@ public class RoomDAO {
         }
     }
 
-    public Room getLastRoom() throws SQLException {
+    public Optional<Room> getLastRoom() throws SQLException {
         String sql = "SELECT id, name, theme, level, price, escape_room_id FROM room ORDER BY id DESC LIMIT 1";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -74,20 +75,24 @@ public class RoomDAO {
              ResultSet rs = stmt.executeQuery();){
 
             if(rs.next()){
-                return new Room(
+                int escapeRoomId = rs.getInt("escape_room_id");
+                boolean wasNull = rs.wasNull();
+
+                 Room room = new Room(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("theme"),
                         rs.getInt("level"),
                         rs.getDouble("price"),
-                        rs.getInt("escape_room_id")
+                        wasNull ? null : escapeRoomId
                 );
+                return Optional.of(room);
             }
-            return null;
+            return Optional.empty();
         }
     }
 
-    public Room getById(int id) throws SQLException {
+    public Optional<Room>  getById(int id) throws SQLException {
         String sql = "SELECT id, name, theme,level, price, escape_room_id FROM room WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -97,19 +102,23 @@ public class RoomDAO {
 
             try(ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Room(
+                    int escapeRoomId = rs.getInt("escape_room_id");
+                    boolean wasNull = rs.wasNull();
+                    Room room = new Room(
                             rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("theme"),
                             rs.getInt("level"),
                             rs.getInt("price"),
-                            rs.getInt("escape_room_id")
+                            wasNull ? null : escapeRoomId
                     );
+                    return Optional.of(room);
                 }
-             }
+            }
         }
-        return null;
+        return Optional.empty();
     }
+
 
 
     public List<Room> getAvailableRooms()throws SQLException  {

@@ -1,12 +1,14 @@
 package cat.itacademy.model;
 
+import java.util.Optional;
+
 public class Room {
     private Integer id;
     private String name;
     private String theme;
     private int level;
     private double price;
-    private int escapeRoomId;
+    private Integer escapeRoomId;
 
     public Room(String name, String theme, int level) {
         this.name = name;
@@ -15,7 +17,7 @@ public class Room {
         this.price = 25.0;
     }
 
-    public Room(int id, String name, String theme, int level,  double price, int escapeRoomId) {
+    public Room(int id, String name, String theme, int level,  double price, Integer escapeRoomId) {
         this.id = id;
         this.name = name;
         this.theme = theme;
@@ -48,8 +50,12 @@ public class Room {
         return price;
     }
 
-    public int getEscapeRoomId() {
+    public Integer getEscapeRoomId() {
         return escapeRoomId;
+    }
+
+    public Optional<Integer> getEscapeRoomIdOpt() {
+        return Optional.ofNullable(escapeRoomId);
     }
 
     @Override
