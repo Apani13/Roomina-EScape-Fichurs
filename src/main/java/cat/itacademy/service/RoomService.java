@@ -90,4 +90,14 @@ public class RoomService {
         return roomDAO.getById(id);
     }
 
+    public List<Room> getRoomsWithClues() throws SQLException {
+        if(RoomDAO.getRoomsWithClues().isEmpty()){
+            throw new EmptyListException(RoomErrorMessages.ROOM_LIST_EMPTY);
+        }
+        return RoomDAO.getRoomsWithClues();
+    }
+
+    public void removeClueFromRoom(int clueId) throws SQLException {
+        roomDAO.removeClueFromRoom(clueId);
+    }
 }

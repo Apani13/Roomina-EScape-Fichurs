@@ -139,4 +139,30 @@ public class RoomDAO {
         return rooms;
     }
 
+    public static List<Room> getRoomsWithClues()throws SQLException {
+        List<Room> rooms = new ArrayList<>();
+        String sql = "SELECT DISTINCT r.id, r.name FROM room r JOIN clue c ON r.id = c.room_id";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    rooms.add(new Room(
+                            rs.getInt("id"),
+                            rs.getString("name")
+                    ));
+                }
+            }
+        }
+        return rooms;
+    }
+
+    public void removeClueFromRoom(int clueId)throws SQLException {
+        String sql = "UPDATE clue SET room_id = NULL WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, clueId);
+            stmt.executeUpdate();
+        }
+    }
 }

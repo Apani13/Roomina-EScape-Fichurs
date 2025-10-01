@@ -6,7 +6,7 @@ public class Clue {
     private String theme;
     private String description;
     private double price;
-    private int roomId;
+    private Integer roomId;
 
     public Clue(String name, String theme, String description, double price) {
         this.name = name;
@@ -15,7 +15,7 @@ public class Clue {
         this.price = price;
     }
 
-    public Clue(int id, String name, String theme, String description, double price,  int roomId) {
+    public Clue(int id, String name, String theme, String description, double price,  Integer roomId) {
         this.id = id;
         this.name = name;
         this.theme = theme;
@@ -47,5 +47,5 @@ public class Clue {
         return price;
     }
 
-    public int getRoomId() { return roomId; }
+    public Integer getRoomId() { return roomId; }
 }

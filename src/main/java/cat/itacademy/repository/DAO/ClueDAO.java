@@ -95,7 +95,7 @@ public class ClueDAO {
                             rs.getString("theme"),
                             rs.getString("description"),
                             rs.getDouble("price"),
-                            rs.getInt("room_id")
+                            rs.getObject("room_id", Integer.class)
                     );
                 }
             }
