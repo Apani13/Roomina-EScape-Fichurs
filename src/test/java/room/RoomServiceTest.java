@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,6 +78,44 @@ public class RoomServiceTest {
         roomService.addClueToRoom(roomId, clueId);
 
         assertEquals(roomId, clueService.getClueById(clueId).getRoomId());
+    }
+
+    @Test
+    public void whenRoomWithClueListIsEmpty_thenThrowsEmptyListException() throws SQLException {
+        assertThrows(EmptyListException.class, ()->roomService.getRoomsWithClues());
+    }
+
+    @Test
+    public void whenRoomListWithClue_thenReturnARecord() throws SQLException {
+        roomService.addRoom(new Room("Slipknot", "music", 2));
+        roomService.addRoom(new Room("saw", "terror", 3));
+
+        ClueService clueService = new ClueService();
+        clueService.addClue(new Clue("clue1", "diversion", "icabcuani", 10));
+        int roomid = roomService.getLastRoom().getId();
+        int clueid = clueService.getLastClue().getId();
+        roomService.addClueToRoom(roomid, clueid);
+
+        assertEquals(1, roomService.getRoomsWithClues().size(), "Se espera un tamaño igual a 1");
+    }
+
+    @Test
+    public void shouldUpdateRoomIdFromClue_whenClueIsUnassigned() throws SQLException {
+        roomService.addRoom(new Room("Slipknot", "music", 2));
+
+        ClueService clueService = new ClueService();
+        clueService.addClue(new Clue("clue1", "diversion", "icabcuani", 10));
+
+        int roomid = roomService.getLastRoom().getId();
+        int clueid = clueService.getLastClue().getId();
+
+        roomService.addClueToRoom(roomid, clueid);
+        assertAll(
+                ()->assertEquals(roomid, clueService.getClueById(clueid).getRoomId()),
+                ()->roomService.removeClueFromRoom(clueid),
+                ()->assertNull(clueService.getClueById(clueid).getRoomId())
+        );
+
     }
 }
 
