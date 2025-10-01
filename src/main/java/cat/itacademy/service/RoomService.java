@@ -82,12 +82,22 @@ public class RoomService {
         roomDAO.updateRoomIdClue(roomId, clueId);
     }
 
-    public Optional<Room> getLastRoom() throws SQLException {
-        return roomDAO.getLastRoom();
+    public Room getLastRoom() throws SQLException {
+        Optional<Room> room = roomDAO.getLastRoom();
+        if(room.isPresent()){
+            return room.get();
+        } else {
+            return null;
+        }
     }
 
-    public Optional<Room> getRoomById(int id) throws SQLException {
-        return roomDAO.getById(id);
+    public Room getRoomById(int id) throws SQLException {
+        Optional<Room> room = roomDAO.getById(id);
+        if(room.isPresent()){
+            return room.get();
+        } else {
+            return null;
+        }
     }
 
     public List<Room> getRoomsWithClues() throws SQLException {

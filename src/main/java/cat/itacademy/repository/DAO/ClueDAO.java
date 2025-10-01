@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ClueDAO {
 
@@ -59,7 +60,7 @@ public class ClueDAO {
         return clues;
     }
 
-    public Clue getLastClue() throws SQLException {
+    public Optional<Clue> getLastClue() throws SQLException {
         String sql = "SELECT id, name, theme, description, price, room_id FROM clue ORDER BY id DESC LIMIT 1";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -67,7 +68,7 @@ public class ClueDAO {
              ResultSet rs = stmt.executeQuery();){
 
             if(rs.next()){
-                return new Clue(
+                Clue clue = new Clue(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("theme"),
@@ -75,11 +76,12 @@ public class ClueDAO {
                         rs.getDouble("price"),
                         rs.getInt("room_id")
                 );
+                return Optional.of(clue);
             }
-            return null;
+            return Optional.empty();
         }
     }
-    public Clue getById(int id) throws SQLException {
+    public Optional<Clue> getById(int id) throws SQLException {
         String sql = "SELECT id, name, theme, description, price, room_id FROM clue WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -89,7 +91,7 @@ public class ClueDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Clue(
+                    Clue clue = new Clue(
                             rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("theme"),
@@ -97,10 +99,11 @@ public class ClueDAO {
                             rs.getDouble("price"),
                             rs.getObject("room_id", Integer.class)
                     );
+                    return Optional.of(clue);
                 }
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 }

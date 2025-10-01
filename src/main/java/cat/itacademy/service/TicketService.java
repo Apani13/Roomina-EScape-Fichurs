@@ -39,13 +39,13 @@ public class TicketService {
             if(clientService.getClientById(ticket.getClientId()) == null){
                 throw new RecordNotFoundException(ClientErrorMessages.CLIENT_NOT_FOUND);
             }
-            if(roomService.getRoomById(ticket.getRoomId()).isEmpty()){
+            if(roomService.getRoomById(ticket.getRoomId()) == null){
                 throw new RecordNotFoundException(RoomErrorMessages.ROOM_NOT_FOUND);
             }
 
             ticketDAO.insert(ticket);
             Ticket ticketDB = getLastTicket();
-            Room room = roomService.getRoomById(ticket.getRoomId()).get();
+            Room room = roomService.getRoomById(ticket.getRoomId());
             System.out.println(String.format(TicketSuccessMessages.TICKET_CREATED, room.getName(), ticketDB.getTotalPrice(), ticketDB.getDateCreationFormat()));
         }catch (RecordNotFoundException | InvalidAttributeException e) {
             throw e;

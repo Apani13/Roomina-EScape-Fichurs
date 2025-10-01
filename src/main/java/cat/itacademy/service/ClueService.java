@@ -7,6 +7,7 @@ import cat.itacademy.model.Clue;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import static cat.itacademy.message.error.ClueErrorMessages.*;
@@ -79,10 +80,20 @@ public class ClueService {
     }
 
     public Clue getLastClue() throws SQLException {
-        return clueDAO.getLastClue();
+        Optional<Clue> clue = clueDAO.getLastClue();
+        if(clue.isPresent()){
+            return clue.get();
+        }else {
+            return null;
+        }
     }
 
     public Clue getClueById(int id) throws SQLException {
-        return clueDAO.getById(id);
+        Optional<Clue> clue = clueDAO.getById(id);
+        if(clue.isPresent()){
+            return clue.get();
+        }else {
+            return null;
+        }
     }
 }

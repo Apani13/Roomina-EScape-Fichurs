@@ -25,18 +25,16 @@ public class TicketServiceTest {
     private ClientService clientService;
     RoomService roomService;
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws SQLException {
         ticketService = new TicketService();
         clientService = new ClientService();
         roomService = new RoomService();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.prepareStatement("DELETE FROM clue").executeUpdate();
             conn.prepareStatement("DELETE FROM ticket").executeUpdate();
             conn.prepareStatement("DELETE FROM client").executeUpdate();
             conn.prepareStatement("DELETE FROM room").executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -67,7 +65,7 @@ public class TicketServiceTest {
         roomService.addRoom(new Room("room1", "terror", 2));
         
         Client client = clientService.getLastClient();
-        Room room = roomService.getLastRoom().get();
+        Room room = roomService.getLastRoom();
 
         PrintStream originalOut = System.out;
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
