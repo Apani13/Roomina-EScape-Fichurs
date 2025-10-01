@@ -1,7 +1,7 @@
 package cat.itacademy.model;
 
 public class Room {
-    private int id;
+    private Integer id;
     private String name;
     private String theme;
     private int level;
@@ -30,7 +30,7 @@ public class Room {
     }
 
 
-    public int getId() {return id;}
+    public Integer getId() {return id;}
 
     public String getName() {
         return name;

@@ -7,6 +7,7 @@ import cat.itacademy.model.Client;
 import cat.itacademy.message.error.ClientErrorMessages;
 import cat.itacademy.message.success.ClienteSuccessMessages;
 
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class ClientService {
@@ -40,5 +41,9 @@ public class ClientService {
             Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
             logger.severe("Error inesperado: " + e.getMessage());
         }
+    }
+
+    public Client getLastClient() throws SQLException {
+        return clientDAO.getLastClient();
     }
 }
