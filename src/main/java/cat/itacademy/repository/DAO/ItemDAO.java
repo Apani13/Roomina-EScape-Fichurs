@@ -1,5 +1,6 @@
 package cat.itacademy.repository.DAO;
 
+import cat.itacademy.dto.AvailableItemDTO;
 import cat.itacademy.model.Item;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -7,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemDAO {
 
@@ -40,5 +43,38 @@ public class ItemDAO {
             }
         }
         return false;
+    }
+
+    public List<AvailableItemDTO> getAvailableItemsWithDetails() throws SQLException {
+        List<AvailableItemDTO> items = new ArrayList<>();
+        String sql = "SELECT name, quantity FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                AvailableItemDTO item = new AvailableItemDTO(
+                        rs.getString("name"),
+                        rs.getInt("quantity")
+                );
+                items.add(item);
+            }
+        }
+        return items;
+    }
+
+    public int getTotalAvailableItemsCount() throws SQLException {
+        String sql = "SELECT COALESCE(SUM(quantity), 0) FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }
     }
 }
