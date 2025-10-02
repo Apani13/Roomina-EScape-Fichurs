@@ -4,18 +4,15 @@ import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.model.Clue;
-import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.model.Room;
 import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.service.ClueService;
-import cat.itacademy.service.EscapeRoomService;
 import cat.itacademy.service.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 

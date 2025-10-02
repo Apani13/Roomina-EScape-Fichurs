@@ -9,8 +9,12 @@ import cat.itacademy.message.success.TicketSuccessMessages;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Ticket;
 import cat.itacademy.repository.DAO.TicketDAO;
+import cat.itacademy.validation.ticket.TicketBasicValidation;
+import cat.itacademy.validation.ticket.TicketEntityExistsValidation;
+import cat.itacademy.validation.ticket.TicketValidator;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -18,28 +22,21 @@ public class TicketService {
     private TicketDAO ticketDAO;
     private ClientService clientService;
     private RoomService roomService;
+    private TicketValidator ticketValidator;
 
     public TicketService() {
-        ticketDAO = new TicketDAO();
-        clientService = new ClientService();
-        roomService = new RoomService();
+        this.ticketDAO = new TicketDAO();
+        this.clientService = new ClientService();
+        this.roomService = new RoomService();
+        this.ticketValidator = new TicketValidator(List.of(
+                new TicketBasicValidation(),
+                new TicketEntityExistsValidation(clientService, roomService)
+        ));
     }
 
     public void addTicket(Ticket ticket) throws SQLException {
         try {
-            if(ticket.getClientId() == null || ticket.getClientId() <= 0) {
-                throw new InvalidAttributeException(TicketErrorMessages.TICKET_CLIENT_ID_NULL_EMPTY);
-            }
-            if(ticket.getRoomId() == null || ticket.getRoomId() <= 0) {
-                throw new InvalidAttributeException(TicketErrorMessages.TICKET_ROOM_ID_NULL_EMPTY);
-            }
-
-            if(clientService.getClientById(ticket.getClientId()) == null){
-                throw new EntityNotFoundException(ClientErrorMessages.CLIENT_NOT_FOUND);
-            }
-            if(roomService.getRoomById(ticket.getRoomId()) == null){
-                throw new EntityNotFoundException(RoomErrorMessages.ROOM_NOT_FOUND);
-            }
+            ticketValidator.validate(ticket);
 
             ticketDAO.insert(ticket);
             Ticket ticketDB = getLastTicket();

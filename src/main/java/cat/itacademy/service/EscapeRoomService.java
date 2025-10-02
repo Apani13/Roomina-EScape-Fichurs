@@ -8,6 +8,9 @@ import cat.itacademy.repository.DAO.EscapeRoomDAO;
 import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.message.error.EscapeRoomErrorMessages;
 import cat.itacademy.message.success.EscapeRoomSuccessMessages;
+import cat.itacademy.validation.escapeRoom.EscapeRoomBasicValidation;
+import cat.itacademy.validation.escapeRoom.EscapeRoomDuplicateValidation;
+import cat.itacademy.validation.escapeRoom.EscapeRoomValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,20 +19,20 @@ import java.util.logging.Logger;
 
 public class EscapeRoomService {
     private EscapeRoomDAO escapeRoomDAO;
+    private EscapeRoomValidator escapeRoomValidator;
 
     public EscapeRoomService() {
         this.escapeRoomDAO = new EscapeRoomDAO();
+        this.escapeRoomValidator = new EscapeRoomValidator(List.of(
+                new EscapeRoomBasicValidation(),
+                new EscapeRoomDuplicateValidation(escapeRoomDAO)
+        ));
     }
 
 
     public void addEscapeRoom(EscapeRoom escapeRoom) throws InvalidAttributeException, DuplicateException {
         try {
-            if (escapeRoom.getName() == null || escapeRoom.getName().isEmpty()) {
-                throw new InvalidAttributeException(EscapeRoomErrorMessages.ESCAPEROOM_NAME_NULL_EMPTY);
-            }
-            if(escapeRoomDAO.existsByName(escapeRoom.getName())){
-                throw new DuplicateException(EscapeRoomErrorMessages.ESCAPEROOM_DUPLICATED);
-            }
+            escapeRoomValidator.validate(escapeRoom);
 
             escapeRoomDAO.insert(escapeRoom);
             EscapeRoom escapeRoomDB = getLastEscapeRoom();

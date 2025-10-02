@@ -4,6 +4,9 @@ import cat.itacademy.repository.DAO.ClueDAO;
 import cat.itacademy.exception.*;
 
 import cat.itacademy.model.Clue;
+import cat.itacademy.validation.clue.ClueBasicValidation;
+import cat.itacademy.validation.clue.ClueDuplicateValidation;
+import cat.itacademy.validation.clue.ClueValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,37 +21,21 @@ import static cat.itacademy.message.error.DBErrorMessages.ERROR_DB_UNEXPECTED_PR
 public class ClueService {
 
     private ClueDAO clueDAO;
+    private ClueValidator clueValidator;
 
     public ClueService() {
         this.clueDAO = new ClueDAO();
+        this.clueValidator = new ClueValidator(List.of(
+                new ClueBasicValidation(),
+                new ClueDuplicateValidation(clueDAO)
+            )
+        );
     }
 
     public void addClue(Clue clue) throws DuplicateException, InvalidAttributeException {
 
         try {
-            if (clue == null) {
-                throw new NullObjectException(CLUE_NULL_OBJECT);
-            }
-
-            if (Double.isNaN(clue.getPrice()) || clue.getPrice() <= 0) {
-                throw new InvalidAttributeException(CLUE_PRICE_INVALID);
-            }
-
-            if (clue.getName() == null || clue.getName().isBlank()) {
-                throw new InvalidAttributeException(CLUE_NAME_NULL_EMPTY);
-            }
-
-            if (clue.getDescription() == null || clue.getDescription().isBlank()) {
-                throw new InvalidAttributeException(CLUE_DESC_NULL_EMPTY);
-            }
-
-            if (clue.getTheme() == null || clue.getTheme().isBlank()) {
-                throw new InvalidAttributeException(CLUE_THEME_NULL_EMPTY);
-            }
-
-            if (clueDAO.existsByName(clue.getName())) {
-                throw new DuplicateException(CLUE_DUPLICATED);
-            }
+            clueValidator.validate(clue);
 
             clueDAO.insert(clue);
 

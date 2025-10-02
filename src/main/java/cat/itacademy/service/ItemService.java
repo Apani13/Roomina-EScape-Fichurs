@@ -1,5 +1,6 @@
 package cat.itacademy.service;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import cat.itacademy.repository.DAO.ItemDAO;
@@ -9,35 +10,27 @@ import cat.itacademy.exception.NullObjectException;
 import cat.itacademy.model.Item;
 import cat.itacademy.message.error.ItemErrorMessages;
 import cat.itacademy.message.success.ItemSuccessMessages;
+import cat.itacademy.validation.item.ItemBasicValidation;
+import cat.itacademy.validation.item.ItemDuplicateValidation;
+import cat.itacademy.validation.item.ItemValidator;
 
 public class ItemService {
 
     private ItemDAO itemDAO;
+    private ItemValidator itemValidator;
 
     public ItemService() {
         this.itemDAO = new ItemDAO();
+        this.itemValidator = new ItemValidator(List.of(
+                new ItemBasicValidation(),
+                new ItemDuplicateValidation(itemDAO)
+        ));
     }
 
     public void addItem(Item item) throws InvalidAttributeException, DuplicateException, NullObjectException {
 
         try {
-            if (item == null) {
-                throw new NullObjectException(ItemErrorMessages.ITEM_NULL_OBJECT);
-            }
-
-            if (item.getName() == null || item.getName().isEmpty()) {
-                throw new InvalidAttributeException(ItemErrorMessages.ITEM_NAME_NULL_EMPTY);
-            }
-            if (item.getMaterial() == null || item.getMaterial().isEmpty()) {
-                throw new InvalidAttributeException(ItemErrorMessages.ITEM_MATERIAL_NULL_EMPTY);
-            }
-            if (item.getQuantity() <= 0) {
-                throw new InvalidAttributeException(ItemErrorMessages.ITEM_QUANTITY_INVALID);
-            }
-
-            if (itemDAO.existsByName(item.getName())) {
-                throw new DuplicateException(ItemErrorMessages.ITEM_DUPLICATED);
-            }
+            itemValidator.validate(item);
 
             itemDAO.insert(item);
          
