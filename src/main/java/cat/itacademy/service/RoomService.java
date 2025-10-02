@@ -10,6 +10,9 @@ import cat.itacademy.exception.NullObjectException;
 import cat.itacademy.model.Room;
 import cat.itacademy.message.error.RoomErrorMessages;
 import cat.itacademy.message.success.RoomSuccessMessages;
+import cat.itacademy.validation.room.RoomBasicValidation;
+import cat.itacademy.validation.room.RoomDuplicateValidation;
+import cat.itacademy.validation.room.RoomValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,32 +21,19 @@ import java.util.Optional;
 
 public class RoomService {
     private RoomDAO roomDAO;
+    private RoomValidator roomValidator;
 
     public RoomService() {
         this.roomDAO =  new RoomDAO();
+        this.roomValidator = new RoomValidator(List.of(
+                new RoomBasicValidation(),
+                new RoomDuplicateValidation(roomDAO)
+        ));
     }
 
     public void addRoom(Room room) throws InvalidAttributeException, DuplicateException, NullObjectException {
         try{
-            if (room == null) {
-                throw new NullObjectException(RoomErrorMessages.ROOM_NULL_OBJECT);
-            }
-
-            if (room.getName() == null || room.getName().isEmpty()) {
-                throw new InvalidAttributeException(RoomErrorMessages.ROOM_NAME_NULL_EMPTY);
-            }
-
-            if (room.getTheme() == null || room.getTheme().isEmpty()) {
-                throw new InvalidAttributeException(RoomErrorMessages.ROOM_THEME_NULL_EMPTY);
-            }
-
-            if (room.getLevel() <= 0 ) {
-                throw new InvalidAttributeException(RoomErrorMessages.ROOM_LEVEL_INVALID);
-            }
-
-            if (roomDAO.existsByName(room.getName()))  {
-                throw new DuplicateException(RoomErrorMessages.ROOM_DUPLICATED);
-            }
+            roomValidator.validate(room);
 
             roomDAO.insert(room);
 
