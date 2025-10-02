@@ -6,6 +6,7 @@ import cat.itacademy.repository.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EscapeRoomDAO {
     public void insert(EscapeRoom escapeRoom) throws SQLException {
@@ -69,25 +70,27 @@ public class EscapeRoomDAO {
         return false;
     }
 
-    public EscapeRoom getLastEscapeRoom() throws SQLException {
+    public Optional<EscapeRoom> getLastEscapeRoom() throws SQLException {
         String sql = "SELECT id, name FROM escape_room ORDER BY id DESC LIMIT 1";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery();){
+             ResultSet rs = stmt.executeQuery()){
 
             if(rs.next()){
-                return new EscapeRoom(
+                EscapeRoom escapeRoom = new EscapeRoom(
                         rs.getInt("id"),
                         rs.getString("name")
                 );
+                return Optional.of(escapeRoom);
             }
-            return null;
+            return Optional.empty();
         }
     }
 
-    public EscapeRoom getById(int id) throws SQLException {
-        String sql = "SELECT id, name FROM escaperoom WHERE id = ?";
+
+    public Optional<EscapeRoom> getById(int id) throws SQLException {
+        String sql = "SELECT id, name FROM escape_room WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -96,14 +99,15 @@ public class EscapeRoomDAO {
 
             try(ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new EscapeRoom(
+                    EscapeRoom escapeRoom = new EscapeRoom(
                             rs.getInt("id"),
                             rs.getString("name")
                     );
+                    return Optional.of(escapeRoom);
                 }
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public void updateEscapeRoomIdRoom(int escapeRoomId, int roomId) throws SQLException{
@@ -115,5 +119,14 @@ public class EscapeRoomDAO {
             stmt.executeUpdate();
         }
     
+    }
+
+    public void removeRoomFromEscapeRoom(int roomId) throws SQLException {
+        String sql = "UPDATE room SET escape_room_id = NULL WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, roomId);
+            stmt.executeUpdate();
+        }
     }
 }

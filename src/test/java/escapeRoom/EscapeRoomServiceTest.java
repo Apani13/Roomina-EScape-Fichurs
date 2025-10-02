@@ -16,10 +16,13 @@ import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EscapeRoomServiceTest {
+    
+    
     private EscapeRoomService escapeRoomService;
 
     @BeforeEach
@@ -73,11 +76,35 @@ public class EscapeRoomServiceTest {
         RoomService roomService = new RoomService();
         roomService.addRoom(new Room("Psicosis3", "Terror",  3));
 
-        int roomId = roomService.getLastRoom().getId();
-        int EscapeRoomId = escapeRoomService.getLastEscapeRoom().getId();
+        int roomId = roomService.getLastRoom().get().getId();
+        int EscapeRoomId = escapeRoomService.getLastEscapeRoom().get().getId();
 
         escapeRoomService.addRoomToEscapeRoom(EscapeRoomId, roomId);
 
-        assertEquals(EscapeRoomId, roomService.getRoomById(roomId).getEscapeRoomId());
+        assertEquals(EscapeRoomId, roomService.getRoomById(roomId).get().getEscapeRoomId());
+    }
+
+    @Test
+    public void whenRemoveRoomFromEscapeRoom_thenRoomEscapeRoomIdIsEmpty() throws SQLException {
+        RoomService roomService = new RoomService();
+        escapeRoomService.addEscapeRoom(new EscapeRoom("ScaryRoom"));
+        roomService.addRoom(new Room("Psicosis3", "Terror", 3));
+
+        int roomId = roomService.getLastRoom().get().getId();
+        int escapeRoomId = escapeRoomService.getLastEscapeRoom().get().getId();
+
+        escapeRoomService.addRoomToEscapeRoom(escapeRoomId, roomId);
+
+        Optional<Room> roomBeforeOpt = roomService.getRoomById(roomId);
+        assertTrue(roomBeforeOpt.isPresent());
+        assertEquals(Integer.valueOf(escapeRoomId), roomBeforeOpt.get().getEscapeRoomId());
+
+        escapeRoomService.removeRoomFromEscapeRoom(roomId);
+
+        Optional<Room> roomAfterOpt = roomService.getRoomById(roomId);
+
+        assertTrue(roomAfterOpt.isPresent());
+        assertTrue(roomAfterOpt.get().getEscapeRoomIdOpt().isEmpty());
     }
 }
+

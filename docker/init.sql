@@ -47,6 +47,16 @@ CREATE TABLE IF NOT EXISTS room_item (
     FOREIGN KEY (room_id) REFERENCES room(id) ON DELETE CASCADE,
     FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE
 );
+
+-- Tabla de asignación de objetos a salas
+CREATE TABLE IF NOT EXISTS room_item (
+    room_id INT NOT NULL,
+    item_id INT NOT NULL,
+    quantity INT,
+    FOREIGN KEY (room_id) REFERENCES room(id),
+    FOREIGN KEY (item_id) REFERENCES item(id)
+>>>>>>> 9dcc26787628b5c4a52d63912a9e8f609e49e317
+);
 -- Tabla cliente
 CREATE TABLE IF NOT EXISTS client (
     id INT PRIMARY KEY AUTO_INCREMENT,
