@@ -8,11 +8,11 @@ public class Clue {
     private double price;
     private Integer roomId;
 
-    public Clue(String name, String theme, String description, double price) {
+    public Clue(String name, String theme, String description) {
         this.name = name;
         this.theme = theme;
         this.description = description;
-        this.price = price;
+        this.price = 10.00;
     }
 
     public Clue(int id, String name, String theme, String description, double price,  Integer roomId) {

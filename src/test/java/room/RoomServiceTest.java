@@ -74,7 +74,7 @@ public class RoomServiceTest {
     public void shouldUpdateRoomId_whenClueIsAssignedToEscapeRoom() throws SQLException {
         roomService.addRoom(new Room("room1", "terror", 1));
         ClueService clueService = new ClueService();
-        clueService.addClue(new Clue("clue1", "diversion", "icabcuani", 10));
+        clueService.addClue(new Clue("clue1", "diversion", "icabcuani"));
 
         int roomId = roomService.getLastRoom().get().getId();
         int clueId = clueService.getLastClue().getId();

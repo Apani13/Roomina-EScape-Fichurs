@@ -16,8 +16,8 @@ public class Main {
         Room room = new Room("room1", "Terror", 1);
         Room room1 = new Room("room2", "Diversion", 2);
 
-        Clue clue = new Clue("pista2", "terror","iuwdiqwuduqwuqw", 10.3);
-        Clue clue2 = new Clue("pista4", "terror","iuwdiqwuduqwuqw", 10.3);
+        Clue clue = new Clue("pista2", "terror","iuwdiqwuduqwuqw");
+        Clue clue2 = new Clue("pista4", "terror","iuwdiqwuduqwuqw");
 
         //roomService.addRoom(room);
         roomService.addRoom(room1);

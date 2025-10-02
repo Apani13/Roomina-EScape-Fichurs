@@ -72,7 +72,7 @@ public class RoomDAO {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery();){
+             ResultSet rs = stmt.executeQuery()) {
 
             if(rs.next()){
                 int escapeRoomId = rs.getInt("escape_room_id");

@@ -48,5 +48,18 @@ public class RoomItemService {
         }
     }
 
+    public void updateItemStock(int roomId, int itemId) {
+
+        try {
+
+            removeItemFromRoom(roomId, itemId);
+
+        } catch (SQLException e) {
+
+            throw  new RuntimeException(e);
+
+        }
+    }
+
 
 }
