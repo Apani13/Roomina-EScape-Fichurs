@@ -76,12 +76,12 @@ public class EscapeRoomServiceTest {
         RoomService roomService = new RoomService();
         roomService.addRoom(new Room("Psicosis3", "Terror",  3));
 
-        int roomId = roomService.getLastRoom().get().getId();
-        int EscapeRoomId = escapeRoomService.getLastEscapeRoom().get().getId();
+        int roomId = roomService.getLastRoom().getId();
+        int EscapeRoomId = escapeRoomService.getLastEscapeRoom().getId();
 
         escapeRoomService.addRoomToEscapeRoom(EscapeRoomId, roomId);
 
-        assertEquals(EscapeRoomId, roomService.getRoomById(roomId).get().getEscapeRoomId());
+        assertEquals(EscapeRoomId, roomService.getRoomById(roomId).getEscapeRoomId());
     }
 
     @Test
@@ -90,22 +90,21 @@ public class EscapeRoomServiceTest {
         escapeRoomService.addEscapeRoom(new EscapeRoom("ScaryRoom"));
         roomService.addRoom(new Room("Psicosis3", "Terror", 3));
 
-        int roomId = roomService.getLastRoom().get().getId();
-        int escapeRoomId = escapeRoomService.getLastEscapeRoom().get().getId();
+        int roomId = roomService.getLastRoom().getId();
+        int escapeRoomId = escapeRoomService.getLastEscapeRoom().getId();
 
         escapeRoomService.addRoomToEscapeRoom(escapeRoomId, roomId);
 
-        Optional<Room> roomBeforeRemove = roomService.getRoomById(roomId);
-
-        assertTrue(roomBeforeRemove.isPresent());
-        assertEquals(Integer.valueOf(escapeRoomId), roomBeforeRemove.get().getEscapeRoomId());
+        Room roomBeforeOpt = roomService.getRoomById(roomId);
+        assertTrue(roomBeforeOpt != null);
+        assertEquals(Integer.valueOf(escapeRoomId), roomBeforeOpt.getEscapeRoomId());
 
         escapeRoomService.removeRoomFromEscapeRoom(roomId);
 
-        Optional<Room> roomAfterRemove = roomService.getRoomById(roomId);
+        Room roomAfterOpt = roomService.getRoomById(roomId);
 
-        assertTrue(roomAfterRemove.isPresent());
-        assertTrue(roomAfterRemove.get().getEscapeRoomIdOpt().isEmpty());
+        assertTrue(roomAfterOpt != null);
+        assertTrue(roomAfterOpt.getEscapeRoomIdOpt().isEmpty());
     }
 }
 

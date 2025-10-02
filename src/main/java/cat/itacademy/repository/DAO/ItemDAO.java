@@ -14,14 +14,16 @@ import java.util.List;
 public class ItemDAO {
 
     public void insert(Item item) throws SQLException {
-        String sql = "INSERT INTO item (name, material, quantity, price) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO item (name, material, quantity, price) VALUES(?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setString(1, item.getName());
             stmt.setString(2, item.getMaterial());
             stmt.setInt(3, item.getQuantity());
             stmt.setDouble(4, item.getPrice());
+
             stmt.executeUpdate();
         }
     }
@@ -31,7 +33,9 @@ public class ItemDAO {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setString(1, name);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;
@@ -72,7 +76,5 @@ public class ItemDAO {
             }
             return 0;
         }
-
-
     }
 }
