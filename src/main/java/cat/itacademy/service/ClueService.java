@@ -7,6 +7,7 @@ import cat.itacademy.model.Clue;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import static cat.itacademy.message.error.ClueErrorMessages.*;
@@ -50,6 +51,7 @@ public class ClueService {
             }
 
             clueDAO.insert(clue);
+
             System.out.println(String.format(CLUE_CREATED, clue.getName()));
 
         } catch (DuplicateException | InvalidAttributeException e) {
@@ -64,6 +66,7 @@ public class ClueService {
         if(clueDAO.getAllNames().isEmpty()){
             throw new EmptyListException(CLUE_LIST_EMPTY);
         }
+
         return clueDAO.getAllNames();
     }
 
@@ -71,18 +74,32 @@ public class ClueService {
         if(clueDAO.getAllNames().isEmpty()){
             throw new EmptyListException(CLUE_LIST_EMPTY);
         }
+
         System.out.println(CLUEUI_LIST_HEADER);
+
         for(Clue clue: clueDAO.getAllNames()){
             System.out.println(String.format(CLUEUI_LIST_BODY, clue.getId(), clue.getName()));
         }
+
         System.out.println(CLUEUI_LIST_FOOTER);
     }
 
     public Clue getLastClue() throws SQLException {
-        return clueDAO.getLastClue();
+        Optional<Clue> clue = clueDAO.getLastClue();
+        if(clue.isPresent()){
+            return clue.get();
+        }else {
+            return null;
+        }
     }
 
     public Clue getClueById(int id) throws SQLException {
-        return clueDAO.getById(id);
+        Optional<Clue> clue = clueDAO.getById(id);
+
+        if(clue.isPresent()){
+            return clue.get();
+        }else {
+            return null;
+        }
     }
 }

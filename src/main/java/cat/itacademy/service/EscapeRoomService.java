@@ -32,11 +32,9 @@ public class EscapeRoomService {
             }
 
             escapeRoomDAO.insert(escapeRoom);
-            Optional<EscapeRoom> escapeRoomDB = getLastEscapeRoom();
+            EscapeRoom escapeRoomDB = getLastEscapeRoom();
 
-            String escapeRoomName = escapeRoomDB
-                    .map(EscapeRoom::getName)
-                    .orElse("Nombre no disponible");
+            String escapeRoomName = escapeRoomDB.getName();
             
             System.out.println(String.format(EscapeRoomSuccessMessages.ESCAPEROOM_CREATED, escapeRoomName));
         } catch (DuplicateException | InvalidAttributeException e) {
@@ -47,8 +45,13 @@ public class EscapeRoomService {
         }
     }
 
-    public Optional<EscapeRoom> getLastEscapeRoom() throws SQLException {
-        return escapeRoomDAO.getLastEscapeRoom();
+    public EscapeRoom getLastEscapeRoom() throws SQLException {
+        Optional<EscapeRoom> escapeRoom = escapeRoomDAO.getLastEscapeRoom();
+        if (escapeRoom.isPresent()) {
+            return escapeRoom.get();
+        }else {
+            return null;
+        }
     }
 
     public List<EscapeRoom> getAllEscapeRooms() throws SQLException{
@@ -58,8 +61,13 @@ public class EscapeRoomService {
         return escapeRoomDAO.findAll();
     }
 
-    public Optional<EscapeRoom> getEscapeRoomById(int id) throws SQLException {
-        return escapeRoomDAO.getById(id);
+    public EscapeRoom getEscapeRoomById(int id) throws SQLException {
+        Optional<EscapeRoom> escapeRoom = escapeRoomDAO.getById(id);
+        if (escapeRoom.isPresent()) {
+            return escapeRoom.get();
+        }else {
+            return null;
+        }
     }
 
     public void addRoomToEscapeRoom(int escapeRoomId, int roomId) throws SQLException {
@@ -79,8 +87,4 @@ public class EscapeRoomService {
             throw e;
         }
     }
-
-
-
-
 }

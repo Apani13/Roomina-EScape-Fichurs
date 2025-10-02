@@ -1,7 +1,7 @@
 package ticket;
 
 import cat.itacademy.exception.InvalidAttributeException;
-import cat.itacademy.exception.RecordNotFoundException;
+import cat.itacademy.exception.EntityNotFoundException;
 import cat.itacademy.model.Client;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Ticket;
@@ -25,18 +25,16 @@ public class TicketServiceTest {
     private ClientService clientService;
     RoomService roomService;
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws SQLException {
         ticketService = new TicketService();
         clientService = new ClientService();
         roomService = new RoomService();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.prepareStatement("DELETE FROM clue").executeUpdate();
             conn.prepareStatement("DELETE FROM ticket").executeUpdate();
             conn.prepareStatement("DELETE FROM client").executeUpdate();
             conn.prepareStatement("DELETE FROM room").executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -55,8 +53,8 @@ public class TicketServiceTest {
         clientService.addClient(new Client("luri", "luri@gmail.com", "98765432", true));
 
         assertAll(
-                ()->assertThrows(RecordNotFoundException.class, ()->ticketService.addTicket(new Ticket(100,1))),
-                ()->assertThrows(RecordNotFoundException.class, ()->ticketService.addTicket(new Ticket(clientService.getLastClient().getId(),100)))
+                ()->assertThrows(EntityNotFoundException.class, ()->ticketService.addTicket(new Ticket(100,1))),
+                ()->assertThrows(EntityNotFoundException.class, ()->ticketService.addTicket(new Ticket(clientService.getLastClient().getId(),100)))
         );
     }
 
@@ -67,7 +65,7 @@ public class TicketServiceTest {
         roomService.addRoom(new Room("room1", "terror", 2));
         
         Client client = clientService.getLastClient();
-        Room room = roomService.getLastRoom().get();
+        Room room = roomService.getLastRoom();
 
         PrintStream originalOut = System.out;
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -83,7 +81,21 @@ public class TicketServiceTest {
                 ()-> assertEquals(room.getId(), ticketDB.getRoomId()),
                 ()-> assertEquals(client.getId(), ticketDB.getClientId()),
                 ()-> assertNotNull(ticketDB.getDateCreation()),
-                ()-> assertEquals("Ticket{Sala: room1, Precio: 25.0, Fecha: "+ date +"}",  outContent.toString().trim())
+                ()-> {
+                    String expectedMessage = String.format(
+                            "==============================\n" +
+                                    "         🎟️  TICKET DE ENTRADA\n" +
+                                    "==============================\n" +
+                                    "Sala: %s\n" +
+                                    "Precio: %.2f €\n" +
+                                    "Fecha: %s\n" +
+                                    "==============================",
+                            room.getName(),
+                            room.getPrice(),
+                            date
+                    );
+                    assertEquals(expectedMessage, outContent.toString().trim());
+                }
         );
     }
 }

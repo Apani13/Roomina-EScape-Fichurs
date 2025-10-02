@@ -25,12 +25,12 @@ public class TicketTest {
 
         RoomService roomService = new RoomService();
         roomService.addRoom(new Room("room1", "intriga", 2));
-        roomId = roomService.getLastRoom().get().getId();
+        roomId = roomService.getLastRoom().getId();
 
     }
 
     @Test
-    public void createTicket_Succes() {
+    public void createTicket_Success() {
         ticket = new Ticket(clientId, roomId);
         assertAll(
                 ()->assertEquals(clientId, ticket.getClientId()),

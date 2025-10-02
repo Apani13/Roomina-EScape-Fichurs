@@ -13,14 +13,16 @@ import java.util.Optional;
 public class RoomDAO {
 
     public void insert(Room room) throws SQLException {
-        String sql = "INSERT INTO room (name, theme, level, price) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO room (name, theme, level, price) VALUES(?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1,room.getName());
+
+            stmt.setString(1, room.getName());
             stmt.setString(2, room.getTheme());
-            stmt.setInt(3,room.getLevel());
-            stmt.setDouble(4,room.getPrice());
+            stmt.setInt(3, room.getLevel());
+            stmt.setDouble(4, room.getPrice());
+
             stmt.executeUpdate();
         }
     }
@@ -128,7 +130,7 @@ public class RoomDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             try(ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
+                while(rs.next()) {
                     rooms.add(new Room(
                             rs.getInt("id"),
                             rs.getString("name")
@@ -161,7 +163,9 @@ public class RoomDAO {
         String sql = "UPDATE clue SET room_id = NULL WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, clueId);
+
             stmt.executeUpdate();
         }
     }
