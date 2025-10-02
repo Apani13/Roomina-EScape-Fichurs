@@ -92,7 +92,7 @@ public class RoomServiceTest {
 
         ClueService clueService = new ClueService();
         clueService.addClue(new Clue("clue1", "diversion", "icabcuani", 10));
-        int roomid = roomService.getLastRoom().get().getId();
+        int roomid = roomService.getLastRoom().getId();
         int clueid = clueService.getLastClue().getId();
         roomService.addClueToRoom(roomid, clueid);
 
@@ -106,7 +106,7 @@ public class RoomServiceTest {
         ClueService clueService = new ClueService();
         clueService.addClue(new Clue("clue1", "diversion", "icabcuani", 10));
 
-        int roomid = roomService.getLastRoom().get().getId();
+        int roomid = roomService.getLastRoom().getId();
         int clueid = clueService.getLastClue().getId();
 
         roomService.addClueToRoom(roomid, clueid);

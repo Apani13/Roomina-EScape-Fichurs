@@ -5,6 +5,7 @@ import cat.itacademy.dto.AvailableClueDTO;
 import cat.itacademy.dto.AvailableItemDTO;
 import cat.itacademy.dto.AvailableRoomDTO;
 import cat.itacademy.dto.InventoryDTO;
+import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.service.InventoryService;
 import cat.itacademy.service.RoomService;
@@ -13,6 +14,7 @@ import cat.itacademy.service.ItemService;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Clue;
 import cat.itacademy.model.Item;
+import cat.itacademy.validation.inventory.InventoryEmptyValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,28 +44,19 @@ public class InventoryServiceTest {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Test
-    public void whenGetDetailedInventory_thenShouldReturnNameAndThemeForRoomsAndClues() throws Exception {
+    public void whenGetInventory_thenShouldReturnCorrectInformation() throws SQLException {
         Room room = new Room("Indiana Jones", "Aventura", 5);
-        Room room2 = new Room("Chucky", "Terror", 4);
-
         Clue clue = new Clue("Llave", "Aventura", "Una pista clave", 25.0);
-        Clue clue2 = new Clue("Cuchillo con sangre", "Terror", "Una pista terrorífica", 25.0);
-
         Item item = new Item("Palmera", "Plástico", 3);
-        Item item2 = new Item("Arbol", "Plástico", 10);
 
         roomService.addRoom(room);
-        roomService.addRoom(room2);
         clueService.addClue(clue);
-        clueService.addClue(clue2);
         itemService.addItem(item);
-        itemService.addItem(item2);
 
-        InventoryDTO inventory = inventoryService.getDetailedAvailableInventory();
+        InventoryDTO inventory = inventoryService.getAvailableInventory();
 
         AvailableRoomDTO roomDTO = inventory.getAvailableRooms().get(0);
         assertEquals("Indiana Jones", roomDTO.getName());
@@ -79,12 +72,10 @@ public class InventoryServiceTest {
     }
 
     @Test
-    public void whenDetailedInventoryIsEmpty_thenShouldReturnEmptyLists() throws Exception {
-        InventoryDTO inventory = inventoryService.getDetailedAvailableInventory();
+    public void whenInventoryIsEmpty_thenShouldThrowEmptyListException() throws SQLException {
+        InventoryDTO inventory = inventoryService.getAvailableInventory();
+        InventoryEmptyValidator validator = new InventoryEmptyValidator();
 
-        assertTrue(inventory.getAvailableRooms().isEmpty());
-        assertTrue(inventory.getAvailableClues().isEmpty());
-        assertTrue(inventory.getAvailableItems().isEmpty());
+        assertThrows(EmptyListException.class, () -> validator.validate(inventory));
     }
-
 }

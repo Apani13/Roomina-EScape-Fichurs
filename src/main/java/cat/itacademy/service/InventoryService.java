@@ -23,11 +23,10 @@ public class InventoryService {
         this.itemDAO = new ItemDAO();
     }
 
-    public InventoryDTO getDetailedAvailableInventory() throws SQLException {
+    public InventoryDTO getAvailableInventory() throws SQLException {
         List<AvailableRoomDTO> availableRooms = roomDAO.getAvailableRoomsWithDetails();
         List<AvailableClueDTO> availableClues = clueDAO.getAvailableCluesWithDetails();
         List<AvailableItemDTO> availableItems = itemDAO.getAvailableItemsWithDetails();
-
         int totalItemUnits = itemDAO.getTotalAvailableItemsCount();
 
         return new InventoryDTO(availableRooms, availableClues, availableItems, totalItemUnits);

@@ -8,10 +8,8 @@ public class InventoryDTO {
     private List<AvailableItemDTO> availableItems;
     private int totalItemUnits;
 
-    public InventoryDTO(List<AvailableRoomDTO> availableRooms,
-                                List<AvailableClueDTO> availableClues,
-                                List<AvailableItemDTO> availableItems,
-                        int totalItemUnits) {
+    public InventoryDTO(List<AvailableRoomDTO> availableRooms, List<AvailableClueDTO> availableClues,
+                        List<AvailableItemDTO> availableItems, int totalItemUnits) {
         this.availableRooms = availableRooms;
         this.availableClues = availableClues;
         this.availableItems = availableItems;
@@ -25,6 +23,14 @@ public class InventoryDTO {
 
     public int getTotalItemsUnits() {
         return totalItemUnits;
+    }
+
+    public boolean inventoryIsEmpty() {
+        if (getAvailableClues().isEmpty() && getAvailableItems().isEmpty() && getAvailableRooms().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -48,7 +54,6 @@ public class InventoryDTO {
             sb.append("• ").append(item.getName())
                     .append(" | Quantitat: ").append(item.getQuantity()).append("\n");
         }
-
         return sb.toString();
     }
 }

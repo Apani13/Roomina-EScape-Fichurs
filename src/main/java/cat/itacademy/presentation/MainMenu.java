@@ -9,14 +9,13 @@ public class MainMenu {
 
     private InventoryService inventoryService;
 
-
     public MainMenu() {
         this.inventoryService = new InventoryService();
     }
 
     public void mostrarInventarioDetallado() {
         try {
-            InventoryDTO inventario = inventoryService.getDetailedAvailableInventory();
+            InventoryDTO inventario = inventoryService.getAvailableInventory();
             System.out.println(inventario.toString());
         } catch (SQLException e) {
             System.out.println("Error al obtener el inventario: " + e.getMessage());
