@@ -31,6 +31,11 @@ public class Room {
         this.name = name;
     }
 
+    public Room(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
 
     public Integer getId() {return id;}
 

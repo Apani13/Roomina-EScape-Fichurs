@@ -1,4 +1,4 @@
-package cat.itacademy.dto;
+package cat.itacademy.dto.availableInventory;
 
 public class AvailableRoomDTO extends AvailableElementDTO {
     private String theme;

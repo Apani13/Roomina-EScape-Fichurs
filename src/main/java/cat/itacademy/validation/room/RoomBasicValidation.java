@@ -8,7 +8,7 @@ import cat.itacademy.validation.ValidationStrategy;
 
 public class RoomBasicValidation implements ValidationStrategy<Room> {
     @Override
-    public void validate(Room room) throws InvalidAttributeException, NullObjectException {
+    public void validateAvailableInventory(Room room) throws InvalidAttributeException, NullObjectException {
         if (room == null) {
             throw new NullObjectException(ROOM_NULL_OBJECT);
         }

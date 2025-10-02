@@ -10,7 +10,7 @@ import static cat.itacademy.message.error.ClueErrorMessages.*;
 
 public class ClueBasicValidation implements ValidationStrategy<Clue> {
     @Override
-    public void validate(Clue clue) throws DuplicateException, InvalidAttributeException, NullObjectException{
+    public void validateAvailableInventory(Clue clue) throws DuplicateException, InvalidAttributeException, NullObjectException{
         if (clue == null) {
             throw new NullObjectException(CLUE_NULL_OBJECT);
         }

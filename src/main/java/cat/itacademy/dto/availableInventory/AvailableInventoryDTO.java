@@ -1,20 +1,19 @@
-package cat.itacademy.dto;
+package cat.itacademy.dto.availableInventory;
 
 import java.util.List;
 
-public class InventoryDTO {
+public class AvailableInventoryDTO {
     private List<AvailableRoomDTO> availableRooms;
     private List<AvailableClueDTO> availableClues;
     private List<AvailableItemDTO> availableItems;
     private int totalItemUnits;
 
-    public InventoryDTO(List<AvailableRoomDTO> availableRooms, List<AvailableClueDTO> availableClues,
-                        List<AvailableItemDTO> availableItems, int totalItemUnits) {
+    public AvailableInventoryDTO(List<AvailableRoomDTO> availableRooms, List<AvailableClueDTO> availableClues,
+                                 List<AvailableItemDTO> availableItems, int totalItemUnits) {
         this.availableRooms = availableRooms;
         this.availableClues = availableClues;
         this.availableItems = availableItems;
         this.totalItemUnits = totalItemUnits;
-
     }
 
     public List<AvailableRoomDTO> getAvailableRooms() { return availableRooms; }
@@ -49,7 +48,7 @@ public class InventoryDTO {
             sb.append("• ").append(clue.getName()).append(" | Temàtica: ").append(clue.getTheme()).append("\n");
         }
 
-        sb.append("\n--- OBJECTES DISPONIBLES (").append(totalItemUnits).append(" unitats) ---\n");
+        sb.append("\n--- OBJECTES DISPONIBLES (").append(getTotalItemsUnits()).append(" unitats) ---\n");
         for (AvailableItemDTO item : availableItems) {
             sb.append("• ").append(item.getName())
                     .append(" | Quantitat: ").append(item.getQuantity()).append("\n");

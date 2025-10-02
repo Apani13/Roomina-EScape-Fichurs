@@ -1,9 +1,13 @@
 package cat.itacademy.service;
 
-import cat.itacademy.dto.AvailableClueDTO;
-import cat.itacademy.dto.AvailableItemDTO;
-import cat.itacademy.dto.AvailableRoomDTO;
-import cat.itacademy.dto.InventoryDTO;
+import cat.itacademy.dto.availableInventory.AvailableClueDTO;
+import cat.itacademy.dto.availableInventory.AvailableItemDTO;
+import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
+import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
+import cat.itacademy.dto.completeInventory.AllCluesDTO;
+import cat.itacademy.dto.completeInventory.AllItemsDTO;
+import cat.itacademy.dto.completeInventory.AllRoomsDTO;
+import cat.itacademy.dto.completeInventory.CompleteInventoryDTO;
 import cat.itacademy.repository.DAO.ClueDAO;
 import cat.itacademy.repository.DAO.ItemDAO;
 import cat.itacademy.repository.DAO.RoomDAO;
@@ -23,13 +27,22 @@ public class InventoryService {
         this.itemDAO = new ItemDAO();
     }
 
-    public InventoryDTO getAvailableInventory() throws SQLException {
-        List<AvailableRoomDTO> availableRooms = roomDAO.getAvailableRoomsWithDetails();
-        List<AvailableClueDTO> availableClues = clueDAO.getAvailableCluesWithDetails();
-        List<AvailableItemDTO> availableItems = itemDAO.getAvailableItemsWithDetails();
+    public AvailableInventoryDTO getAvailableInventory() throws SQLException {
+        List<AvailableRoomDTO> availableRooms = roomDAO.getAvailableRooms();
+        List<AvailableClueDTO> availableClues = clueDAO.getAvailableClues();
+        List<AvailableItemDTO> availableItems = itemDAO.getAvailableItems();
         int totalItemUnits = itemDAO.getTotalAvailableItemsCount();
 
-        return new InventoryDTO(availableRooms, availableClues, availableItems, totalItemUnits);
+        return new AvailableInventoryDTO(availableRooms, availableClues, availableItems, totalItemUnits);
+    }
+
+    public CompleteInventoryDTO getCompleteInventory() throws SQLException {
+        List<AllRoomsDTO> allRoms = roomDAO.getAllRoomsNameAndPrice();
+        List<AllCluesDTO> allClues = clueDAO.getAllCluesNameAndPrice();
+        List<AllItemsDTO> allItems = itemDAO.getAllItemsNameAndPrice();
+        double totalPrice =
+
+        return new CompleteInventoryDTO(allRoms,allClues,allItems, );
     }
 }
 

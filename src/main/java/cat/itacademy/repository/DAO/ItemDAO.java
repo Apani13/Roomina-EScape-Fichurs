@@ -1,6 +1,7 @@
 package cat.itacademy.repository.DAO;
 
-import cat.itacademy.dto.AvailableItemDTO;
+import cat.itacademy.dto.availableInventory.AvailableItemDTO;
+import cat.itacademy.dto.completeInventory.AllItemsDTO;
 import cat.itacademy.model.Item;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -45,7 +46,7 @@ public class ItemDAO {
         return false;
     }
 
-    public List<AvailableItemDTO> getAvailableItemsWithDetails() throws SQLException {
+    public List<AvailableItemDTO> getAvailableItems() throws SQLException {
         List<AvailableItemDTO> items = new ArrayList<>();
         String sql = "SELECT name, quantity FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
 
@@ -77,4 +78,27 @@ public class ItemDAO {
             return 0;
         }
     }
+
+    public List<AllItemsDTO> getAllItemsNameAndPrice() throws SQLException {
+        List<AllItemsDTO> items = new ArrayList<>();
+        String sql = "SELECT name, price FROM item";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while(rs.next()) {
+                AllItemsDTO item = new AllItemsDTO(
+                        rs.getString("name"),
+                        rs.getDouble("price")
+                );
+                items.add(item);
+            }
+        }
+        return items;
+    }
+
+
+
+
 }
