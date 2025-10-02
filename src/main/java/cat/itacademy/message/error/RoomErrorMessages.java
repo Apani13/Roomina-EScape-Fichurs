@@ -11,5 +11,5 @@ public class RoomErrorMessages {
     public static final String ROOM_THEME_NULL_EMPTY = "El nombre del tema está vacío o es nulo...";
     public static final String ROOM_LEVEL_INVALID = "El valor del nivel no es válido...";
     public static final String ROOM_LIST_EMPTY = "No existen salas disponibles...";
-
+    public static final String ROOM_NOT_FOUND = "La sala no existe...";
 }

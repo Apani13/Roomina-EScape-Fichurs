@@ -25,19 +25,16 @@ public class TicketTest {
 
         RoomService roomService = new RoomService();
         roomService.addRoom(new Room("room1", "intriga", 2));
-        roomId = roomService.getLastRoom().getId();
+        roomId = roomService.getLastRoom().get().getId();
 
     }
 
     @Test
-    public void ticketTest() {
-        double price = 25;
-        ticket = new Ticket(clientId, roomId, price);
+    public void createTicket_Succes() {
+        ticket = new Ticket(clientId, roomId);
         assertAll(
                 ()->assertEquals(clientId, ticket.getClientId()),
-                ()->assertEquals(roomId, ticket.getRoomId()),
-                ()->assertEquals(price, ticket.getTotalPrice()),
-                ()->assertNotNull(ticket.getDateCreation())
+                ()->assertEquals(roomId, ticket.getRoomId())
         );
     }
 }

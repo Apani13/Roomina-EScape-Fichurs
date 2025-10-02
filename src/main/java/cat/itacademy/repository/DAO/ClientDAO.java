@@ -6,6 +6,7 @@ import cat.itacademy.repository.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ClientDAO {
     public void insert(Client client) throws SQLException {
@@ -77,7 +78,7 @@ public class ClientDAO {
         return false;
     }
 
-    public Client getLastClient() throws SQLException {
+    public Optional<Client> getLastClient() throws SQLException {
 
         String sql = "SELECT * FROM client ORDER BY id DESC LIMIT 1";
         try (Connection conn = DatabaseConnection.getConnection();){
@@ -85,15 +86,42 @@ public class ClientDAO {
             ResultSet rs = stmt.executeQuery(sql);
 
             if(rs.next()){
-                return new Client(
+                Boolean acceptsNotifications = (Boolean) rs.getObject("accepts_notifications");
+                Client client = new Client(
                         rs.getInt("id"),
                         rs.getString("user_name"),
                         rs.getString("email"),
                         rs.getString("phone"),
-                        rs.getBoolean("accepts_notifications")
+                        acceptsNotifications != null ? acceptsNotifications : false
                 );
+                return Optional.of(client);
             }
         }
-        return null;
+        return Optional.empty();
+    }
+
+    public Optional<Client> getById(int id) throws SQLException {
+        String sql = "SELECT * FROM client WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Boolean acceptsNotifications = (Boolean) rs.getObject("accepts_notifications");
+                    Client client = new Client(
+                            rs.getInt("id"),
+                            rs.getString("user_name"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            acceptsNotifications != null ? acceptsNotifications : false
+                    );
+                    return Optional.of(client);
+                }
+            }
+        }
+        return Optional.empty();
     }
 }
