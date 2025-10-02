@@ -30,7 +30,7 @@ public class TicketTest {
     }
 
     @Test
-    public void createTicket_Succes() {
+    public void createTicket_Success() {
         ticket = new Ticket(clientId, roomId);
         assertAll(
                 ()->assertEquals(clientId, ticket.getClientId()),

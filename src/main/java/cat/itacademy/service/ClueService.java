@@ -51,6 +51,7 @@ public class ClueService {
             }
 
             clueDAO.insert(clue);
+
             System.out.println(String.format(CLUE_CREATED, clue.getName()));
 
         } catch (DuplicateException | InvalidAttributeException e) {
@@ -65,6 +66,7 @@ public class ClueService {
         if(clueDAO.getAllNames().isEmpty()){
             throw new EmptyListException(CLUE_LIST_EMPTY);
         }
+
         return clueDAO.getAllNames();
     }
 
@@ -72,10 +74,13 @@ public class ClueService {
         if(clueDAO.getAllNames().isEmpty()){
             throw new EmptyListException(CLUE_LIST_EMPTY);
         }
+
         System.out.println(CLUEUI_LIST_HEADER);
+
         for(Clue clue: clueDAO.getAllNames()){
             System.out.println(String.format(CLUEUI_LIST_BODY, clue.getId(), clue.getName()));
         }
+
         System.out.println(CLUEUI_LIST_FOOTER);
     }
 
@@ -90,6 +95,7 @@ public class ClueService {
 
     public Clue getClueById(int id) throws SQLException {
         Optional<Clue> clue = clueDAO.getById(id);
+
         if(clue.isPresent()){
             return clue.get();
         }else {

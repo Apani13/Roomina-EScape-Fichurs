@@ -19,6 +19,7 @@ public class ClueDAO {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setString(1, clue.getName());
             stmt.setString(2, clue.getTheme());
             stmt.setString(3, clue.getDescription());
@@ -65,7 +66,7 @@ public class ClueDAO {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery();){
+             ResultSet rs = stmt.executeQuery()){
 
             if(rs.next()){
                 Clue clue = new Clue(

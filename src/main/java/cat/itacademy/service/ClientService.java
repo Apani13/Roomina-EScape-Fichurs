@@ -34,7 +34,9 @@ public class ClientService {
             }
 
             clientDAO.insert(client);
+
             Client lastClient = getLastClient();
+
             System.out.println(String.format(ClienteSuccessMessages.CLIENT_CREATED, lastClient.getUserName(), lastClient.getEmail(), lastClient.getPhone(), lastClient.isAcceptsNotifications()));
         } catch (DuplicateException | InvalidAttributeException e) {
             throw e;
@@ -46,6 +48,7 @@ public class ClientService {
 
     public Client getLastClient() throws SQLException {
         Optional<Client> client = clientDAO.getLastClient();
+
         if (client.isPresent()) {
             return client.get();
         }else {
@@ -55,6 +58,7 @@ public class ClientService {
 
     public Client getClientById(int id) throws SQLException {
         Optional<Client> client = clientDAO.getById(id);
+
         if (client.isPresent()) {
             return client.get();
         } else {

@@ -14,10 +14,12 @@ public class ClientDAO {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setString(1, client.getUserName());
             stmt.setString(2, client.getEmail());
             stmt.setString(3, client.getPhone());
             stmt.setBoolean(4, client.isAcceptsNotifications());
+
             stmt.executeUpdate();
         }
     }
@@ -44,7 +46,7 @@ public class ClientDAO {
     }
 
     public void update(Client client) throws SQLException {
-        String sql = "UPDATE escape_room SET user_name=?, email=?, phone=? WHERE id=?";
+        String sql = "UPDATE escape_room SET user_name = ?, email = ?, phone = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, client.getUserName());
@@ -56,7 +58,7 @@ public class ClientDAO {
     }
 
     public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM client WHERE id=?";
+        String sql = "DELETE FROM client WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);

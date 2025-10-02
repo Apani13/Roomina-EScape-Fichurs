@@ -1,7 +1,7 @@
 package ticket;
 
 import cat.itacademy.exception.InvalidAttributeException;
-import cat.itacademy.exception.RecordNotFoundException;
+import cat.itacademy.exception.EntityNotFoundException;
 import cat.itacademy.model.Client;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Ticket;
@@ -53,8 +53,8 @@ public class TicketServiceTest {
         clientService.addClient(new Client("luri", "luri@gmail.com", "98765432", true));
 
         assertAll(
-                ()->assertThrows(RecordNotFoundException.class, ()->ticketService.addTicket(new Ticket(100,1))),
-                ()->assertThrows(RecordNotFoundException.class, ()->ticketService.addTicket(new Ticket(clientService.getLastClient().getId(),100)))
+                ()->assertThrows(EntityNotFoundException.class, ()->ticketService.addTicket(new Ticket(100,1))),
+                ()->assertThrows(EntityNotFoundException.class, ()->ticketService.addTicket(new Ticket(clientService.getLastClient().getId(),100)))
         );
     }
 
@@ -81,7 +81,21 @@ public class TicketServiceTest {
                 ()-> assertEquals(room.getId(), ticketDB.getRoomId()),
                 ()-> assertEquals(client.getId(), ticketDB.getClientId()),
                 ()-> assertNotNull(ticketDB.getDateCreation()),
-                ()-> assertEquals("Ticket{Sala: room1, Precio: 25.0, Fecha: "+ date +"}",  outContent.toString().trim())
+                ()-> {
+                    String expectedMessage = String.format(
+                            "==============================\n" +
+                                    "         🎟️  TICKET DE ENTRADA\n" +
+                                    "==============================\n" +
+                                    "Sala: %s\n" +
+                                    "Precio: %.2f €\n" +
+                                    "Fecha: %s\n" +
+                                    "==============================",
+                            room.getName(),
+                            room.getPrice(),
+                            date
+                    );
+                    assertEquals(expectedMessage, outContent.toString().trim());
+                }
         );
     }
 }

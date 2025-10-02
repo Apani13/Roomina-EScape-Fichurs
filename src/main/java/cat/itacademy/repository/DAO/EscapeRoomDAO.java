@@ -14,7 +14,9 @@ public class EscapeRoomDAO {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setString(1, escapeRoom.getName());
+
             stmt.executeUpdate();
         }
     }
@@ -38,7 +40,7 @@ public class EscapeRoomDAO {
     }
 
     public void update(EscapeRoom escapeRoom) throws SQLException {
-        String sql = "UPDATE escape_room SET name=? WHERE id=?";
+        String sql = "UPDATE escape_room SET name = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, escapeRoom.getName());
@@ -48,7 +50,7 @@ public class EscapeRoomDAO {
     }
 
     public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM escape_room WHERE id=?";
+        String sql = "DELETE FROM escape_room WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
