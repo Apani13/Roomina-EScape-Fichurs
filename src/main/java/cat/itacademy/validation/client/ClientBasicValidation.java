@@ -16,11 +16,13 @@ public class ClientBasicValidation implements ValidationStrategy<Client> {
         if (client.getUserName() == null || client.getUserName().isEmpty()) {
             throw new InvalidAttributeException(CLIENT_USERNAME_NULL_EMPTY);
         }
-        if (client.getEmail() == null || client.getEmail().isEmpty()) {
-            throw new InvalidAttributeException(CLIENT_EMAIL_NULL_EMPTY);
-        }
-        if (client.getPhone() == null || client.getPhone().isEmpty()) {
-            throw new InvalidAttributeException(CLIENT_PHONE_NULL_EMPTY);
+        if(client.isAcceptsNotifications()){
+            if (client.getEmail() == null || client.getEmail().isEmpty()) {
+                throw new InvalidAttributeException(CLIENT_EMAIL_NULL_EMPTY);
+            }
+            if (client.getPhone() == null || client.getPhone().isEmpty()) {
+                throw new InvalidAttributeException(CLIENT_PHONE_NULL_EMPTY);
+            }
         }
     }
 }

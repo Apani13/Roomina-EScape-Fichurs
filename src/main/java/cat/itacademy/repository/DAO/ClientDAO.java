@@ -13,7 +13,7 @@ public class ClientDAO {
         String sql = "INSERT INTO client(user_name, email, phone, accepts_notifications) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, client.getUserName());
             stmt.setString(2, client.getEmail());
@@ -21,8 +21,15 @@ public class ClientDAO {
             stmt.setBoolean(4, client.isAcceptsNotifications());
 
             stmt.executeUpdate();
+
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    client.setId(rs.getInt(1)); // ⚡ ahora el objeto original queda sincronizado con la BD
+                }
+            }
         }
     }
+
 
     public List<Client> findAll() throws SQLException {
         List<Client> clients = new ArrayList<>();
