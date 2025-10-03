@@ -1,7 +1,7 @@
 
 package cat.itacademy.service;
 
-import cat.itacademy.dto.completeInventory.AllRoomsDTO;
+import cat.itacademy.dto.completeInventory.EntityRoomDTO;
 import cat.itacademy.repository.DAO.RoomDAO;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.EmptyListException;
@@ -47,7 +47,7 @@ public class RoomService {
         }
     }
 
-    public List<AllRoomsDTO> getAllRooms() throws SQLException {
+    public List<EntityRoomDTO> getAllRooms() throws SQLException {
         if(roomDAO.getAllRoomsNameAndPrice().isEmpty()){
             throw new EmptyListException(RoomErrorMessages.ROOM_LIST_EMPTY);
         }

@@ -1,7 +1,7 @@
 package cat.itacademy.repository.DAO;
 
 import cat.itacademy.dto.availableInventory.AvailableClueDTO;
-import cat.itacademy.dto.completeInventory.AllCluesDTO;
+import cat.itacademy.dto.completeInventory.EntityClueDTO;
 import cat.itacademy.model.Clue;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -126,8 +126,8 @@ public class ClueDAO {
         return clues;
     }
 
-    public List<AllCluesDTO> getAllCluesNameAndPrice() throws SQLException {
-        List<AllCluesDTO> clues = new ArrayList<>();
+    public List<EntityClueDTO> getAllCluesNameAndPrice() throws SQLException {
+        List<EntityClueDTO> clues = new ArrayList<>();
         String sql = "SELECT name, price FROM clue";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -135,7 +135,7 @@ public class ClueDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while(rs.next()) {
-                AllCluesDTO clue = new AllCluesDTO(
+                EntityClueDTO clue = new EntityClueDTO(
                         rs.getString("name"),
                         rs.getDouble("price")
                 );

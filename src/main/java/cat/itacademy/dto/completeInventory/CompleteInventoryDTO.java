@@ -4,28 +4,28 @@ import java.util.List;
 
 public class CompleteInventoryDTO {
 
-    private List<AllRoomsDTO> allRoms;
-    private List<AllCluesDTO> allClues;
-    private List<AllItemsDTO> allItems;
+    private List<EntityRoomDTO> allRoms;
+    private List<EntityClueDTO> allClues;
+    private List<EntityItemDTO> allItems;
     private double totalInventoryPrice;
 
-    public CompleteInventoryDTO(List<AllRoomsDTO> allRoms, List<AllCluesDTO> allClues,
-                                List<AllItemsDTO> allItems, double totalInventoryPrice) {
+    public CompleteInventoryDTO(List<EntityRoomDTO> allRoms, List<EntityClueDTO> allClues,
+                                List<EntityItemDTO> allItems, double totalInventoryPrice) {
         this.allRoms = allRoms;
         this.allClues = allClues;
         this.allItems = allItems;
         this.totalInventoryPrice = totalInventoryPrice;
     }
 
-    public List<AllRoomsDTO> getAllRoms() {
+    public List<EntityRoomDTO> getAllRoms() {
         return allRoms;
     }
 
-    public List<AllCluesDTO> getAllClues() {
+    public List<EntityClueDTO> getAllClues() {
         return allClues;
     }
 
-    public List<AllItemsDTO> getAllItems() {
+    public List<EntityItemDTO> getAllItems() {
         return allItems;
     }
 
@@ -48,17 +48,17 @@ public class CompleteInventoryDTO {
         sb.append("Precio de cada elemento: \n");
 
         sb.append("\n--- SALAS (").append(allRoms.size()).append(") ---\n");
-        for (AllRoomsDTO room : allRoms) {
+        for (EntityRoomDTO room : allRoms) {
             sb.append("• ").append(room.getName()).append(" | Precio: ").append(room.getPrice()).append("\n");
         }
 
         sb.append("\n--- OBJECTES (").append(allItems.size()).append(") ---\n");
-        for (AllItemsDTO item : allItems) {
-            sb.append("• ").append(item.getName()).append(" | Precio: ").append(item.getPrice()).append("\n");
+        for (EntityItemDTO item : allItems) {
+            sb.append("• ").append(item.getName()).append(" | Precio: ").append(item.getPrice() * item.getQuantity()).append("\n");
         }
 
         sb.append("\n--- CLUES (").append(allClues.size()).append(") ---\n");
-        for (AllCluesDTO clues : allClues) {
+        for (EntityClueDTO clues : allClues) {
             sb.append("• ").append(clues.getName()).append(" | Precio: ").append(clues.getPrice()).append("\n");
         }
 

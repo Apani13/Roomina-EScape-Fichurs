@@ -1,9 +1,9 @@
 package cat.itacademy.dto.availableInventory;
 
-public class AvailableElementDTO {
+public class AvailableEntityDTO {
     private String name;
 
-    public AvailableElementDTO(String name) {
+    public AvailableEntityDTO(String name) {
         this.name = name;
     }
 

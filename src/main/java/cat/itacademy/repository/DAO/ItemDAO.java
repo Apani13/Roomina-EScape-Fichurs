@@ -1,7 +1,7 @@
 package cat.itacademy.repository.DAO;
 
 import cat.itacademy.dto.availableInventory.AvailableItemDTO;
-import cat.itacademy.dto.completeInventory.AllItemsDTO;
+import cat.itacademy.dto.completeInventory.EntityItemDTO;
 import cat.itacademy.model.Item;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -79,18 +79,19 @@ public class ItemDAO {
         }
     }
 
-    public List<AllItemsDTO> getAllItemsNameAndPrice() throws SQLException {
-        List<AllItemsDTO> items = new ArrayList<>();
-        String sql = "SELECT name, price FROM item";
+    public List<EntityItemDTO> getAllItemsNameAndPrice() throws SQLException {
+        List<EntityItemDTO> items = new ArrayList<>();
+        String sql = "SELECT name, price, quantity FROM item";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while(rs.next()) {
-                AllItemsDTO item = new AllItemsDTO(
+                EntityItemDTO item = new EntityItemDTO(
                         rs.getString("name"),
-                        rs.getDouble("price")
+                        rs.getDouble("price"),
+                        rs.getInt("quantity")
                 );
                 items.add(item);
             }

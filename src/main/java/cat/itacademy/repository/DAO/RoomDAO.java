@@ -1,6 +1,6 @@
 package cat.itacademy.repository.DAO;
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
-import cat.itacademy.dto.completeInventory.AllRoomsDTO;
+import cat.itacademy.dto.completeInventory.EntityRoomDTO;
 import cat.itacademy.model.Room;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -151,8 +151,8 @@ public class RoomDAO {
         return rooms;
     }
 
-    public List<AllRoomsDTO> getAllRoomsNameAndPrice() throws SQLException {
-        List<AllRoomsDTO> rooms = new ArrayList<>();
+    public List<EntityRoomDTO> getAllRoomsNameAndPrice() throws SQLException {
+        List<EntityRoomDTO> rooms = new ArrayList<>();
         String sql = "SELECT name, price FROM room";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -160,7 +160,7 @@ public class RoomDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                AllRoomsDTO room = new AllRoomsDTO(
+                EntityRoomDTO room = new EntityRoomDTO(
                         rs.getString("name"),
                         rs.getDouble("price")
                 );

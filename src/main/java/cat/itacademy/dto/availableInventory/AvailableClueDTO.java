@@ -1,6 +1,6 @@
 package cat.itacademy.dto.availableInventory;
 
-public class AvailableClueDTO extends AvailableElementDTO {
+public class AvailableClueDTO extends AvailableEntityDTO {
     private String theme;
 
     public AvailableClueDTO(String name, String theme) {
