@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 public class ClientService {
     private ClientDAO clientDAO;
     private ClientValidator clientValidator;
+    private final NotificationService notificationService;
 
     public ClientService() {
         this.clientDAO = new ClientDAO();
@@ -25,6 +26,7 @@ public class ClientService {
                 new ClientBasicValidation(),
                 new ClientDuplicateValidation(clientDAO)
         ));
+        this.notificationService = new NotificationService();
     }
 
     public void addClient(Client client) {
@@ -32,6 +34,10 @@ public class ClientService {
             clientValidator.validate(client);
 
             clientDAO.insert(client);
+
+            if (client.isAcceptsNotifications()) {
+                notificationService.addObserver(client);
+            }
 
             Client lastClient = getLastClient();
 
@@ -61,6 +67,15 @@ public class ClientService {
             return client.get();
         } else {
             return null;
+        }
+    }
+
+    public void loadObserversFromDB() throws SQLException {
+        List<Client> clients = clientDAO.findAll();
+        for (Client client : clients) {
+            if (client.isAcceptsNotifications()) {
+                notificationService.addObserver(client);
+            }
         }
     }
 }

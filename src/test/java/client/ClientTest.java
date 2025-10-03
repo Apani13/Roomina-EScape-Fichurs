@@ -10,7 +10,7 @@ public class ClientTest {
     private Client client;
     @BeforeEach
     void init() {
-        client = new Client("luri", "luri@gmail.com", "698765432", true);
+        client = new Client("luri", "luri@gmail.com", "698765432");
     }
     @Test
     void whenCreatClientWithAcceptedNotifications_thenItIsSavedSuccessfully(){
