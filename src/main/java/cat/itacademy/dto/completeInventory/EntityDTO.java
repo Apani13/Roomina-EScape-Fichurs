@@ -1,10 +1,10 @@
 package cat.itacademy.dto.completeInventory;
 
-public class CompleteElementDTO {
+public class EntityDTO {
     private String name;
     private double price;
 
-    public CompleteElementDTO(String name, double price) {
+    public EntityDTO(String name, double price) {
         this.name = name;
         this.price = price;
     }

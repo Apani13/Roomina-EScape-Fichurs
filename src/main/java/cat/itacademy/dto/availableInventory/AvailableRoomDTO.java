@@ -1,6 +1,6 @@
 package cat.itacademy.dto.availableInventory;
 
-public class AvailableRoomDTO extends AvailableElementDTO {
+public class AvailableRoomDTO extends AvailableEntityDTO {
     private String theme;
 
     public AvailableRoomDTO(String name, String theme) {

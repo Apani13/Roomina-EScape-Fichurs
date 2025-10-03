@@ -4,9 +4,9 @@ import cat.itacademy.dto.availableInventory.AvailableClueDTO;
 import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
-import cat.itacademy.dto.completeInventory.AllCluesDTO;
-import cat.itacademy.dto.completeInventory.AllItemsDTO;
-import cat.itacademy.dto.completeInventory.AllRoomsDTO;
+import cat.itacademy.dto.completeInventory.EntityClueDTO;
+import cat.itacademy.dto.completeInventory.EntityItemDTO;
+import cat.itacademy.dto.completeInventory.EntityRoomDTO;
 import cat.itacademy.dto.completeInventory.CompleteInventoryDTO;
 import cat.itacademy.repository.DAO.ClueDAO;
 import cat.itacademy.repository.DAO.ItemDAO;
@@ -37,9 +37,9 @@ public class InventoryService {
     }
 
     public CompleteInventoryDTO getCompleteInventory() throws SQLException {
-        List<AllRoomsDTO> allRoms = roomDAO.getAllRoomsNameAndPrice();
-        List<AllCluesDTO> allClues = clueDAO.getAllCluesNameAndPrice();
-        List<AllItemsDTO> allItems = itemDAO.getAllItemsNameAndPrice();
+        List<EntityRoomDTO> allRoms = roomDAO.getAllRoomsNameAndPrice();
+        List<EntityClueDTO> allClues = clueDAO.getAllCluesNameAndPrice();
+        List<EntityItemDTO> allItems = itemDAO.getAllItemsNameAndPrice();
         double totalPrice = roomDAO.getAllPrices() + itemDAO.getAllPrices() + clueDAO.getAllPrices();
 
         return new CompleteInventoryDTO(allRoms,allClues,allItems, totalPrice);

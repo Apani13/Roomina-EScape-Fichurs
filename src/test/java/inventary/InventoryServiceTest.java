@@ -4,9 +4,9 @@ import cat.itacademy.dto.availableInventory.AvailableClueDTO;
 import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
-import cat.itacademy.dto.completeInventory.AllCluesDTO;
-import cat.itacademy.dto.completeInventory.AllItemsDTO;
-import cat.itacademy.dto.completeInventory.AllRoomsDTO;
+import cat.itacademy.dto.completeInventory.EntityClueDTO;
+import cat.itacademy.dto.completeInventory.EntityItemDTO;
+import cat.itacademy.dto.completeInventory.EntityRoomDTO;
 import cat.itacademy.dto.completeInventory.CompleteInventoryDTO;
 import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.repository.DatabaseConnection;
@@ -96,15 +96,15 @@ public class InventoryServiceTest {
 
         CompleteInventoryDTO inventory = inventoryService.getCompleteInventory();
 
-        AllRoomsDTO roomDTO = inventory.getAllRoms().get(0);
+        EntityRoomDTO roomDTO = inventory.getAllRoms().get(0);
         assertEquals("Indiana Jones", roomDTO.getName());
         assertEquals( 25.0, roomDTO.getPrice());
 
-        AllCluesDTO clueDTO = inventory.getAllClues().get(0);
+        EntityClueDTO clueDTO = inventory.getAllClues().get(0);
         assertEquals("Llave", clueDTO.getName());
         assertEquals(10.0, clueDTO.getPrice());
 
-        AllItemsDTO itemDTO = inventory.getAllItems().get(0);
+        EntityItemDTO itemDTO = inventory.getAllItems().get(0);
         assertEquals("Palmera", itemDTO.getName());
         assertEquals(15.0, itemDTO.getPrice());
     }
