@@ -1,4 +1,3 @@
-// InventoryServiceTest.java
 package inventary;
 
 import cat.itacademy.dto.availableInventory.AvailableClueDTO;
@@ -42,6 +41,8 @@ public class InventoryServiceTest {
         itemService = new ItemService();
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.prepareStatement("DELETE FROM clue").executeUpdate();
+            conn.prepareStatement("DELETE FROM ticket").executeUpdate();
+            conn.prepareStatement("DELETE FROM client").executeUpdate();
             conn.prepareStatement("DELETE FROM item").executeUpdate();
             conn.prepareStatement("DELETE FROM room").executeUpdate();
             conn.prepareStatement("DELETE FROM escape_room").executeUpdate();
@@ -53,8 +54,8 @@ public class InventoryServiceTest {
     @Test
     public void whenGetAvailableInventory_thenShouldReturnCorrectInformation() throws SQLException {
         Room room = new Room("Indiana Jones", "Aventura", 5);
-        Clue clue = new Clue("Llave", "Aventura", "Una pista clave", 25.0);
-        Item item = new Item("Palmera", "Plástico", 3);
+        Clue clue = new Clue("Llave", "Aventura", "Una pista clave");
+        Item item = new Item("Palmera", "plastico", 5);
 
         roomService.addRoom(room);
         clueService.addClue(clue);
@@ -72,7 +73,7 @@ public class InventoryServiceTest {
 
         AvailableItemDTO itemDTO = inventory.getAvailableItems().get(0);
         assertEquals("Palmera", itemDTO.getName());
-        assertEquals(3, itemDTO.getQuantity());
+        assertEquals(5, itemDTO.getQuantity());
     }
 
     @Test
@@ -83,10 +84,11 @@ public class InventoryServiceTest {
         assertThrows(EmptyListException.class, () -> validator.validateAvailableInventory(inventory));
     }
 
+    @Test
     public void whenGetCompleteInventory_thenShouldReturnCorrectInformation() throws SQLException {
         Room room = new Room("Indiana Jones", "Aventura", 5);
-        Clue clue = new Clue("Llave", "Aventura", "Una pista clave", 25.0);
-        Item item = new Item("Palmera", "Plástico", 3);
+        Clue clue = new Clue("Llave", "Aventura", "Una pista clave");
+        Item item = new Item("Palmera", "plastico", 5);
 
         roomService.addRoom(room);
         clueService.addClue(clue);
@@ -96,15 +98,15 @@ public class InventoryServiceTest {
 
         AllRoomsDTO roomDTO = inventory.getAllRoms().get(0);
         assertEquals("Indiana Jones", roomDTO.getName());
-        assertEquals( room.getPrice(), roomDTO.getPrice());
+        assertEquals( 25.0, roomDTO.getPrice());
 
         AllCluesDTO clueDTO = inventory.getAllClues().get(0);
         assertEquals("Llave", clueDTO.getName());
-        assertEquals("Aventura", clueDTO.getPrice());
+        assertEquals(10.0, clueDTO.getPrice());
 
         AllItemsDTO itemDTO = inventory.getAllItems().get(0);
         assertEquals("Palmera", itemDTO.getName());
-        assertEquals(3, itemDTO.getPrice());
+        assertEquals(15.0, itemDTO.getPrice());
     }
 
     @Test
@@ -114,6 +116,4 @@ public class InventoryServiceTest {
 
         assertThrows(EmptyListException.class, () -> validator.validateCompleteInventory(inventory));
     }
-
-
 }

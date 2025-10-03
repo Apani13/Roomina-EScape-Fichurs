@@ -69,7 +69,6 @@ public class RoomDAO {
                         rs.getString("name"),
                         rs.getString("theme"),
                         rs.getInt("level"),
-                        rs.getDouble("price"),
                         wasNull ? null : escapeRoomId
                 );
                 return Optional.of(room);
@@ -95,7 +94,6 @@ public class RoomDAO {
                             rs.getString("name"),
                             rs.getString("theme"),
                             rs.getInt("level"),
-                            rs.getInt("price"),
                             wasNull ? null : escapeRoomId
                     );
                     return Optional.of(room);
@@ -166,21 +164,23 @@ public class RoomDAO {
                         rs.getString("name"),
                         rs.getDouble("price")
                 );
+                rooms.add(room);
             }
         }
         return rooms;
     }
 
-    public double getAllPrices() throws SQLException{
-        String sql = "SELECT SUM(price) FROM room";
+    public double getAllPrices() throws SQLException {
+        String sql = "SELECT SUM(price) AS totalPrice FROM room";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                double
+               return rs.getDouble("totalPrice");
             }
-
+        }
+        return 0.0;
     }
 }

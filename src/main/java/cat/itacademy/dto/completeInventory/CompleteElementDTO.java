@@ -10,5 +10,5 @@ public class CompleteElementDTO {
     }
 
     public String getName() {return name;}
-    public String getPrice() {return name;}
+    public double getPrice() {return price;}
 }

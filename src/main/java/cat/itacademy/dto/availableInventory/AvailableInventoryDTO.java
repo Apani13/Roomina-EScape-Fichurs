@@ -35,12 +35,12 @@ public class AvailableInventoryDTO {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("=== INVENTARI ACTUALITZAT ===\n");
-        sb.append("Quantitats disponibles de cada element:\n\n");
+        sb.append("=== INVENTARIO ACTUALIZADO ===\n");
+        sb.append("Cantidad disponible de cada elemento:\n\n");
 
-        sb.append("--- SALES DISPONIBLES (").append(availableRooms.size()).append(") ---\n");
+        sb.append("--- SALAS DISPONIBLES (").append(availableRooms.size()).append(") ---\n");
         for (AvailableRoomDTO room : availableRooms) {
-            sb.append("• ").append(room.getName()).append(" | Temàtica: ").append(room.getTheme()).append("\n");
+            sb.append("• ").append(room.getName()).append(" | Temática: ").append(room.getTheme()).append("\n");
         }
 
         sb.append("\n--- PISTES DISPONIBLES (").append(availableClues.size()).append(") ---\n");

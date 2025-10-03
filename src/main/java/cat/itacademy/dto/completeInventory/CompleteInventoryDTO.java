@@ -43,6 +43,28 @@ public class CompleteInventoryDTO {
 
     @Override
     public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== INVENTARIO ACTUALITZADO ===\n");
+        sb.append("Precio de cada elemento: \n");
 
+        sb.append("\n--- SALAS (").append(allRoms.size()).append(") ---\n");
+        for (AllRoomsDTO room : allRoms) {
+            sb.append("• ").append(room.getName()).append(" | Precio: ").append(room.getPrice()).append("\n");
+        }
+
+        sb.append("\n--- OBJECTES (").append(allItems.size()).append(") ---\n");
+        for (AllItemsDTO item : allItems) {
+            sb.append("• ").append(item.getName()).append(" | Precio: ").append(item.getPrice()).append("\n");
+        }
+
+        sb.append("\n--- CLUES (").append(allClues.size()).append(") ---\n");
+        for (AllCluesDTO clues : allClues) {
+            sb.append("• ").append(clues.getName()).append(" | Precio: ").append(clues.getPrice()).append("\n");
+        }
+
+        sb.append("\n--- VALOR TOTAL DEL INVENTARIO: ").append(getTotalInventoryPrice()).append(" €.");
+
+        return sb.toString();
     }
 }
+

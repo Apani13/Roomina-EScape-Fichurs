@@ -40,9 +40,9 @@ public class InventoryService {
         List<AllRoomsDTO> allRoms = roomDAO.getAllRoomsNameAndPrice();
         List<AllCluesDTO> allClues = clueDAO.getAllCluesNameAndPrice();
         List<AllItemsDTO> allItems = itemDAO.getAllItemsNameAndPrice();
-        double totalPrice =
+        double totalPrice = roomDAO.getAllPrices() + itemDAO.getAllPrices() + clueDAO.getAllPrices();
 
-        return new CompleteInventoryDTO(allRoms,allClues,allItems, );
+        return new CompleteInventoryDTO(allRoms,allClues,allItems, totalPrice);
     }
 }
 

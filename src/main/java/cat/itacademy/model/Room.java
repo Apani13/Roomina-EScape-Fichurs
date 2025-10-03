@@ -17,12 +17,18 @@ public class Room {
         this.price = 25.0;
     }
 
-    public Room(int id, String name, String theme, int level,  double price, Integer escapeRoomId) {
+    public Room(String name, String theme) {
+        this.name = name;
+        this.theme = theme;
+        this.price = 25.0;
+    }
+
+    public Room(int id, String name, String theme, int level, Integer escapeRoomId) {
         this.id = id;
         this.name = name;
         this.theme = theme;
         this.level = level;
-        this.price = price;
+        this.price = 25.0;
         this.escapeRoomId = escapeRoomId;
     }
 
@@ -31,9 +37,9 @@ public class Room {
         this.name = name;
     }
 
-    public Room(String name, double price) {
+    public Room(String name) {
         this.name = name;
-        this.price = price;
+        this.price = 25.0;
     }
 
 

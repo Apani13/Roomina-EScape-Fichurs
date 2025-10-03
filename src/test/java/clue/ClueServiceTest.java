@@ -33,8 +33,8 @@ public class ClueServiceTest {
         }
     }
 
-    private Clue newClue(String name, String theme, String desc, double price) {
-        return new Clue(name, theme, desc, price);
+    private Clue newClue(String name, String theme, String desc) {
+        return new Clue(name, theme, desc);
     }
 
     @Test
@@ -45,8 +45,8 @@ public class ClueServiceTest {
 
             clueService.addClue(newClue("Sangre en la pared",
                     "puzzle",
-            "parece que las manchas siguen un patrón...",
-            10.95));
+            "parece que las manchas siguen un patrón..."
+            ));
 
         System.setOut(originalOut);
 
@@ -58,28 +58,28 @@ public class ClueServiceTest {
     void whenAddingDuplicateName_thenThrowsDuplicateClueException() {
         clueService.addClue(newClue("Retrato fantasma",
                 "susto",
-                "chan chan chan...",
-                5.33));
+                "chan chan chan..."
+        ));
 
         assertThrows(DuplicateException.class,
                 () -> clueService.addClue(newClue("Retrato fantasma"
                 ,"eneagramas"
-                ,"que será, será...",
-                100.34)),
+                ,"que será, será..."
+                )),
                 "Debería lanzar excepción InvalidAttributeException");
     }
 
-    @Test
+    /*@Test
     void whenPriceIsNegative_thenInvalidAttributeExceptionIsThrown() {
 
         assertThrows(InvalidAttributeException.class,
                 () -> clueService.addClue(newClue("pañuelo usado",
                         "prueba de ADN",
-                        "Quién es el asesino? :(",
-                        -55.22)),
+                        "Quién es el asesino? :("
+                )),
                 "Debería lanzar excepción InvalidAttributeException");
 
-    }
+    }*/
 
     @Test
     void whenNameIsBlank_thenInvalidAttributeExceptionIsThrown() {
@@ -87,8 +87,8 @@ public class ClueServiceTest {
         assertThrows(InvalidAttributeException.class,
                 () -> clueService.addClue(newClue(null,
                                 "carta",
-                                "aaaa",
-                                1.55)),
+                                "aaaa"
+                )),
                         "Debería lanzar excepción InvalidAttributeException");
 
 

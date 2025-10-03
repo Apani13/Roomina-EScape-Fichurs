@@ -98,7 +98,19 @@ public class ItemDAO {
         return items;
     }
 
+    public double getAllPrices() throws SQLException {
+        String sql = "SELECT SUM(price) AS totalPrice FROM item";
 
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-
+            while (rs.next()) {
+                return rs.getDouble("totalPrice");
+            }
+        }
+        return 0.0;
+    }
 }
+
+

@@ -11,7 +11,7 @@ public class Item {
         this.name = name;
         this.material = material;
         this.quantity = quantity;
-        this.price = 5;
+        this.price = 15.0;
     }
 
     public String getName() {

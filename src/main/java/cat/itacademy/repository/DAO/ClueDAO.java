@@ -76,7 +76,6 @@ public class ClueDAO {
                         rs.getString("name"),
                         rs.getString("theme"),
                         rs.getString("description"),
-                        rs.getDouble("price"),
                         rs.getInt("room_id")
                 );
                 return Optional.of(clue);
@@ -99,7 +98,6 @@ public class ClueDAO {
                             rs.getString("name"),
                             rs.getString("theme"),
                             rs.getString("description"),
-                            rs.getDouble("price"),
                             rs.getObject("room_id", Integer.class)
                     );
                     return Optional.of(clue);
@@ -146,4 +144,18 @@ public class ClueDAO {
         }
         return clues;
     }
+    public double getAllPrices() throws SQLException {
+        String sql = "SELECT SUM(price) AS totalPrice FROM clue";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                return rs.getDouble("totalPrice");
+            }
+        }
+        return 0.0;
+    }
 }
+
