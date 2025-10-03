@@ -3,11 +3,13 @@ package ticket;
 import cat.itacademy.model.Client;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Ticket;
+import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.service.ClientService;
 import cat.itacademy.service.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,6 +29,9 @@ public class TicketTest {
         roomService.addRoom(new Room("room1", "intriga", 2));
         roomId = roomService.getLastRoom().getId();
 
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.prepareStatement("DELETE FROM client").executeUpdate();
+        }
     }
 
     @Test

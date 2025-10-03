@@ -17,7 +17,7 @@ public class ClueDuplicateValidation implements ValidationStrategy<Clue> {
     }
 
     @Override
-    public void validate(Clue clue) throws DuplicateException, SQLException {
+    public void validateAvailableInventory(Clue clue) throws DuplicateException, SQLException {
         if (clueDAO.existsByName(clue.getName())) {
             throw new DuplicateException(CLUE_DUPLICATED);
         }

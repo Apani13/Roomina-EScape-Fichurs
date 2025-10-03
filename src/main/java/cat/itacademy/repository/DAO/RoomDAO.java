@@ -1,5 +1,6 @@
 package cat.itacademy.repository.DAO;
-import cat.itacademy.dto.AvailableRoomDTO;
+import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
+import cat.itacademy.dto.completeInventory.AllRoomsDTO;
 import cat.itacademy.model.Room;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -42,24 +43,6 @@ public class RoomDAO {
         return false;
     }
 
-    public List<Room> getAllNames() throws SQLException {
-        List<Room> rooms = new ArrayList<>();
-        String sql = "SELECT id, name FROM room";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                rooms.add(new Room(
-                        rs.getInt("id"),
-                        rs.getString("name")
-                ));
-            }
-        }
-        return rooms;
-    }
-
     public void updateRoomIdClue(int roomId, int clueId) throws SQLException {
         String sql = "UPDATE clue SET room_id = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -86,7 +69,6 @@ public class RoomDAO {
                         rs.getString("name"),
                         rs.getString("theme"),
                         rs.getInt("level"),
-                        rs.getDouble("price"),
                         wasNull ? null : escapeRoomId
                 );
                 return Optional.of(room);
@@ -112,7 +94,6 @@ public class RoomDAO {
                             rs.getString("name"),
                             rs.getString("theme"),
                             rs.getInt("level"),
-                            rs.getInt("price"),
                             wasNull ? null : escapeRoomId
                     );
                     return Optional.of(room);
@@ -120,26 +101,6 @@ public class RoomDAO {
             }
         }
         return Optional.empty();
-    }
-
-
-
-    public List<Room> getAvailableRooms()throws SQLException  {
-        List<Room> rooms = new ArrayList<>();
-        String sql = "SELECT id, name FROM room WHERE escape_room_id IS NULL";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            try(ResultSet rs = stmt.executeQuery()) {
-                while(rs.next()) {
-                    rooms.add(new Room(
-                            rs.getInt("id"),
-                            rs.getString("name")
-                    ));
-                }
-            }
-        }
-        return rooms;
     }
 
     public static List<Room> getRoomsWithClues()throws SQLException {
@@ -171,7 +132,7 @@ public class RoomDAO {
         }
     }
 
-    public List<AvailableRoomDTO> getAvailableRoomsWithDetails() throws SQLException {
+    public List<AvailableRoomDTO> getAvailableRooms() throws SQLException {
         List<AvailableRoomDTO> rooms = new ArrayList<>();
         String sql = "SELECT name, theme FROM room WHERE escape_room_id IS NULL";
 
@@ -190,5 +151,36 @@ public class RoomDAO {
         return rooms;
     }
 
+    public List<AllRoomsDTO> getAllRoomsNameAndPrice() throws SQLException {
+        List<AllRoomsDTO> rooms = new ArrayList<>();
+        String sql = "SELECT name, price FROM room";
 
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                AllRoomsDTO room = new AllRoomsDTO(
+                        rs.getString("name"),
+                        rs.getDouble("price")
+                );
+                rooms.add(room);
+            }
+        }
+        return rooms;
+    }
+
+    public double getAllPrices() throws SQLException {
+        String sql = "SELECT SUM(price) AS totalPrice FROM room";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+               return rs.getDouble("totalPrice");
+            }
+        }
+        return 0.0;
+    }
 }

@@ -1,7 +1,6 @@
 package cat.itacademy.validation.client;
 
 import cat.itacademy.exception.DuplicateException;
-import cat.itacademy.exception.EntityNotFoundException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.exception.NullObjectException;
 import cat.itacademy.model.Client;
@@ -19,7 +18,7 @@ public class ClientValidator {
 
     public void validate(Client client) throws DuplicateException, InvalidAttributeException, NullObjectException, SQLException {
         for (ValidationStrategy<Client> strategy : strategies) {
-            strategy.validate(client);
+            strategy.validateAvailableInventory(client);
         }
     }
 }

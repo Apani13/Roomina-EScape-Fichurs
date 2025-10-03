@@ -16,7 +16,7 @@ public class RoomDuplicateValidation implements ValidationStrategy<Room> {
     }
 
     @Override
-    public void validate(Room room) throws DuplicateException, SQLException {
+    public void validateAvailableInventory(Room room) throws DuplicateException, SQLException {
         if (roomDAO.existsByName(room.getName()))  {
             throw new DuplicateException(RoomErrorMessages.ROOM_DUPLICATED);
         }

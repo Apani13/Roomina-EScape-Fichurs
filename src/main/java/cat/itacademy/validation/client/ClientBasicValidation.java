@@ -9,7 +9,7 @@ import static cat.itacademy.message.error.ClientErrorMessages.*;
 
 public class ClientBasicValidation implements ValidationStrategy<Client> {
     @Override
-    public void validate(Client client) throws InvalidAttributeException, NullObjectException {
+    public void validateAvailableInventory(Client client) throws InvalidAttributeException, NullObjectException {
         if(client == null){
             throw new NullObjectException(CLIENT_NULL_OBJECT);
         }

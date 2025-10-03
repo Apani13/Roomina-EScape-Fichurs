@@ -1,4 +1,4 @@
-package cat.itacademy.dto;
+package cat.itacademy.dto.availableInventory;
 
 public class AvailableItemDTO extends AvailableElementDTO {
     private int quantity;

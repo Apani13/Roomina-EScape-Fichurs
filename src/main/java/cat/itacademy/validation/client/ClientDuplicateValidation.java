@@ -14,7 +14,7 @@ public class ClientDuplicateValidation implements ValidationStrategy<Client> {
         this.clientDAO = clientDAO;
     }
     @Override
-    public void validate(Client client) throws DuplicateException, SQLException {
+    public void validateAvailableInventory(Client client) throws DuplicateException, SQLException {
          if(clientDAO.existsByUserName(client.getUserName())){
              throw new DuplicateException(ClientErrorMessages.CLIENT_DUPLICATED);
          }

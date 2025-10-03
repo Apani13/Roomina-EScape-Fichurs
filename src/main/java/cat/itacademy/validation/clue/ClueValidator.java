@@ -16,7 +16,7 @@ public class ClueValidator {
 
     public void validate(Clue clue) throws DuplicateException, SQLException {
         for (ValidationStrategy<Clue> strategy : strategies) {
-            strategy.validate(clue);
+            strategy.validateAvailableInventory(clue);
         }
     }
 }

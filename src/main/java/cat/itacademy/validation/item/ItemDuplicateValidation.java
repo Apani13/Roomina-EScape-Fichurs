@@ -16,7 +16,7 @@ public class ItemDuplicateValidation implements ValidationStrategy<Item> {
     }
 
     @Override
-    public void validate(Item item) throws DuplicateException, SQLException {
+    public void validateAvailableInventory(Item item) throws DuplicateException, SQLException {
         if (itemDAO.existsByName(item.getName())) {
             throw new DuplicateException(ItemErrorMessages.ITEM_DUPLICATED);
         }

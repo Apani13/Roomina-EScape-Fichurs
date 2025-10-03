@@ -5,5 +5,5 @@ import cat.itacademy.exception.*;
 import java.sql.SQLException;
 
 public interface ValidationStrategy <T>{
-    void validate(T entity) throws DuplicateException, EntityNotFoundException, InvalidAttributeException, NullObjectException, SQLException, EmptyListException;
+    void validateAvailableInventory(T entity) throws DuplicateException, EntityNotFoundException, InvalidAttributeException, NullObjectException, SQLException, EmptyListException;
 }

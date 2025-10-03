@@ -20,7 +20,7 @@ public class TicketEntityExistsValidation implements ValidationStrategy<Ticket> 
     }
 
     @Override
-    public void validate(Ticket ticket) throws EntityNotFoundException, SQLException {
+    public void validateAvailableInventory(Ticket ticket) throws EntityNotFoundException, SQLException {
         if(clientService.getClientById(ticket.getClientId()) == null){
             throw new EntityNotFoundException(CLIENT_NOT_FOUND);
         }
