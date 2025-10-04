@@ -11,6 +11,7 @@ public class Main {
 
         mainMenu.showAvailableInventory();
         mainMenu.showTotalInventoryPrice();
+        mainMenu.showTotalValueOfSales();
 
     }
 }

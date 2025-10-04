@@ -23,6 +23,11 @@ public class Ticket {
         this.totalPrice = totalPrice;
     }
 
+    public Ticket(LocalDateTime dateCreation , double totalPrice) {
+        this.dateCreation = dateCreation;
+        this.totalPrice = totalPrice;
+    }
+
     public int getId() {
         return id;
     }

@@ -4,16 +4,12 @@ import cat.itacademy.dto.availableInventory.AvailableClueDTO;
 import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
-import cat.itacademy.dto.completeInventory.EntityClueDTO;
-import cat.itacademy.dto.completeInventory.EntityItemDTO;
-import cat.itacademy.dto.completeInventory.EntityRoomDTO;
-import cat.itacademy.dto.completeInventory.CompleteInventoryDTO;
+import cat.itacademy.dto.completeInventory.*;
 import cat.itacademy.exception.EmptyListException;
+import cat.itacademy.model.Ticket;
+import cat.itacademy.repository.DAO.TicketDAO;
 import cat.itacademy.repository.DatabaseConnection;
-import cat.itacademy.service.InventoryService;
-import cat.itacademy.service.RoomService;
-import cat.itacademy.service.ClueService;
-import cat.itacademy.service.ItemService;
+import cat.itacademy.service.*;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Clue;
 import cat.itacademy.model.Item;
@@ -23,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,6 +29,7 @@ public class InventoryServiceTest {
     private RoomService roomService;
     private ClueService clueService;
     private ItemService itemService;
+    private TicketService ticketService;
 
     @BeforeEach
     public void setUp() {
@@ -86,6 +84,8 @@ public class InventoryServiceTest {
 
     @Test
     public void whenGetCompleteInventory_thenShouldReturnCorrectInformation() throws SQLException {
+        LocalDateTime date;
+
         Room room = new Room("Indiana Jones", "Aventura", 5);
         Clue clue = new Clue("Llave", "Aventura", "Una pista clave");
         Item item = new Item("Palmera", "plastico", 5);
@@ -107,6 +107,7 @@ public class InventoryServiceTest {
         EntityItemDTO itemDTO = inventory.getAllItems().get(0);
         assertEquals("Palmera", itemDTO.getName());
         assertEquals(15.0, itemDTO.getPrice());
+
     }
 
     @Test
