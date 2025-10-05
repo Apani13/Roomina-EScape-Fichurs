@@ -4,18 +4,15 @@ import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.model.Clue;
-import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.model.Room;
 import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.service.ClueService;
-import cat.itacademy.service.EscapeRoomService;
 import cat.itacademy.service.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,14 +22,13 @@ public class RoomServiceTest {
     private RoomService roomService;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws SQLException{
         roomService = new RoomService();
         try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.prepareStatement("DELETE FROM item").executeUpdate();
             conn.prepareStatement("DELETE FROM clue").executeUpdate();
             conn.prepareStatement("DELETE FROM room").executeUpdate();
             conn.prepareStatement("DELETE FROM escape_room").executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -76,7 +72,7 @@ public class RoomServiceTest {
         ClueService clueService = new ClueService();
         clueService.addClue(new Clue("clue1", "diversion", "icabcuani"));
 
-        int roomId = roomService.getLastRoom().get().getId();
+        int roomId = roomService.getLastRoom().getId();
         int clueId = clueService.getLastClue().getId();
 
         roomService.addClueToRoom(roomId, clueId);
@@ -95,7 +91,7 @@ public class RoomServiceTest {
         roomService.addRoom(new Room("saw", "terror", 3));
 
         ClueService clueService = new ClueService();
-        clueService.addClue(new Clue("clue1", "diversion", "icabcuani", 10));
+        clueService.addClue(new Clue("clue1", "diversion", "icabcuani"));
         int roomid = roomService.getLastRoom().getId();
         int clueid = clueService.getLastClue().getId();
         roomService.addClueToRoom(roomid, clueid);
@@ -108,7 +104,7 @@ public class RoomServiceTest {
         roomService.addRoom(new Room("Slipknot", "music", 2));
 
         ClueService clueService = new ClueService();
-        clueService.addClue(new Clue("clue1", "diversion", "icabcuani", 10));
+        clueService.addClue(new Clue("clue1", "diversion", "icabcuani"));
 
         int roomid = roomService.getLastRoom().getId();
         int clueid = clueService.getLastClue().getId();

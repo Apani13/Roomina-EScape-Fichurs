@@ -1,21 +1,21 @@
 package cat.itacademy.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Ticket {
     private int id;
-    private int clientId;
-    private int roomId;
+    private Integer clientId;
+    private Integer roomId;
     private LocalDateTime dateCreation;
     private double totalPrice;
 
-    public Ticket(int clientId, int roomId, double price) {
+    public Ticket(Integer clientId, Integer roomId) {
         this.clientId = clientId;
         this.roomId = roomId;
-        this.totalPrice = price;
     }
 
-    public Ticket(int id, int clientId, int roomId, LocalDateTime dateCreation, double totalPrice) {
+    public Ticket(int id, Integer clientId, Integer roomId, LocalDateTime dateCreation, double totalPrice) {
         this.id = id;
         this.clientId = clientId;
         this.roomId = roomId;
@@ -27,16 +27,20 @@ public class Ticket {
         return id;
     }
 
-    public int getClientId() {
+    public Integer getClientId() {
         return clientId;
     }
 
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
     public LocalDateTime getDateCreation() {
         return dateCreation;
+    }
+
+    public LocalDate getDateCreationFormat() {
+        return this.dateCreation.toLocalDate();
     }
 
     public double getTotalPrice() {

@@ -1,4 +1,5 @@
 package cat.itacademy.repository.DAO;
+import cat.itacademy.dto.AvailableRoomDTO;
 import cat.itacademy.model.Room;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -13,14 +14,16 @@ import java.util.Optional;
 public class RoomDAO {
 
     public void insert(Room room) throws SQLException {
-        String sql = "INSERT INTO room (name, theme, level, price) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO room (name, theme, level, price) VALUES(?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1,room.getName());
+
+            stmt.setString(1, room.getName());
             stmt.setString(2, room.getTheme());
-            stmt.setInt(3,room.getLevel());
-            stmt.setDouble(4,room.getPrice());
+            stmt.setInt(3, room.getLevel());
+            stmt.setDouble(4, room.getPrice());
+
             stmt.executeUpdate();
         }
     }
@@ -55,16 +58,6 @@ public class RoomDAO {
             }
         }
         return rooms;
-    }
-
-    public void updateRoomIdClue(int roomId, int clueId) throws SQLException {
-        String sql = "UPDATE clue SET room_id = ? WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, roomId);
-            stmt.setInt(2, clueId);
-            stmt.executeUpdate();
-        }
     }
 
     public Optional<Room> getLastRoom() throws SQLException {
@@ -126,7 +119,7 @@ public class RoomDAO {
 
 
 
-    public List<Room> getAvailableRooms()throws SQLException  {
+    public List<Room> getAvailableRooms() throws SQLException  {
 
         List<Room> rooms = new ArrayList<>();
         String sql = "SELECT id, name FROM room WHERE escape_room_id IS NULL";
@@ -134,8 +127,9 @@ public class RoomDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
+            try(ResultSet rs = stmt.executeQuery()) {
+                while(rs.next()) {
+
                     rooms.add(new Room(
                             rs.getInt("id"),
                             rs.getString("name")
@@ -183,8 +177,31 @@ public class RoomDAO {
         String sql = "UPDATE clue SET room_id = NULL WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, clueId);
+
             stmt.executeUpdate();
         }
     }
+
+    public List<AvailableRoomDTO> getAvailableRoomsWithDetails() throws SQLException {
+        List<AvailableRoomDTO> rooms = new ArrayList<>();
+        String sql = "SELECT name, theme FROM room WHERE escape_room_id IS NULL";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                AvailableRoomDTO room = new AvailableRoomDTO(
+                        rs.getString("name"),
+                        rs.getString("theme")
+                );
+                rooms.add(room);
+            }
+        }
+        return rooms;
+    }
+
+
 }

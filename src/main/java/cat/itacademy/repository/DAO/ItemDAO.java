@@ -1,17 +1,25 @@
 package cat.itacademy.repository.DAO;
 
+import cat.itacademy.dto.AvailableItemDTO;
 import cat.itacademy.model.Item;
 import cat.itacademy.repository.DatabaseConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ItemDAO {
 
     public void insert(Item item) throws SQLException {
-        String sql = "INSERT INTO item (name, material, stock, price) VALUES (?, ?, ?, ?)";
+
+        String sql = "INSERT INTO item (name, material, stock, price) VALUES(?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, item.getName());
             stmt.setString(2, item.getMaterial());
@@ -36,13 +44,49 @@ public class ItemDAO {
             stmt.setString(1, name);
 
             try (ResultSet rs = stmt.executeQuery()) {
-
-                return rs.next() && rs.getInt(1) > 0;
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
             }
+        }
+        return false;
+    }
+
+    public List<AvailableItemDTO> getAvailableItemsWithDetails() throws SQLException {
+        List<AvailableItemDTO> items = new ArrayList<>();
+        String sql = "SELECT name, quantity FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                AvailableItemDTO item = new AvailableItemDTO(
+                        rs.getString("name"),
+                        rs.getInt("quantity")
+                );
+                items.add(item);
+            }
+        }
+        return items;
+    }
+
+    public int getTotalAvailableItemsCount() throws SQLException {
+        String sql = "SELECT COALESCE(SUM(quantity), 0) FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
         }
     }
 
-    public Item getById(int id) throws SQLException {
+    public Optional<Item> getById(int id) throws SQLException {
+
         String sql = "SELECT id, name, material, stock, price FROM item WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -50,34 +94,53 @@ public class ItemDAO {
 
             stmt.setInt(1, id);
 
-            try (ResultSet rs = stmt.executeQuery()) {
-
+            try(ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Item(
+
+                    Item item = new Item(
                             rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("material"),
                             rs.getInt("stock"),
                             rs.getDouble("price")
                     );
+
+                    return Optional.of(item);
                 }
             }
         }
-        return null;
+        return Optional.empty();
     }
 
-    public boolean existsById(int id) throws SQLException {
-        String sql = "SELECT 1 FROM item WHERE id = ? LIMIT 1";
+    public Optional<Item> getLastItem() throws SQLException {
+        String sql = "SELECT id, name, material, stock, price FROM item ORDER BY id DESC LIMIT 1";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-            stmt.setInt(1, id);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next();
+            if(rs.next()){
+                Item item = new Item(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("material"),
+                        rs.getInt("stock"),
+                        rs.getDouble("price")
+                );
+                return Optional.of(item);
             }
+            return Optional.empty();
         }
     }
+
+   public void updateStock(int itemId, int stock) throws SQLException {
+       String sql = "UPDATE item SET stock = ? WHERE id = ?";
+       try (Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+           stmt.setInt(1, stock);
+           stmt.setInt(2, itemId);
+           stmt.executeUpdate();
+       }
+   }
 
 }

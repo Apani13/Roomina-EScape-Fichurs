@@ -1,65 +1,112 @@
 package cat.itacademy.service;
 
+import cat.itacademy.exception.InsufficientStockException;
 import cat.itacademy.exception.InvalidAttributeException;
+import cat.itacademy.model.RoomItem;
 import cat.itacademy.repository.DAO.ItemDAO;
-import cat.itacademy.repository.DAO.RoomDAO;
 import cat.itacademy.repository.DAO.RoomItemDAO;
 
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.List;
 
 import static cat.itacademy.message.success.ItemAddedSuccessMessages.ITEM_ADDED_SUCCESS;
 
 public class RoomItemService {
 
-    private final RoomItemDAO roomItemDAO = new RoomItemDAO();
-    private final RoomDAO roomDAO = new RoomDAO();
-    private final ItemDAO itemDAO = new ItemDAO();
+    private final ItemService itemService;
+    private final RoomService roomService;
+    private final RoomItemDAO roomItemDAO;
+    private final ItemDAO itemDAO;
 
-    public void addItemToRoom(int roomId, int itemId, int stock) {
+    public RoomItemService() {
+        this.itemService = new ItemService();
+        this.roomService = new RoomService();
+        this.roomItemDAO = new RoomItemDAO();
+        this.itemDAO = new ItemDAO();
+    }
+
+    public void addItemToRoom(RoomItem roomItem) {
+
+        Integer itemId = roomItem.getItemId();
+        Integer roomId = roomItem.getRoomId();
 
         try {
-            if (stock <= 0) {
+            if (roomItem.getQuantity() <= 0) {
                 throw new InvalidAttributeException("Quantity must be > 0");
             }
-            if (!roomDAO.existsById(roomId)) {
-                throw new InvalidAttributeException("Room not found");
-            }
-            if (!itemDAO.existsById(itemId)) {
-                throw new InvalidAttributeException("Item not found");
+
+            if (roomId == null || roomId <= 0) {
+                throw new InvalidAttributeException("introduzca una sala válida.");
             }
 
-            roomItemDAO.insertRoomItem(roomId, itemId, stock);
-            System.out.println(String.format(ITEM_ADDED_SUCCESS, itemDAO.getById(itemId).getName()));
+            if (itemId == null || itemId <= 0) {
+                throw new InvalidAttributeException("introduzca una objeto de decoración válido.");
+            }
+
+            if (roomService.getRoomById(roomId) == null) {
+                throw new InvalidAttributeException("La sala no existe...");
+            }
+
+            if (itemService.getItemById(itemId) == null) {
+                throw new InvalidAttributeException("El objeto de decoración no existe...");
+            }
+
+            if (roomItem.getQuantity() > itemService.getItemById(itemId).getStock()) {
+
+                throw new InsufficientStockException("No hay suficientes "
+                                                    + itemService.getItemById(itemId).getName()
+                                                    + " disponlibles, quedan "
+                                                    + itemService.getItemById(itemId).getStock()
+                                                    );
+            }
+
+            roomItemDAO.insertRoomItem(roomItem);
+            reduceItemStock(itemId, roomItem.getQuantity());
+
+
+            System.out.println(String.format(ITEM_ADDED_SUCCESS,
+                    itemService.getItemById(itemId).getName()));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void removeItemFromRoom(int roomId, int itemId) {
+    public void removeItemFromRoom(int roomId, int itemId) throws SQLException{
+        int quantity = roomItemDAO.getQuantity(roomId, itemId);
 
-        try {
+        roomItemDAO.deleteRoomItem(roomId, itemId);
 
-            roomItemDAO.deleteRoomItem(roomId, itemId);
+        increaseItemStock(itemId, quantity);
 
-        } catch (SQLException e) {
-
-            throw new RuntimeException(e);
-        }
     }
 
-    public void updateItemStock(int roomId, int itemId) {
+    public void reduceItemStock(int itemId, int numItemsAssigned) throws SQLException {
 
-        try {
+        int updatedStock = (itemService.getItemById(itemId).getStock()) - numItemsAssigned;
 
-            removeItemFromRoom(roomId, itemId);
+        itemDAO.updateStock(itemId, updatedStock);
 
-        } catch (SQLException e) {
-
-            throw  new RuntimeException(e);
-
-        }
     }
+
+    public void increaseItemStock(int itemId, int numItemsAssigned) throws SQLException {
+
+        int updatedStock = (itemService.getItemById(itemId).getStock()) + numItemsAssigned;
+
+        itemDAO.updateStock(itemId, updatedStock);
+
+    }
+
+    public List<RoomItem> getAllItemsFromRoom(int roomId) throws SQLException {
+        return roomItemDAO.getAllByRoomId(roomId);
+    }
+
+    /*public RoomItem getRoomItemById(int roomId, int itemId) {
+
+        roomItemDAO.
+
+    }*/
 
 
 }

@@ -1,11 +1,14 @@
 package cat.itacademy.repository.DAO;
 
+import cat.itacademy.model.RoomItem;
 import cat.itacademy.repository.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoomItemDAO {
 
@@ -20,13 +23,13 @@ public class RoomItemDAO {
             "UPDATE quantity FROM room_item WHERE room_id = ? AND item_id = ?";
 
 
-    public void insertRoomItem(int roomId, int itemId, int qty) throws SQLException {
+    public void insertRoomItem(RoomItem roomItem) throws SQLException {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)) {
-            stmt.setInt(1, roomId);
-            stmt.setInt(2, itemId);
-            stmt.setInt(3, qty);
+            stmt.setInt(1, roomItem.getRoomId());
+            stmt.setInt(2, roomItem.getItemId());
+            stmt.setInt(3, roomItem.getQuantity());
             stmt.executeUpdate();
         }
     }
@@ -43,7 +46,7 @@ public class RoomItemDAO {
     }
 
 
-    public int getQuantity(int roomId, int itemId) throws SQLException {
+    public Integer getQuantity(int roomId, int itemId) throws SQLException {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_QTY_SQL)) {
@@ -57,14 +60,38 @@ public class RoomItemDAO {
 
     }
 
-    public Integer updateQuantity(int roomId, int itemId) throws SQLException {
+    public void updateQuantity(int roomId, int itemId) throws SQLException {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_QTY_SQL)) {
             stmt.setInt(1, roomId);
             stmt.setInt(2, itemId);
 
+        }
+
     }
 
 
+    public List<RoomItem> getAllByRoomId(int roomId) throws SQLException {
+        List<RoomItem> roomItems = new ArrayList<>();
+
+        String sql = "SELECT * FROM room_item WHERE room_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ) {
+            stmt.setInt(1, roomId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                RoomItem roomitem = new RoomItem(
+                        rs.getInt("room_id"),
+                        rs.getInt("item_id"),
+                        rs.getInt("quantity")
+                );
+                roomItems.add(roomitem);
+            }
+        }
+        return roomItems;
+    }
 }

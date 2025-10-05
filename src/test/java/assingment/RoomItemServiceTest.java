@@ -1,9 +1,14 @@
 package assingment;
 
 import cat.itacademy.exception.InvalidAttributeException;
+import cat.itacademy.model.Item;
+import cat.itacademy.model.Room;
+import cat.itacademy.model.RoomItem;
 import cat.itacademy.repository.DAO.RoomItemDAO;
 import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.service.ItemService;
 import cat.itacademy.service.RoomItemService;
+import cat.itacademy.service.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,109 +18,162 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RoomItemServiceTest {
 
-    private final RoomItemService roomItemService = new RoomItemService();
-    private final RoomItemDAO roomItemDAO = new RoomItemDAO();
-
+    private RoomItemService roomItemService;
+    private RoomService roomService;
+    private ItemService itemService;
+    private RoomItemDAO roomItemDAO;
     private int roomId;
-    private int lanternId;
-    private int chestId;
+    private int itemId;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws SQLException {
+
+        roomItemService = new RoomItemService();
+        roomService = new RoomService();
+        itemService = new ItemService();
+        roomItemDAO = new RoomItemDAO();
+
         try (Connection conn = DatabaseConnection.getConnection()) {
-
-            conn.createStatement().executeUpdate("DELETE FROM room_item");
-            conn.createStatement().executeUpdate("DELETE FROM item");
-            conn.createStatement().executeUpdate("DELETE FROM room");
-
-            try (PreparedStatement stmt = conn.prepareStatement(
-                    "INSERT INTO room(name, theme, level, price) VALUES(?, ?, ?, ?)",
-                    Statement.RETURN_GENERATED_KEYS)) {
-
-                stmt.setString(1, "Room 1");
-                stmt.setString(2, "mystery");
-                stmt.setInt(3, 2);
-                stmt.setDouble(4, 20.00);
-                stmt.executeUpdate();
-
-                try (ResultSet keys = stmt.getGeneratedKeys()) {
-                    keys.next();
-                    roomId = keys.getInt(1);
-                }
-            }
-
-            try (PreparedStatement stmt = conn.prepareStatement(
-                    "INSERT INTO item(name, material, stock, price) VALUES(?, ?, ?, ?)",
-                    Statement.RETURN_GENERATED_KEYS)) {
-
-                stmt.setString(1, "Lantern");
-                stmt.setString(2, "metal");
-                stmt.setInt(3, 10);
-                stmt.setDouble(4, 5.00);
-                stmt.executeUpdate();
-
-                try (ResultSet keys = stmt.getGeneratedKeys()) {
-                    keys.next();
-                    lanternId = keys.getInt(1);
-                }
-            }
-
-            try (PreparedStatement stmt = conn.prepareStatement(
-                    "INSERT INTO item(name, material, stock, price) VALUES(?,?,?,?)",
-                    Statement.RETURN_GENERATED_KEYS)) {
-
-                stmt.setString(1, "Chest");
-                stmt.setString(2, "wood");
-                stmt.setInt(3, 2);
-                stmt.setDouble(4, 12.00);
-                stmt.executeUpdate();
-                try (ResultSet keys = stmt.getGeneratedKeys()) {
-                    keys.next();
-                    chestId = keys.getInt(1);
-                }
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            conn.prepareStatement("DELETE FROM room_item").executeUpdate();
+            conn.prepareStatement("DELETE FROM room").executeUpdate();
+            conn.prepareStatement("DELETE FROM item").executeUpdate();
         }
+
+    }
+
+    private RoomItem newRoomItem(Integer roomId, Integer itemId, int qty) {
+        return new RoomItem(roomId, itemId, qty);
+    }
+
+    private Room newRoom(String name, String theme, int level) {
+        return new Room(name, theme, level);
+    }
+
+    private Item newItem(String name, String material, int stock) {
+        return new Item(name, material, stock);
     }
 
 
     @Test
     void whenRelatingItemThatExistToRoom_thenRelationIsMade() throws SQLException {
-        roomItemService.addItemToRoom(roomId, lanternId, 3);
-        assertEquals(3, roomItemDAO.getQuantity(roomId, lanternId));
+
+        itemService.addItem(
+               newItem("Candelabro",
+                       "metal",
+                       30)
+        );
+
+        roomService.addRoom(
+                newRoom("Chuky",
+                        "Terror",
+                        2)
+        );
+
+        roomId = roomService.getLastRoom().getId();
+        itemId = itemService.getLastItem().getId();
+
+        roomItemService.addItemToRoom(
+                newRoomItem(roomId,
+                        itemId,
+                        10)
+        );
+
+        assertEquals(10, roomItemDAO.getQuantity(roomId,itemId));
+        assertEquals(20, itemService.getItemById(itemId).getStock());
     }
 
 
     @Test
-    void whenAddingNonExistingItem_thenThrowsException() {
+    void whenAddingNonExistingItem_thenThrowsException() throws SQLException {
+
+        roomService.addRoom(
+                newRoom("Saw III",
+                        "Felicidad",
+                        5)
+        );
+
+        roomId = roomService.getLastRoom().getId();
+        itemId = 5000;
+
         assertThrows(InvalidAttributeException.class,
-                () -> roomItemService.addItemToRoom(roomId, 999_999, 1));
+                () -> roomItemService.addItemToRoom(
+                        newRoomItem(roomId,
+                                itemId,
+                                6)
+                        )
+        );
     }
 
 
     @Test
-    void roomCanContainMultipleItems() throws SQLException {
-        roomItemService.addItemToRoom(roomId, lanternId, 1);
-        roomItemService.addItemToRoom(roomId, chestId, 1);
-        assertNotNull(roomItemDAO.getQuantity(roomId, lanternId));
-        assertNotNull(roomItemDAO.getQuantity(roomId, chestId));
-    }
+    void whenAddingItemsToRoom_roomCanContainMultipleItems() throws SQLException {
 
+        roomService.addRoom(
+                newRoom("Fiesta En la playa",
+                        "Misterio",
+                        5)
+        );
 
-    @Test
-    void whenAddingItemToRoom_thenSystemReflectsItemNowBelongsToRoom() throws SQLException {
-        roomItemService.addItemToRoom(roomId, lanternId, 4);
-        assertEquals(4, roomItemDAO.getQuantity(roomId, lanternId));
+        itemService.addItem(
+                newItem("Chancleta",
+                        "Plastico",
+                        42)
+        );
+
+        roomId = roomService.getLastRoom().getId();
+        itemId = itemService.getLastItem().getId();
+
+        roomItemService.addItemToRoom(
+                newRoomItem(roomId,
+                        itemId,
+                        10)
+        );
+
+        itemService.addItem(
+                newItem("Arbol",
+                        "madera",
+                        7)
+        );
+
+        itemId = itemService.getLastItem().getId();
+
+        roomItemService.addItemToRoom(
+                newRoomItem(roomId,
+                        itemId,
+                        3)
+        );
+
+        assertEquals(2, roomItemService.getAllItemsFromRoom(roomId).size());
+
     }
 
 
     @Test
     void whenRemovingItem_thenInventoryUpdates() throws SQLException {
-        roomItemService.addItemToRoom(roomId, chestId, 5);
-        roomItemService.removeItemFromRoom(roomId, chestId);
-        assertNull(roomItemDAO.getQuantity(roomId, chestId));
+        itemService.addItem(
+                newItem("Candelabro",
+                        "metal",
+                        30)
+        );
+
+        roomService.addRoom(
+                newRoom("Chuky",
+                        "Terror",
+                        2)
+        );
+
+        roomId = roomService.getLastRoom().getId();
+        itemId = itemService.getLastItem().getId();
+
+        roomItemService.addItemToRoom(
+                newRoomItem(roomId,
+                        itemId,
+                        10)
+        );
+
+        roomItemService.removeItemFromRoom(roomId, itemId);
+
+        assertEquals(30, itemService.getItemById(itemId).getStock());
     }
 
 }

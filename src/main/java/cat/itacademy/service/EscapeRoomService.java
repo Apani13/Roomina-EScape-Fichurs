@@ -8,6 +8,9 @@ import cat.itacademy.repository.DAO.EscapeRoomDAO;
 import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.message.error.EscapeRoomErrorMessages;
 import cat.itacademy.message.success.EscapeRoomSuccessMessages;
+import cat.itacademy.validation.escapeRoom.EscapeRoomBasicValidation;
+import cat.itacademy.validation.escapeRoom.EscapeRoomDuplicateValidation;
+import cat.itacademy.validation.escapeRoom.EscapeRoomValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,27 +19,25 @@ import java.util.logging.Logger;
 
 public class EscapeRoomService {
     private EscapeRoomDAO escapeRoomDAO;
+    private EscapeRoomValidator escapeRoomValidator;
 
     public EscapeRoomService() {
         this.escapeRoomDAO = new EscapeRoomDAO();
+        this.escapeRoomValidator = new EscapeRoomValidator(List.of(
+                new EscapeRoomBasicValidation(),
+                new EscapeRoomDuplicateValidation(escapeRoomDAO)
+        ));
     }
 
 
     public void addEscapeRoom(EscapeRoom escapeRoom) throws InvalidAttributeException, DuplicateException {
         try {
-            if (escapeRoom.getName() == null || escapeRoom.getName().isEmpty()) {
-                throw new InvalidAttributeException(EscapeRoomErrorMessages.ESCAPEROOM_NAME_NULL_EMPTY);
-            }
-            if(escapeRoomDAO.existsByName(escapeRoom.getName())){
-                throw new DuplicateException(EscapeRoomErrorMessages.ESCAPEROOM_DUPLICATED);
-            }
+            escapeRoomValidator.validate(escapeRoom);
 
             escapeRoomDAO.insert(escapeRoom);
-            Optional<EscapeRoom> escapeRoomDB = getLastEscapeRoom();
+            EscapeRoom escapeRoomDB = getLastEscapeRoom();
 
-            String escapeRoomName = escapeRoomDB
-                    .map(EscapeRoom::getName)
-                    .orElse("Nombre no disponible");
+            String escapeRoomName = escapeRoomDB.getName();
             
             System.out.println(String.format(EscapeRoomSuccessMessages.ESCAPEROOM_CREATED, escapeRoomName));
         } catch (DuplicateException | InvalidAttributeException e) {
@@ -47,8 +48,13 @@ public class EscapeRoomService {
         }
     }
 
-    public Optional<EscapeRoom> getLastEscapeRoom() throws SQLException {
-        return escapeRoomDAO.getLastEscapeRoom();
+    public EscapeRoom getLastEscapeRoom() throws SQLException {
+        Optional<EscapeRoom> escapeRoom = escapeRoomDAO.getLastEscapeRoom();
+        if (escapeRoom.isPresent()) {
+            return escapeRoom.get();
+        }else {
+            return null;
+        }
     }
 
     public List<EscapeRoom> getAllEscapeRooms() throws SQLException{
@@ -58,8 +64,13 @@ public class EscapeRoomService {
         return escapeRoomDAO.findAll();
     }
 
-    public Optional<EscapeRoom> getEscapeRoomById(int id) throws SQLException {
-        return escapeRoomDAO.getById(id);
+    public EscapeRoom getEscapeRoomById(int id) throws SQLException {
+        Optional<EscapeRoom> escapeRoom = escapeRoomDAO.getById(id);
+        if (escapeRoom.isPresent()) {
+            return escapeRoom.get();
+        }else {
+            return null;
+        }
     }
 
     public void addRoomToEscapeRoom(int escapeRoomId, int roomId) throws SQLException {
@@ -79,8 +90,4 @@ public class EscapeRoomService {
             throw e;
         }
     }
-
-
-
-
 }

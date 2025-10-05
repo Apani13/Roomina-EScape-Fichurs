@@ -6,34 +6,35 @@ import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.model.Client;
 import cat.itacademy.message.error.ClientErrorMessages;
 import cat.itacademy.message.success.ClienteSuccessMessages;
+import cat.itacademy.validation.client.ClientBasicValidation;
+import cat.itacademy.validation.client.ClientDuplicateValidation;
+import cat.itacademy.validation.client.ClientValidator;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class ClientService {
     private ClientDAO clientDAO;
+    private ClientValidator clientValidator;
 
     public ClientService() {
-        clientDAO = new ClientDAO();
+        this.clientDAO = new ClientDAO();
+        this.clientValidator = new ClientValidator(List.of(
+                new ClientBasicValidation(),
+                new ClientDuplicateValidation(clientDAO)
+        ));
     }
 
     public void addClient(Client client) {
         try {
-            if (client.getUserName() == null || client.getUserName().isEmpty()) {
-                throw new InvalidAttributeException(ClientErrorMessages.CLIENT_USERNAME_NULL_EMPTY);
-            }
-            if (client.getEmail() == null || client.getEmail().isEmpty()) {
-                throw new InvalidAttributeException(ClientErrorMessages.CLIENT_EMAIL_NULL_EMPTY);
-            }
-            if (client.getPhone() == null || client.getPhone().isEmpty()) {
-                throw new InvalidAttributeException(ClientErrorMessages.CLIENT_PHONE_NULL_EMPTY);
-            }
-            if(clientDAO.existsByUserName(client.getUserName())){
-                throw new DuplicateException(ClientErrorMessages.CLIENT_DUPLICATED);
-            }
+            clientValidator.validate(client);
 
             clientDAO.insert(client);
-            Client lastClient = clientDAO.getLastClient();
+
+            Client lastClient = getLastClient();
+
             System.out.println(String.format(ClienteSuccessMessages.CLIENT_CREATED, lastClient.getUserName(), lastClient.getEmail(), lastClient.getPhone(), lastClient.isAcceptsNotifications()));
         } catch (DuplicateException | InvalidAttributeException e) {
             throw e;
@@ -44,6 +45,22 @@ public class ClientService {
     }
 
     public Client getLastClient() throws SQLException {
-        return clientDAO.getLastClient();
+        Optional<Client> client = clientDAO.getLastClient();
+
+        if (client.isPresent()) {
+            return client.get();
+        }else {
+            return null;
+        }
+    }
+
+    public Client getClientById(int id) throws SQLException {
+        Optional<Client> client = clientDAO.getById(id);
+
+        if (client.isPresent()) {
+            return client.get();
+        } else {
+            return null;
+        }
     }
 }
