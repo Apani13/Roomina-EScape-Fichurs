@@ -18,7 +18,7 @@ public class ClientValidator {
 
     public void validate(Client client) throws DuplicateException, InvalidAttributeException, NullObjectException, SQLException {
         for (ValidationStrategy<Client> strategy : strategies) {
-            strategy.validate(client);
+            strategy.validateAvailableInventory(client);
         }
     }
 }

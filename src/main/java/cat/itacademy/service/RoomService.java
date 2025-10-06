@@ -50,29 +50,29 @@ public class RoomService {
         }
     }
 
-    public List<Room> getAllRooms() throws SQLException {
-        if(roomDAO.getAllNames().isEmpty()){
+    public List<EntityRoomDTO> getAllRooms() throws SQLException {
+        if(roomDAO.getAllRoomsNameAndPrice().isEmpty()){
             throw new EmptyListException(RoomErrorMessages.ROOM_LIST_EMPTY);
         }
 
-        return roomDAO.getAllNames();
+        return roomDAO.getAllRoomsNameAndPrice();
     }
 
-    public List<Room> getAvailableRooms() throws SQLException {
+    /*public List<AvailableRoomDTO> getAvailableRooms() throws SQLException {
         if(roomDAO.getAllNames().isEmpty()) {
             throw new  EmptyListException(RoomErrorMessages.ROOM_LIST_EMPTY);
         }
 
         return roomDAO.getAvailableRooms();
-    }
+    }*/
 
-    public void showRooms() throws SQLException {
+    /*public void showRooms() throws SQLException {
         System.out.println(RoomUIMessages.ROOMUI_LIST_HEADER);
         for(Room room: getAllRooms()){
             System.out.println(String.format(RoomUIMessages.ROOMUI_LIST_BODY, room.getId(), room.getName()));
         }
         System.out.println(RoomUIMessages.ROOMUI_LIST_FOOTER);
-    }
+    }*/
 
     public void addClueToRoom(int roomId, int clueId) throws SQLException {
         clueDao.updateRoomIdClue(roomId, clueId);

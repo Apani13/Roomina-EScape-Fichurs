@@ -1,6 +1,7 @@
 package cat.itacademy.repository.DAO;
 
-import cat.itacademy.dto.AvailableItemDTO;
+import cat.itacademy.dto.availableInventory.AvailableItemDTO;
+import cat.itacademy.dto.completeInventory.EntityItemDTO;
 import cat.itacademy.model.Item;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -52,7 +53,7 @@ public class ItemDAO {
         return false;
     }
 
-    public List<AvailableItemDTO> getAvailableItemsWithDetails() throws SQLException {
+    public List<AvailableItemDTO> getAvailableItems() throws SQLException {
         List<AvailableItemDTO> items = new ArrayList<>();
         String sql = "SELECT name, quantity FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
 
@@ -85,6 +86,28 @@ public class ItemDAO {
         }
     }
 
+    public List<EntityItemDTO> getAllItemsNameAndPrice() throws SQLException {
+        List<EntityItemDTO> items = new ArrayList<>();
+        String sql = "SELECT name, price, quantity FROM item";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while(rs.next()) {
+                EntityItemDTO item = new EntityItemDTO(
+                        rs.getString("name"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity")
+                );
+                items.add(item);
+            }
+        }
+        return items;
+    }
+
+    public double getAllPrices() throws SQLException {
+        String sql = "SELECT SUM(price) AS totalPrice FROM item";
     public Optional<Item> getById(int id) throws SQLException {
 
         String sql = "SELECT id, name, material, stock, price FROM item WHERE id = ?";
@@ -119,6 +142,12 @@ public class ItemDAO {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
+            while (rs.next()) {
+                return rs.getDouble("totalPrice");
+            }
+        }
+        return 0.0;
+    }
             if(rs.next()){
                 Item item = new Item(
                         rs.getInt("id"),
@@ -144,3 +173,5 @@ public class ItemDAO {
    }
 
 }
+
+

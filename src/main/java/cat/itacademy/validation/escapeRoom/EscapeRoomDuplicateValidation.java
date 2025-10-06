@@ -16,7 +16,7 @@ public class EscapeRoomDuplicateValidation implements ValidationStrategy<EscapeR
     }
 
     @Override
-    public void validate(EscapeRoom escapeRoom) throws DuplicateException, SQLException {
+    public void validateAvailableInventory(EscapeRoom escapeRoom) throws DuplicateException, SQLException {
         if(escapeRoomDAO.existsByName(escapeRoom.getName())){
             throw new DuplicateException(EscapeRoomErrorMessages.ESCAPEROOM_DUPLICATED);
         }

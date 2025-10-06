@@ -16,7 +16,7 @@ public class EscapeRoomValidator {
 
     public void validate(EscapeRoom escapeRoom) throws DuplicateException, SQLException {
         for (ValidationStrategy<EscapeRoom> strategy : strategies) {
-            strategy.validate(escapeRoom);
+            strategy.validateAvailableInventory(escapeRoom);
         }
     }
 }

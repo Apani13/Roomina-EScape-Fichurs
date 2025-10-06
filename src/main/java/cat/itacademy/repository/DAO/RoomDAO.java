@@ -1,5 +1,6 @@
 package cat.itacademy.repository.DAO;
-import cat.itacademy.dto.AvailableRoomDTO;
+import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
+import cat.itacademy.dto.completeInventory.EntityRoomDTO;
 import cat.itacademy.model.Room;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -76,7 +77,6 @@ public class RoomDAO {
                         rs.getString("name"),
                         rs.getString("theme"),
                         rs.getInt("level"),
-                        rs.getDouble("price"),
                         wasNull ? null : escapeRoomId
                 );
                 return Optional.of(room);
@@ -184,7 +184,7 @@ public class RoomDAO {
         }
     }
 
-    public List<AvailableRoomDTO> getAvailableRoomsWithDetails() throws SQLException {
+    public List<AvailableRoomDTO> getAvailableRooms() throws SQLException {
         List<AvailableRoomDTO> rooms = new ArrayList<>();
         String sql = "SELECT name, theme FROM room WHERE escape_room_id IS NULL";
 
@@ -203,5 +203,36 @@ public class RoomDAO {
         return rooms;
     }
 
+    public List<EntityRoomDTO> getAllRoomsNameAndPrice() throws SQLException {
+        List<EntityRoomDTO> rooms = new ArrayList<>();
+        String sql = "SELECT name, price FROM room";
 
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                EntityRoomDTO room = new EntityRoomDTO(
+                        rs.getString("name"),
+                        rs.getDouble("price")
+                );
+                rooms.add(room);
+            }
+        }
+        return rooms;
+    }
+
+    public double getAllPrices() throws SQLException {
+        String sql = "SELECT SUM(price) AS totalPrice FROM room";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+               return rs.getDouble("totalPrice");
+            }
+        }
+        return 0.0;
+    }
 }

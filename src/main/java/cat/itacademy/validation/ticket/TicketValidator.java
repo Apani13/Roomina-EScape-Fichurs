@@ -18,7 +18,7 @@ public class TicketValidator {
 
     public void validate(Ticket ticket) throws EntityNotFoundOnDBException, InvalidAttributeException, NullObjectException, SQLException {
         for (ValidationStrategy<Ticket> strategy : strategies) {
-            strategy.validate(ticket);
+            strategy.validateAvailableInventory(ticket);
         }
     }
 }
