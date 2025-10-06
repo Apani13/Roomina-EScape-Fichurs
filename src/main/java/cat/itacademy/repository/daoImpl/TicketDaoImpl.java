@@ -1,9 +1,9 @@
-package cat.itacademy.repository.DAO;
+package cat.itacademy.repository.daoImpl;
 
-import cat.itacademy.dto.completeInventory.EntityItemDTO;
 import cat.itacademy.dto.completeInventory.EntityTicketDTO;
 import cat.itacademy.model.Ticket;
 import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.repository.dao.TicketDao;
 import cat.itacademy.service.RoomService;
 
 import java.sql.Connection;
@@ -14,11 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TicketDAO {
+public class TicketDaoImpl implements TicketDao {
+
     private RoomService roomService;
-    public  TicketDAO() {
+    public TicketDaoImpl() {
         roomService = new RoomService();
     }
+
+    @Override
     public void insert(Ticket ticket) throws SQLException {
         String sql = "INSERT INTO ticket (client_id, room_id, total_price) VALUES(?, ?, ?)";
 
@@ -33,7 +36,8 @@ public class TicketDAO {
         }
     }
 
-    public Optional<Ticket> findLast() throws SQLException {
+    @Override
+    public Optional<Ticket> getLast() throws SQLException {
         String sql = "SELECT id, client_id, date_creation, room_id, total_price FROM ticket ORDER BY id DESC LIMIT 1";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -54,6 +58,7 @@ public class TicketDAO {
         }
     }
 
+    @Override
     public List<EntityTicketDTO> getAllTicketsNameAndPrice() throws SQLException {
         List<EntityTicketDTO> tickets = new ArrayList<>();
         String sql = "SELECT date_creation, total_price FROM ticket";

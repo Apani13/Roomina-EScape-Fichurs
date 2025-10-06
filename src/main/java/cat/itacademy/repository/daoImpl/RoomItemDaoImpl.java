@@ -1,7 +1,8 @@
-package cat.itacademy.repository.DAO;
+package cat.itacademy.repository.daoImpl;
 
 import cat.itacademy.model.RoomItem;
 import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.repository.dao.RoomItemDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomItemDAO {
+public class RoomItemDaoImpl implements RoomItemDao {
 
     private static final String INSERT_SQL =
             "INSERT INTO room_item(room_id, item_id, quantity) VALUES (?, ?, ?)";
@@ -22,8 +23,8 @@ public class RoomItemDAO {
     private static final String UPDATE_QTY_SQL =
             "UPDATE quantity FROM room_item WHERE room_id = ? AND item_id = ?";
 
-
-    public void insertRoomItem(RoomItem roomItem) throws SQLException {
+    @Override
+    public void insert(RoomItem roomItem) throws SQLException {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)) {
@@ -34,7 +35,7 @@ public class RoomItemDAO {
         }
     }
 
-
+    @Override
     public void deleteRoomItem(int roomId, int itemId) throws SQLException {
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -45,7 +46,7 @@ public class RoomItemDAO {
         }
     }
 
-
+    @Override
     public Integer getQuantity(int roomId, int itemId) throws SQLException {
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -71,7 +72,7 @@ public class RoomItemDAO {
 
     }
 
-
+    @Override
     public List<RoomItem> getAllByRoomId(int roomId) throws SQLException {
         List<RoomItem> roomItems = new ArrayList<>();
 

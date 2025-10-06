@@ -5,7 +5,7 @@ import cat.itacademy.exception.EntityNotFoundOnDBException;
 import cat.itacademy.message.success.TicketSuccessMessages;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Ticket;
-import cat.itacademy.repository.DAO.TicketDAO;
+import cat.itacademy.repository.daoImpl.TicketDaoImpl;
 import cat.itacademy.validation.ticket.TicketBasicValidation;
 import cat.itacademy.validation.ticket.TicketEntityExistsValidation;
 import cat.itacademy.validation.ticket.TicketValidator;
@@ -16,13 +16,13 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 public class TicketService {
-    private TicketDAO ticketDAO;
+    private TicketDaoImpl ticketDAO;
     private ClientService clientService;
     private RoomService roomService;
     private TicketValidator ticketValidator;
 
     public TicketService() {
-        this.ticketDAO = new TicketDAO();
+        this.ticketDAO = new TicketDaoImpl();
         this.clientService = new ClientService();
         this.roomService = new RoomService();
         this.ticketValidator = new TicketValidator(List.of(
@@ -48,7 +48,7 @@ public class TicketService {
     }
 
     public Ticket getLastTicket() throws SQLException {
-        Optional<Ticket> ticket = ticketDAO.findLast();
+        Optional<Ticket> ticket = ticketDAO.getLast();
 
         if (ticket.isPresent()) {
             return ticket.get();

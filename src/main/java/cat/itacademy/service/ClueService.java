@@ -1,8 +1,7 @@
 package cat.itacademy.service;
 
 import cat.itacademy.dto.availableInventory.AvailableClueDTO;
-import cat.itacademy.message.error.RoomErrorMessages;
-import cat.itacademy.repository.DAO.ClueDAO;
+import cat.itacademy.repository.daoImpl.ClueDaoImpl;
 import cat.itacademy.exception.*;
 
 import cat.itacademy.model.Clue;
@@ -22,11 +21,11 @@ import static cat.itacademy.message.error.DBErrorMessages.ERROR_DB_UNEXPECTED_PR
 
 public class ClueService {
 
-    private ClueDAO clueDAO;
+    private ClueDaoImpl clueDAO;
     private ClueValidator clueValidator;
 
     public ClueService() {
-        this.clueDAO = new ClueDAO();
+        this.clueDAO = new ClueDaoImpl();
         this.clueValidator = new ClueValidator(List.of(
                 new ClueBasicValidation(),
                 new ClueDuplicateValidation(clueDAO)
@@ -74,7 +73,7 @@ public class ClueService {
     }
 
     public Clue getLastClue() throws SQLException {
-        Optional<Clue> clue = clueDAO.getLastClue();
+        Optional<Clue> clue = clueDAO.getLast();
         if(clue.isPresent()){
             return clue.get();
         }else {

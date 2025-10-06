@@ -3,11 +3,10 @@ package cat.itacademy.service;
 import cat.itacademy.exception.InsufficientStockException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.model.RoomItem;
-import cat.itacademy.repository.DAO.ItemDAO;
-import cat.itacademy.repository.DAO.RoomItemDAO;
+import cat.itacademy.repository.daoImpl.ItemDaoImpl;
+import cat.itacademy.repository.daoImpl.RoomItemDaoImpl;
 
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.List;
 
 import static cat.itacademy.message.success.ItemAddedSuccessMessages.ITEM_ADDED_SUCCESS;
@@ -16,14 +15,14 @@ public class RoomItemService {
 
     private final ItemService itemService;
     private final RoomService roomService;
-    private final RoomItemDAO roomItemDAO;
-    private final ItemDAO itemDAO;
+    private final RoomItemDaoImpl roomItemDAO;
+    private final ItemDaoImpl itemDAO;
 
     public RoomItemService() {
         this.itemService = new ItemService();
         this.roomService = new RoomService();
-        this.roomItemDAO = new RoomItemDAO();
-        this.itemDAO = new ItemDAO();
+        this.roomItemDAO = new RoomItemDaoImpl();
+        this.itemDAO = new ItemDaoImpl();
     }
 
     public void addItemToRoom(RoomItem roomItem) {
@@ -61,7 +60,7 @@ public class RoomItemService {
                                                     );
             }
 
-            roomItemDAO.insertRoomItem(roomItem);
+            roomItemDAO.insert(roomItem);
             reduceItemStock(itemId, roomItem.getQuantity());
 
 

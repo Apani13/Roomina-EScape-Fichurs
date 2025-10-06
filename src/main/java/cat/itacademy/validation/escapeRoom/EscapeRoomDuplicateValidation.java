@@ -3,15 +3,15 @@ package cat.itacademy.validation.escapeRoom;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.message.error.EscapeRoomErrorMessages;
 import cat.itacademy.model.EscapeRoom;
-import cat.itacademy.repository.DAO.EscapeRoomDAO;
+import cat.itacademy.repository.daoImpl.EscapeRoomDaoImpl;
 import cat.itacademy.validation.ValidationStrategy;
 
 import java.sql.SQLException;
 
 public class EscapeRoomDuplicateValidation implements ValidationStrategy<EscapeRoom> {
-    private EscapeRoomDAO escapeRoomDAO;
+    private EscapeRoomDaoImpl escapeRoomDAO;
 
-    public EscapeRoomDuplicateValidation(EscapeRoomDAO escapeRoomDAO){
+    public EscapeRoomDuplicateValidation(EscapeRoomDaoImpl escapeRoomDAO){
         this.escapeRoomDAO = escapeRoomDAO;
     }
 

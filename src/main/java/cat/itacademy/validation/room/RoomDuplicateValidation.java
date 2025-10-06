@@ -3,15 +3,15 @@ package cat.itacademy.validation.room;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.message.error.RoomErrorMessages;
 import cat.itacademy.model.Room;
-import cat.itacademy.repository.DAO.RoomDAO;
+import cat.itacademy.repository.daoImpl.RoomDaoImpl;
 import cat.itacademy.validation.ValidationStrategy;
 
 import java.sql.SQLException;
 
 public class RoomDuplicateValidation implements ValidationStrategy<Room> {
-    private RoomDAO roomDAO;
+    private RoomDaoImpl roomDAO;
 
-    public RoomDuplicateValidation(RoomDAO roomDAO) {
+    public RoomDuplicateValidation(RoomDaoImpl roomDAO) {
         this.roomDAO = roomDAO;
     }
 

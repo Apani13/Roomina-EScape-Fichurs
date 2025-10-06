@@ -4,7 +4,7 @@ import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.model.Item;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.RoomItem;
-import cat.itacademy.repository.DAO.RoomItemDAO;
+import cat.itacademy.repository.daoImpl.RoomItemDaoImpl;
 import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.service.ItemService;
 import cat.itacademy.service.RoomItemService;
@@ -21,7 +21,7 @@ public class RoomItemServiceTest {
     private RoomItemService roomItemService;
     private RoomService roomService;
     private ItemService itemService;
-    private RoomItemDAO roomItemDAO;
+    private RoomItemDaoImpl roomItemDAO;
     private int roomId;
     private int itemId;
 
@@ -31,7 +31,7 @@ public class RoomItemServiceTest {
         roomItemService = new RoomItemService();
         roomService = new RoomService();
         itemService = new ItemService();
-        roomItemDAO = new RoomItemDAO();
+        roomItemDAO = new RoomItemDaoImpl();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.prepareStatement("DELETE FROM room_item").executeUpdate();

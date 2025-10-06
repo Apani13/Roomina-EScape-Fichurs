@@ -5,16 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import cat.itacademy.dto.availableInventory.AvailableClueDTO;
 import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 import cat.itacademy.exception.EmptyListException;
-import cat.itacademy.model.Room;
-import cat.itacademy.repository.DAO.ItemDAO;
+import cat.itacademy.repository.daoImpl.ItemDaoImpl;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.exception.NullObjectException;
 import cat.itacademy.model.Item;
-import cat.itacademy.message.error.ItemErrorMessages;
 import cat.itacademy.message.success.ItemSuccessMessages;
 import cat.itacademy.validation.item.ItemBasicValidation;
 import cat.itacademy.validation.item.ItemDuplicateValidation;
@@ -24,11 +21,11 @@ import static cat.itacademy.message.error.ItemErrorMessages.ITEM_LIST_EMPTY;
 
 public class ItemService {
 
-    private ItemDAO itemDAO;
+    private ItemDaoImpl itemDAO;
     private ItemValidator itemValidator;
 
     public ItemService() {
-        this.itemDAO = new ItemDAO();
+        this.itemDAO = new ItemDaoImpl();
         this.itemValidator = new ItemValidator(List.of(
                 new ItemBasicValidation(),
                 new ItemDuplicateValidation(itemDAO)
@@ -73,7 +70,7 @@ public class ItemService {
     }
 
     public Item getLastItem() throws SQLException {
-        Optional<Item> item = itemDAO.getLastItem();
+        Optional<Item> item = itemDAO.getLast();
         if(item.isPresent()){
             return item.get();
         } else {
