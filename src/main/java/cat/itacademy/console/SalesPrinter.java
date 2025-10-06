@@ -5,7 +5,7 @@ import cat.itacademy.dto.completeInventory.EntityTicketDTO;
 
 public class SalesPrinter {
 
-    public static String printSalesReport(CompleteInventoryDTO inventory) {
+    public  String printSalesReport(CompleteInventoryDTO inventory) {
         StringBuilder sb = new StringBuilder();
         sb.append("=== INFORME DE VENTAS ===\n");
         sb.append("Tickets vendidos e ingresos generados:\n");

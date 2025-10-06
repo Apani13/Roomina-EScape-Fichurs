@@ -46,7 +46,6 @@ public class InventoryService {
 
         return new CompleteInventoryDTO(allRoms,allClues,allItems, allTickets, totalPrice);
     }
-
 }
 
 

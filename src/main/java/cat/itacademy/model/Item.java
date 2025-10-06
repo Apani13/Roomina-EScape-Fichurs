@@ -2,6 +2,7 @@ package cat.itacademy.model;
 
 public class Item {
 
+    private int id;
     private String name;
     private String material;
     private double price;
@@ -12,6 +13,15 @@ public class Item {
         this.material = material;
         this.quantity = quantity;
         this.price = 15.0;
+    }
+
+    public Item(int id, String name) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

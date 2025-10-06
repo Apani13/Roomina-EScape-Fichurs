@@ -1,8 +1,12 @@
 package cat.itacademy.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import cat.itacademy.dto.availableInventory.AvailableClueDTO;
+import cat.itacademy.dto.availableInventory.AvailableItemDTO;
+import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.repository.DAO.ItemDAO;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.InvalidAttributeException;
@@ -13,6 +17,8 @@ import cat.itacademy.message.success.ItemSuccessMessages;
 import cat.itacademy.validation.item.ItemBasicValidation;
 import cat.itacademy.validation.item.ItemDuplicateValidation;
 import cat.itacademy.validation.item.ItemValidator;
+
+import static cat.itacademy.message.error.ItemErrorMessages.ITEM_LIST_EMPTY;
 
 public class ItemService {
 
@@ -42,5 +48,12 @@ public class ItemService {
             Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
             logger.severe("Error inesperado: " + e.getMessage());
         }
+    }
+
+    public List<AvailableItemDTO> getAvailableItems() throws SQLException {
+    if (itemDAO.getAvailableItems().isEmpty()) {
+        throw new EmptyListException(ITEM_LIST_EMPTY);
+    }
+    return itemDAO.getAvailableItems();
     }
 }

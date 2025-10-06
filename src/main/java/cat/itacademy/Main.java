@@ -7,11 +7,9 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-        MainMenu mainMenu = new MainMenu();
+        MainMenu menu = new MainMenu();
 
-        mainMenu.showAvailableInventory();
-        mainMenu.showTotalInventoryPrice();
-        mainMenu.showTotalValueOfSales();
+        menu.start();
 
     }
 }
