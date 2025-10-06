@@ -7,7 +7,7 @@ import cat.itacademy.dto.completeInventory.EntityClueDTO;
 
 public class CompleteInventoryPrinter {
 
-    public static String printCompleteInventory(CompleteInventoryDTO inventory) {
+    public String printCompleteInventory(CompleteInventoryDTO inventory) {
         StringBuilder sb = new StringBuilder();
         sb.append("=== VALOR DEL INVENTARIO ===\n");
         sb.append("Valor económico de los elementos en stock:\n");

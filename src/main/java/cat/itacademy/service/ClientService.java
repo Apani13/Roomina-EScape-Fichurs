@@ -1,5 +1,6 @@
 package cat.itacademy.service;
 
+import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.repository.DAO.ClientDAO;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.InvalidAttributeException;
@@ -14,6 +15,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+
+import static cat.itacademy.message.error.ClientErrorMessages.CLIENT_LIST_EMPTY;
 
 public class ClientService {
     private ClientDAO clientDAO;
@@ -77,5 +80,12 @@ public class ClientService {
                 notificationService.addObserver(client);
             }
         }
+    }
+
+    public List<Client> getAllClients() throws SQLException {
+        if (clientDAO.findAll().isEmpty()) {
+            throw new EmptyListException(CLIENT_LIST_EMPTY);
+        }
+        return clientDAO.findAll();
     }
 }

@@ -1,6 +1,9 @@
 package cat.itacademy.repository.DAO;
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
+import cat.itacademy.dto.completeInventory.EntityClueDTO;
 import cat.itacademy.dto.completeInventory.EntityRoomDTO;
+import cat.itacademy.model.Clue;
+import cat.itacademy.model.Item;
 import cat.itacademy.model.Room;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -117,28 +120,26 @@ public class RoomDAO {
         return Optional.empty();
     }
 
-
-
-
-
-    public boolean existsById(int id) throws SQLException {
-
-        String sql = "SELECT 1 FROM room WHERE id = ?";
-
+    public List<Room> getRoomsWithClues()throws SQLException {
+        List<Room> rooms = new ArrayList<>();
+        String sql = "SELECT DISTINCT r.id, r.name FROM room r JOIN clue c ON r.id = c.room_id";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next(); }
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    rooms.add(new Room(
+                            rs.getInt("id"),
+                            rs.getString("name")
+                    ));
+                }
+            }
         }
+        return rooms;
     }
-
-
-    public static List<Room> getRoomsWithClues()throws SQLException {
+    public List<Room> getRoomsWithItems()throws SQLException {
         List<Room> rooms = new ArrayList<>();
-        String sql = "SELECT DISTINCT r.id, r.name FROM room r JOIN clue c ON r.id = c.room_id";
+        String sql = "SELECT DISTINCT r.id, r.name FROM room r JOIN item i ON r.id = i.room_id";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -160,6 +161,17 @@ public class RoomDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, clueId);
+
+            stmt.executeUpdate();
+        }
+    }
+
+    public void removeItemFromRoom(int itemId) throws SQLException {
+        String sql = "UPDATE item SET room_id = NULL WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, itemId);
 
             stmt.executeUpdate();
         }
@@ -216,4 +228,41 @@ public class RoomDAO {
         }
         return 0.0;
     }
+
+    public List<Clue> getCluesByRoomId(int roomId) throws SQLException {
+        List<Clue> clues = new ArrayList<>();
+        String sql = "SELECT c.id, c.name " +
+                "FROM clue c WHERE c.room_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                clues.add(new Clue(
+                        rs.getInt("id"),
+                        rs.getString("name")
+                ));
+            }
+        }
+        return clues;
+    }
+
+    public List<Item> getItemsByRoomId(int itemId) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT i.id, i.name " +
+                "FROM item i WHERE i.room_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                items.add(new Item(
+                        rs.getInt("id"),
+                        rs.getString("name")
+                ));
+            }
+        }
+        return items;
+    }
+
 }

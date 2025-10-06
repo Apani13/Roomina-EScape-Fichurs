@@ -1,5 +1,7 @@
 package cat.itacademy.service;
 
+import cat.itacademy.dto.availableInventory.AvailableClueDTO;
+import cat.itacademy.message.error.RoomErrorMessages;
 import cat.itacademy.repository.DAO.ClueDAO;
 import cat.itacademy.exception.*;
 
@@ -79,6 +81,15 @@ public class ClueService {
             return null;
         }
     }
+
+    public List<AvailableClueDTO> getAvailableCLues() throws SQLException {
+        if (clueDAO.getAvailableClues().isEmpty()) {
+            throw new EmptyListException(CLUE_LIST_EMPTY);
+        }
+        return clueDAO.getAvailableClues();
+    }
+
+
 
     public Clue getClueById(int id) throws SQLException {
         Optional<Clue> clue = clueDAO.getById(id);

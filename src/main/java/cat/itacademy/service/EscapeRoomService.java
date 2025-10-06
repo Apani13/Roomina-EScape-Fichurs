@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import static cat.itacademy.message.error.InventoryErrorMessages.INVENTORY_EMPTY;
+
 public class EscapeRoomService {
     private EscapeRoomDAO escapeRoomDAO;
     private EscapeRoomValidator escapeRoomValidator;
@@ -73,9 +75,15 @@ public class EscapeRoomService {
         }
     }
 
+    public  List<EscapeRoom> getRoomsByEscapeRoom(int escapeRoomID) throws SQLException {
+        if(escapeRoomDAO.getRoomsByEscapeRoomId(escapeRoomID).isEmpty()) {
+            throw  new EmptyListException(INVENTORY_EMPTY);
+        }
+        return escapeRoomDAO.getRoomsByEscapeRoomId(escapeRoomID);
+    }
+
     public void addRoomToEscapeRoom(int escapeRoomId, int roomId) throws SQLException {
         escapeRoomDAO.updateEscapeRoomIdRoom(escapeRoomId, roomId);
-
     }
 
     public void removeRoomFromEscapeRoom(int roomId) throws SQLException {

@@ -7,5 +7,6 @@ public class ItemErrorMessages {
         public static final String ITEM_NAME_NULL_EMPTY = "El nombre del objeto está vacío o es nulo...";
         public static final String ITEM_MATERIAL_NULL_EMPTY = "El material está vacío o es nulo...";
         public static final String ITEM_QUANTITY_INVALID = "La cantidad de objetos de decoración es inválida...";
+        public static final String ITEM_LIST_EMPTY = "La lista de objetos de decoración está vacia...";
 }
 

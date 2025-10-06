@@ -1,9 +1,13 @@
 
 package cat.itacademy.service;
 
+import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.completeInventory.EntityRoomDTO;
 import cat.itacademy.message.ui.RoomUIMessages;
 import cat.itacademy.repository.DAO.ClueDAO;
+import cat.itacademy.message.ui.RoomUIMessages;
+import cat.itacademy.model.Clue;
+import cat.itacademy.model.Item;
 import cat.itacademy.repository.DAO.RoomDAO;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.EmptyListException;
@@ -20,6 +24,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.Optional;
+
+import static cat.itacademy.message.error.InventoryErrorMessages.INVENTORY_EMPTY;
 
 public class RoomService {
     private RoomDAO roomDAO;
@@ -59,21 +65,14 @@ public class RoomService {
         return roomDAO.getAllRoomsNameAndPrice();
     }
 
-    /*public List<AvailableRoomDTO> getAvailableRooms() throws SQLException {
-        if(roomDAO.getAllNames().isEmpty()) {
+    public List<AvailableRoomDTO> getAvailableRooms() throws SQLException {
+        if(roomDAO.getAvailableRooms().isEmpty()) {
             throw new  EmptyListException(RoomErrorMessages.ROOM_LIST_EMPTY);
         }
 
         return roomDAO.getAvailableRooms();
-    }*/
+    }
 
-    /*public void showRooms() throws SQLException {
-        System.out.println(RoomUIMessages.ROOMUI_LIST_HEADER);
-        for(Room room: getAllRooms()){
-            System.out.println(String.format(RoomUIMessages.ROOMUI_LIST_BODY, room.getId(), room.getName()));
-        }
-        System.out.println(RoomUIMessages.ROOMUI_LIST_FOOTER);
-    }*/
 
     public void addClueToRoom(int roomId, int clueId) throws SQLException {
         clueDao.updateRoomIdClue(roomId, clueId);
@@ -91,14 +90,32 @@ public class RoomService {
     }
 
     public List<Room> getRoomsWithClues() throws SQLException {
-        if(RoomDAO.getRoomsWithClues().isEmpty()){
+        if(roomDAO.getRoomsWithClues().isEmpty()){
             throw new EmptyListException(RoomErrorMessages.ROOM_LIST_EMPTY);
         }
+        return roomDAO.getRoomsWithClues();
+    }
 
-        return RoomDAO.getRoomsWithClues();
+    public List<Clue> getCluesByRoomId(int roomId) throws SQLException {
+        if(roomDAO.getCluesByRoomId(roomId).isEmpty()){
+            throw new EmptyListException(INVENTORY_EMPTY);
+        }
+        return  roomDAO.getCluesByRoomId(roomId);
+    }
+
+    public List<Item> getItemByRoomId(int roomId) throws SQLException {
+        if(roomDAO.getItemsByRoomId(roomId).isEmpty()) {
+            throw new EmptyListException(INVENTORY_EMPTY);
+        }
+        return roomDAO.getItemsByRoomId(roomId);
+
     }
 
     public void removeClueFromRoom(int clueId) throws SQLException {
         roomDAO.removeClueFromRoom(clueId);
+    }
+
+    public void removeItemFromRoom(int roomId) throws SQLException {
+        roomDAO.removeItemFromRoom(roomId);
     }
 }

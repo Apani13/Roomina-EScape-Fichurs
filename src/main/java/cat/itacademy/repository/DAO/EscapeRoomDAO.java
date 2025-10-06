@@ -1,5 +1,6 @@
 package cat.itacademy.repository.DAO;
 
+import cat.itacademy.model.Clue;
 import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -112,6 +113,34 @@ public class EscapeRoomDAO {
         return Optional.empty();
     }
 
+    public List<EscapeRoom> getRoomsByEscapeRoomId(int escapeRoomID) throws SQLException {
+        List<EscapeRoom> escapeRooms = new ArrayList<>();
+        String sql = "SELECT r.id, r.name FROM room r WHERE r.escape_room_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                escapeRooms.add(new EscapeRoom(
+                        rs.getInt("id"),
+                        rs.getString("name")
+                ));
+            }
+        }
+        return escapeRooms;
+    }
+
+    public void removeItemFromRoom(int roomId) throws SQLException {
+        String sql = "UPDATE room SET escape_room_id = NULL WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, roomId);
+
+            stmt.executeUpdate();
+        }
+    }
+
     public void updateEscapeRoomIdRoom(int escapeRoomId, int roomId) throws SQLException{
         String sql = "UPDATE room SET escape_room_id = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -120,7 +149,6 @@ public class EscapeRoomDAO {
             stmt.setInt(2, roomId);
             stmt.executeUpdate();
         }
-    
     }
 
     public void removeRoomFromEscapeRoom(int roomId) throws SQLException {

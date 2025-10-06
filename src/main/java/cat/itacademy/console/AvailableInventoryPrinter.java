@@ -7,7 +7,9 @@ import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 
 public class AvailableInventoryPrinter {
 
-    public static String printAvailableInventory(AvailableInventoryDTO inventory) {
+    public AvailableInventoryPrinter() {}
+
+    public String printAvailableInventory(AvailableInventoryDTO inventory) {
         StringBuilder sb = new StringBuilder();
         sb.append("=== INVENTARIO ACTUALIZADO ===\n");
         sb.append("Cantidad disponible de cada elemento:\n\n");

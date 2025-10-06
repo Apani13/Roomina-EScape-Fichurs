@@ -23,6 +23,10 @@ public class Item {
         this.price = price;
     }
 
+    public Item(int id, String name) {
+        this.name = name;
+        this.id = id;
+    }
 
     public int getId() { return id; }
     public String getName() { return name; }
