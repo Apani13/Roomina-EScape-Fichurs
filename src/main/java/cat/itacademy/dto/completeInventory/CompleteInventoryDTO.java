@@ -1,5 +1,7 @@
 package cat.itacademy.dto.completeInventory;
 
+import cat.itacademy.model.Ticket;
+
 import java.util.List;
 
 public class CompleteInventoryDTO {
@@ -7,13 +9,15 @@ public class CompleteInventoryDTO {
     private List<EntityRoomDTO> allRoms;
     private List<EntityClueDTO> allClues;
     private List<EntityItemDTO> allItems;
+    private List<EntityTicketDTO> allTickets;
     private double totalInventoryPrice;
 
     public CompleteInventoryDTO(List<EntityRoomDTO> allRoms, List<EntityClueDTO> allClues,
-                                List<EntityItemDTO> allItems, double totalInventoryPrice) {
+                                List<EntityItemDTO> allItems, List<EntityTicketDTO> allTickets,  double totalInventoryPrice) {
         this.allRoms = allRoms;
         this.allClues = allClues;
         this.allItems = allItems;
+        this.allTickets = allTickets;
         this.totalInventoryPrice = totalInventoryPrice;
     }
 
@@ -29,8 +33,21 @@ public class CompleteInventoryDTO {
         return allItems;
     }
 
+    public List<EntityTicketDTO> getAllTickets() {
+        return allTickets;
+    }
+
     public double getTotalInventoryPrice() {
         return totalInventoryPrice;
+    }
+
+    public double getTotalValueOfSales(){
+        double totalValue = 0;
+
+        for (EntityTicketDTO ticket: allTickets) {
+            totalValue += ticket.getPrice();
+        }
+        return totalValue;
     }
 
     public boolean inventoryIsEmpty() {
