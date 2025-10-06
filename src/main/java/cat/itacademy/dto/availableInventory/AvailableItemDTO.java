@@ -1,12 +1,12 @@
 package cat.itacademy.dto.availableInventory;
 
 public class AvailableItemDTO extends AvailableEntityDTO {
-    private int quantity;
+    private int stock;
 
-    public AvailableItemDTO(String name, int quantity) {
+    public AvailableItemDTO(String name, int stock) {
         super(name);
-        this.quantity = quantity;
+        this.stock = stock;
     }
 
-    public int getQuantity() { return quantity; }
+    public int getStock() { return stock; }
 }

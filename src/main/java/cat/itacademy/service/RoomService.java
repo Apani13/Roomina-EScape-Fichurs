@@ -1,6 +1,7 @@
 
 package cat.itacademy.service;
 
+import cat.itacademy.dto.completeInventory.EntityRoomDTO;
 import cat.itacademy.message.ui.RoomUIMessages;
 import cat.itacademy.repository.DAO.ClueDAO;
 import cat.itacademy.repository.DAO.RoomDAO;

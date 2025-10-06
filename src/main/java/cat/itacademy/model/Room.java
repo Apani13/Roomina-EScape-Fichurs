@@ -10,6 +10,16 @@ public class Room {
     private double price;
     private Integer escapeRoomId;
 
+    public Room(Integer id, String name, String theme, int level, double price, Integer escapeRoomId) {
+        this.id = id;
+        this.name = name;
+        this.theme = theme;
+        this.level = level;
+        this.price = price;
+        this.escapeRoomId = escapeRoomId;
+    }
+
+
     public Room(String name, String theme, int level) {
         this.name = name;
         this.theme = theme;

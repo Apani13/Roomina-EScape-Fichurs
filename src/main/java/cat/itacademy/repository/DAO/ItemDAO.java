@@ -55,7 +55,7 @@ public class ItemDAO {
 
     public List<AvailableItemDTO> getAvailableItems() throws SQLException {
         List<AvailableItemDTO> items = new ArrayList<>();
-        String sql = "SELECT name, quantity FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
+        String sql = "SELECT name, stock FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -64,7 +64,7 @@ public class ItemDAO {
             while (rs.next()) {
                 AvailableItemDTO item = new AvailableItemDTO(
                         rs.getString("name"),
-                        rs.getInt("quantity")
+                        rs.getInt("stock")
                 );
                 items.add(item);
             }
@@ -73,7 +73,7 @@ public class ItemDAO {
     }
 
     public int getTotalAvailableItemsCount() throws SQLException {
-        String sql = "SELECT COALESCE(SUM(quantity), 0) FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
+        String sql = "SELECT COALESCE(SUM(stock), 0) FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -88,7 +88,7 @@ public class ItemDAO {
 
     public List<EntityItemDTO> getAllItemsNameAndPrice() throws SQLException {
         List<EntityItemDTO> items = new ArrayList<>();
-        String sql = "SELECT name, price, quantity FROM item";
+        String sql = "SELECT name, price, stock FROM item";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -98,7 +98,7 @@ public class ItemDAO {
                 EntityItemDTO item = new EntityItemDTO(
                         rs.getString("name"),
                         rs.getDouble("price"),
-                        rs.getInt("quantity")
+                        rs.getInt("stock")
                 );
                 items.add(item);
             }
@@ -108,6 +108,18 @@ public class ItemDAO {
 
     public double getAllPrices() throws SQLException {
         String sql = "SELECT SUM(price) AS totalPrice FROM item";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                return rs.getDouble("totalPrice");
+            }
+        }
+        return 0.0;
+    }
+
     public Optional<Item> getById(int id) throws SQLException {
 
         String sql = "SELECT id, name, material, stock, price FROM item WHERE id = ?";
@@ -142,12 +154,6 @@ public class ItemDAO {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()) {
-                return rs.getDouble("totalPrice");
-            }
-        }
-        return 0.0;
-    }
             if(rs.next()){
                 Item item = new Item(
                         rs.getInt("id"),
