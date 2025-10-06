@@ -25,11 +25,11 @@ public class MainMenu {
         this.sc = new Scanner(System.in);
         this.inventoryMenu = new InventoryMenu(sc, inventoryService);
         this.notificationMenu = new NotificationMenu(sc);
+        this.salesTicketsMenu = new SalesTicketsMenu(sc);
         this.escapeRoomMenu = new EscapeRoomMenu(sc);
     }
 
     public void start() throws SQLException {
-        ConsoleUtils.clearScreen();
         System.out.println("🎮 BIENVENIDO/A AL SISTEMA DE ESCAPE ROOMS VIRTUALES 🎮");
 
         while (!exit) {

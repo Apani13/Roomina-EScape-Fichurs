@@ -1,7 +1,7 @@
 package cat.itacademy.presentation;
 
-import cat.itacademy.console.AvailableInventoryPrinter;
 import cat.itacademy.console.CompleteInventoryPrinter;
+import cat.itacademy.console.ConsoleUtils;
 import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
 import cat.itacademy.dto.completeInventory.CompleteInventoryDTO;
 import cat.itacademy.model.Clue;
@@ -31,6 +31,7 @@ public class EscapeRoomMenu {
         this.roomService = new RoomService();
         this.clueService = new ClueService();
         this.itemService = new ItemService();
+        this.escapeRoomService = new EscapeRoomService();
         this.availableInventory = inventoryService.getAvailableInventory();
         this.completeInvetory = inventoryService.getCompleteInventory();
 
@@ -40,7 +41,6 @@ public class EscapeRoomMenu {
         boolean backToMain = false;
 
         while (!backToMain) {
-            ConsoleUtils.clearScreen();
             System.out.println("🎪 GESTIÓN DE ESCAPE ROOMS");
             System.out.println("1. Mostrar Escape Rooms, Salas, Pistas y Objetos creados");
             System.out.println("2. Crear un nuevo Escape Room");

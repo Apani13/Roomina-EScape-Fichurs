@@ -2,6 +2,7 @@ package cat.itacademy.presentation;
 
 import cat.itacademy.console.AvailableInventoryPrinter;
 import cat.itacademy.console.CompleteInventoryPrinter;
+import cat.itacademy.console.ConsoleUtils;
 import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
 import cat.itacademy.dto.completeInventory.CompleteInventoryDTO;
 import cat.itacademy.service.InventoryService;
@@ -30,7 +31,6 @@ public class InventoryMenu {
         boolean backToMain = false;
 
         while (!backToMain) {
-            ConsoleUtils.clearScreen();
             System.out.println("📦 GESTIÓN DE INVENTARIO");
             System.out.println("1. Mostrar Elementos Disponibles");
             System.out.println("2. Mostrar Elementos Totales Creados");
@@ -61,12 +61,12 @@ public class InventoryMenu {
 
     private void showAvailableElements() throws SQLException {
         System.out.println("\n🆓 ELEMENTOS DISPONIBLES");
-        availablePrinter.printAvailableInventory(availableInventory);
+        System.out.println(availablePrinter.printAvailableInventory(availableInventory));
     }
 
     private void showTotalElements() {
         System.out.println("\n📊 ELEMENTOS TOTALES CREADOS");
-        completePrinter.printCompleteInventory(completeInvetory);
+        System.out.println(completePrinter.printCompleteInventory(completeInvetory));
     }
 
     private int readOption() {

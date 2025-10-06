@@ -1,5 +1,6 @@
 package cat.itacademy.presentation;
 
+import cat.itacademy.console.ConsoleUtils;
 import cat.itacademy.console.SalesPrinter;
 import cat.itacademy.dto.completeInventory.CompleteInventoryDTO;
 import cat.itacademy.model.Ticket;
@@ -31,7 +32,6 @@ public class SalesTicketsMenu {
         boolean backToMain = false;
 
         while (!backToMain) {
-            ConsoleUtils.clearScreen();
             System.out.println("🎫 GESTIÓN DE VENTAS Y TICKETS");
             System.out.println("1. Generar Ticket de Venta");
             System.out.println("2. Mostrar Total de Ingresos por Ventas");
@@ -61,17 +61,18 @@ public class SalesTicketsMenu {
     }
 
     private void generateSaleTicket() throws SQLException {
-        System.out.println("\n🎫 GENERAR TICKET DE VENTA");
-        System.out.print("Inserte el ID del Cliente: ");
-        System.out.println(clientService.getAllClients());
-        int clientId = Integer.parseInt(sc.nextLine());
+            System.out.println("\n🎫 GENERAR TICKET DE VENTA");
+            System.out.print("Inserte el ID del Cliente: ");
+            System.out.println(clientService.getAllClients());
+            int clientId = Integer.parseInt(sc.nextLine());
 
-        System.out.print("Inserte el ID de la Sala: ");
-        System.out.println(completeInventoryDTO.getAllRoms());;
-        int roomId = Integer.parseInt(sc.nextLine());
-        Ticket ticket = new Ticket(clientId, roomId);
+            System.out.print("Inserte el ID de la Sala: ");
+            System.out.println(completeInventoryDTO.getAllRoms());
+            ;
+            int roomId = Integer.parseInt(sc.nextLine());
+            Ticket ticket = new Ticket(clientId, roomId);
 
-        ticketService.addTicket(ticket);
+            ticketService.addTicket(ticket);
     }
 
     private void showTotalRevenue() {
