@@ -9,7 +9,11 @@ import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.model.Ticket;
 import cat.itacademy.repository.DAO.TicketDAO;
 import cat.itacademy.repository.DatabaseConnection;
-import cat.itacademy.service.*;
+import cat.itacademy.repository.util.DatabaseCleaner;
+import cat.itacademy.service.InventoryService;
+import cat.itacademy.service.RoomService;
+import cat.itacademy.service.ClueService;
+import cat.itacademy.service.ItemService;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Clue;
 import cat.itacademy.model.Item;
@@ -37,16 +41,8 @@ public class InventoryServiceTest {
         roomService = new RoomService();
         clueService = new ClueService();
         itemService = new ItemService();
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            conn.prepareStatement("DELETE FROM clue").executeUpdate();
-            conn.prepareStatement("DELETE FROM ticket").executeUpdate();
-            conn.prepareStatement("DELETE FROM client").executeUpdate();
-            conn.prepareStatement("DELETE FROM item").executeUpdate();
-            conn.prepareStatement("DELETE FROM room").executeUpdate();
-            conn.prepareStatement("DELETE FROM escape_room").executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+        DatabaseCleaner.clearAllTables();
     }
 
     @Test
