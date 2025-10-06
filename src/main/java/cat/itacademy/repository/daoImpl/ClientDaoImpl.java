@@ -1,6 +1,7 @@
-package cat.itacademy.repository.DAO;
+package cat.itacademy.repository.daoImpl;
 
 import cat.itacademy.model.Client;
+import cat.itacademy.repository.dao.ClientDao;
 import cat.itacademy.repository.DatabaseConnection;
 
 import java.sql.*;
@@ -8,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ClientDAO {
+public class ClientDaoImpl implements ClientDao {
+
+    @Override
     public void insert(Client client) throws SQLException {
         String sql = "INSERT INTO client(user_name, email, phone, accepts_notifications) VALUES (?, ?, ?, ?)";
 
@@ -30,7 +33,7 @@ public class ClientDAO {
         }
     }
 
-
+    @Override
     public List<Client> findAll() throws SQLException {
         List<Client> clients = new ArrayList<>();
         String sql = "SELECT id, user_name, email, phone, accepts_notifications FROM client";
@@ -52,6 +55,7 @@ public class ClientDAO {
         return clients;
     }
 
+
     public void update(Client client) throws SQLException {
         String sql = "UPDATE escape_room SET user_name = ?, email = ?, phone = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -64,6 +68,7 @@ public class ClientDAO {
         }
     }
 
+    @Override
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM client WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -73,7 +78,8 @@ public class ClientDAO {
         }
     }
 
-    public boolean existsByUserName(String userName) throws SQLException {
+    @Override
+    public boolean existsByName(String userName) throws SQLException {
         String sql = "SELECT COUNT(*) FROM client WHERE user_name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -87,7 +93,8 @@ public class ClientDAO {
         return false;
     }
 
-    public Optional<Client> getLastClient() throws SQLException {
+    @Override
+    public Optional<Client> getLast() throws SQLException {
 
         String sql = "SELECT * FROM client ORDER BY id DESC LIMIT 1";
         try (Connection conn = DatabaseConnection.getConnection();){
@@ -109,6 +116,7 @@ public class ClientDAO {
         return Optional.empty();
     }
 
+    @Override
     public Optional<Client> getById(int id) throws SQLException {
         String sql = "SELECT * FROM client WHERE id = ?";
 

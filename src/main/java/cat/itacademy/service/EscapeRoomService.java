@@ -4,7 +4,7 @@ import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.message.success.RoomSuccessMessages;
-import cat.itacademy.repository.DAO.EscapeRoomDAO;
+import cat.itacademy.repository.daoImpl.EscapeRoomDaoImpl;
 import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.message.error.EscapeRoomErrorMessages;
 import cat.itacademy.message.success.EscapeRoomSuccessMessages;
@@ -20,11 +20,11 @@ import java.util.logging.Logger;
 import static cat.itacademy.message.error.InventoryErrorMessages.INVENTORY_EMPTY;
 
 public class EscapeRoomService {
-    private EscapeRoomDAO escapeRoomDAO;
+    private EscapeRoomDaoImpl escapeRoomDAO;
     private EscapeRoomValidator escapeRoomValidator;
 
     public EscapeRoomService() {
-        this.escapeRoomDAO = new EscapeRoomDAO();
+        this.escapeRoomDAO = new EscapeRoomDaoImpl();
         this.escapeRoomValidator = new EscapeRoomValidator(List.of(
                 new EscapeRoomBasicValidation(),
                 new EscapeRoomDuplicateValidation(escapeRoomDAO)
@@ -51,7 +51,7 @@ public class EscapeRoomService {
     }
 
     public EscapeRoom getLastEscapeRoom() throws SQLException {
-        Optional<EscapeRoom> escapeRoom = escapeRoomDAO.getLastEscapeRoom();
+        Optional<EscapeRoom> escapeRoom = escapeRoomDAO.getLast();
         if (escapeRoom.isPresent()) {
             return escapeRoom.get();
         }else {

@@ -1,9 +1,10 @@
-package cat.itacademy.repository.DAO;
+package cat.itacademy.repository.daoImpl;
 
 import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 import cat.itacademy.dto.completeInventory.EntityItemDTO;
 import cat.itacademy.model.Item;
 import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.repository.dao.ItemDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemDAO {
+public class ItemDaoImpl implements ItemDao {
 
+    @Override
     public void insert(Item item) throws SQLException {
 
         String sql = "INSERT INTO item (name, material, stock, price) VALUES(?, ?, ?, ?)";
@@ -36,6 +38,7 @@ public class ItemDAO {
         }
     }
 
+    @Override
     public boolean existsByName(String name) throws SQLException {
         String sql = "SELECT COUNT(*) FROM item WHERE name = ?";
 
@@ -53,6 +56,7 @@ public class ItemDAO {
         return false;
     }
 
+    @Override
     public List<AvailableItemDTO> getAvailableItems() throws SQLException {
         List<AvailableItemDTO> items = new ArrayList<>();
         String sql = "SELECT name, stock FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
@@ -72,6 +76,7 @@ public class ItemDAO {
         return items;
     }
 
+    @Override
     public int getTotalAvailableItemsCount() throws SQLException {
         String sql = "SELECT COALESCE(SUM(stock), 0) FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
 
@@ -86,6 +91,7 @@ public class ItemDAO {
         }
     }
 
+    @Override
     public List<EntityItemDTO> getAllItemsNameAndPrice() throws SQLException {
         List<EntityItemDTO> items = new ArrayList<>();
         String sql = "SELECT name, price, stock FROM item";
@@ -106,6 +112,7 @@ public class ItemDAO {
         return items;
     }
 
+    @Override
     public double getAllPrices() throws SQLException {
         String sql = "SELECT SUM(price) AS totalPrice FROM item";
 
@@ -120,6 +127,7 @@ public class ItemDAO {
         return 0.0;
     }
 
+    @Override
     public Optional<Item> getById(int id) throws SQLException {
 
         String sql = "SELECT id, name, material, stock, price FROM item WHERE id = ?";
@@ -147,7 +155,8 @@ public class ItemDAO {
         return Optional.empty();
     }
 
-    public Optional<Item> getLastItem() throws SQLException {
+    @Override
+    public Optional<Item> getLast() throws SQLException {
         String sql = "SELECT id, name, material, stock, price FROM item ORDER BY id DESC LIMIT 1";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -168,7 +177,8 @@ public class ItemDAO {
         }
     }
 
-   public void updateStock(int itemId, int stock) throws SQLException {
+    @Override
+    public void updateStock(int itemId, int stock) throws SQLException {
        String sql = "UPDATE item SET stock = ? WHERE id = ?";
        try (Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
