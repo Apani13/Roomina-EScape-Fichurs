@@ -1,11 +1,13 @@
-// InventoryServiceTest.java
 package inventary;
 
-import cat.itacademy.dto.AvailableClueDTO;
-import cat.itacademy.dto.AvailableItemDTO;
-import cat.itacademy.dto.AvailableRoomDTO;
-import cat.itacademy.dto.InventoryDTO;
+import cat.itacademy.dto.availableInventory.AvailableClueDTO;
+import cat.itacademy.dto.availableInventory.AvailableItemDTO;
+import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
+import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
+import cat.itacademy.dto.completeInventory.*;
 import cat.itacademy.exception.EmptyListException;
+import cat.itacademy.model.Ticket;
+import cat.itacademy.repository.DAO.TicketDAO;
 import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.repository.util.DatabaseCleaner;
 import cat.itacademy.service.InventoryService;
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,6 +33,7 @@ public class InventoryServiceTest {
     private RoomService roomService;
     private ClueService clueService;
     private ItemService itemService;
+    private TicketService ticketService;
 
     @BeforeEach
     public void setUp() {
@@ -42,16 +46,16 @@ public class InventoryServiceTest {
     }
 
     @Test
-    public void whenGetInventory_thenShouldReturnCorrectInformation() throws SQLException {
+    public void whenGetAvailableInventory_thenShouldReturnCorrectInformation() throws SQLException {
         Room room = new Room("Indiana Jones", "Aventura", 5);
-        Clue clue = new Clue("Llave", "Aventura", "Una pista clave", 25.0);
+        Clue clue = new Clue("Llave", "Aventura", "Una pista clave");
         Item item = new Item("Palmera", "Plástico", 3);
 
         roomService.addRoom(room);
         clueService.addClue(clue);
         itemService.addItem(item);
 
-        InventoryDTO inventory = inventoryService.getAvailableInventory();
+        AvailableInventoryDTO inventory = inventoryService.getAvailableInventory();
 
         AvailableRoomDTO roomDTO = inventory.getAvailableRooms().get(0);
         assertEquals("Indiana Jones", roomDTO.getName());
@@ -63,14 +67,50 @@ public class InventoryServiceTest {
 
         AvailableItemDTO itemDTO = inventory.getAvailableItems().get(0);
         assertEquals("Palmera", itemDTO.getName());
-        assertEquals(3, itemDTO.getQuantity());
+        assertEquals(5, itemDTO.getQuantity());
     }
 
     @Test
-    public void whenInventoryIsEmpty_thenShouldThrowEmptyListException() throws SQLException {
-        InventoryDTO inventory = inventoryService.getAvailableInventory();
+    public void whenAvailableInventoryIsEmpty_thenShouldThrowEmptyListException() throws SQLException {
+        AvailableInventoryDTO inventory = inventoryService.getAvailableInventory();
         InventoryEmptyValidator validator = new InventoryEmptyValidator();
 
-        assertThrows(EmptyListException.class, () -> validator.validate(inventory));
+        assertThrows(EmptyListException.class, () -> validator.validateAvailableInventory(inventory));
+    }
+
+    @Test
+    public void whenGetCompleteInventory_thenShouldReturnCorrectInformation() throws SQLException {
+        LocalDateTime date;
+
+        Room room = new Room("Indiana Jones", "Aventura", 5);
+        Clue clue = new Clue("Llave", "Aventura", "Una pista clave");
+        Item item = new Item("Palmera", "plastico", 5);
+
+        roomService.addRoom(room);
+        clueService.addClue(clue);
+        itemService.addItem(item);
+
+        CompleteInventoryDTO inventory = inventoryService.getCompleteInventory();
+
+        EntityRoomDTO roomDTO = inventory.getAllRoms().get(0);
+        assertEquals("Indiana Jones", roomDTO.getName());
+        assertEquals( 25.0, roomDTO.getPrice());
+
+        EntityClueDTO clueDTO = inventory.getAllClues().get(0);
+        assertEquals("Llave", clueDTO.getName());
+        assertEquals(10.0, clueDTO.getPrice());
+
+        EntityItemDTO itemDTO = inventory.getAllItems().get(0);
+        assertEquals("Palmera", itemDTO.getName());
+        assertEquals(15.0, itemDTO.getPrice());
+
+    }
+
+    @Test
+    public void whenCompleteInventoryIsEmpty_thenShouldThrowEmptyListException() throws SQLException {
+        CompleteInventoryDTO inventory = inventoryService.getCompleteInventory();
+        InventoryEmptyValidator validator = new InventoryEmptyValidator();
+
+        assertThrows(EmptyListException.class, () -> validator.validateCompleteInventory(inventory));
     }
 }

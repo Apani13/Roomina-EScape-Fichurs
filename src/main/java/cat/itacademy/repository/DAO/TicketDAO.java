@@ -1,5 +1,7 @@
 package cat.itacademy.repository.DAO;
 
+import cat.itacademy.dto.completeInventory.EntityItemDTO;
+import cat.itacademy.dto.completeInventory.EntityTicketDTO;
 import cat.itacademy.model.Ticket;
 import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.service.RoomService;
@@ -8,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class TicketDAO {
@@ -48,5 +52,24 @@ public class TicketDAO {
             }
             return Optional.empty();
         }
+    }
+
+    public List<EntityTicketDTO> getAllTicketsNameAndPrice() throws SQLException {
+        List<EntityTicketDTO> tickets = new ArrayList<>();
+        String sql = "SELECT date_creation, total_price FROM ticket";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while(rs.next()) {
+                EntityTicketDTO ticket = new EntityTicketDTO(
+                        rs.getTimestamp("date_creation").toLocalDateTime(),
+                        rs.getDouble("total_price")
+                );
+                tickets.add(ticket);
+            }
+        }
+        return tickets;
     }
 }

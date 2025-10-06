@@ -1,12 +1,10 @@
 package cat.itacademy.validation.item;
 
 import cat.itacademy.exception.DuplicateException;
-import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.model.Item;
 import cat.itacademy.validation.ValidationStrategy;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ItemValidator {
@@ -18,7 +16,7 @@ public class ItemValidator {
 
     public void validate(Item item) throws DuplicateException, SQLException {
         for (ValidationStrategy<Item> strategy : strategies) {
-            strategy.validate(item);
+            strategy.validateAvailableInventory(item);
         }
     }
 }

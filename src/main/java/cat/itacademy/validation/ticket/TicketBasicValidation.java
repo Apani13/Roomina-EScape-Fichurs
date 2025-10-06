@@ -8,7 +8,7 @@ import cat.itacademy.validation.ValidationStrategy;
 
 public class TicketBasicValidation implements ValidationStrategy<Ticket> {
     @Override
-    public void validate(Ticket ticket) throws InvalidAttributeException, NullObjectException  {
+    public void validateAvailableInventory(Ticket ticket) throws InvalidAttributeException, NullObjectException  {
         if(ticket == null){
             throw new NullObjectException(TICKET_NULL_OBJECT);
         }

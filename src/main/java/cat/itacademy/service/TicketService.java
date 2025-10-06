@@ -1,10 +1,7 @@
 package cat.itacademy.service;
 
 import cat.itacademy.exception.InvalidAttributeException;
-import cat.itacademy.exception.EntityNotFoundException;
-import cat.itacademy.message.error.ClientErrorMessages;
-import cat.itacademy.message.error.RoomErrorMessages;
-import cat.itacademy.message.error.TicketErrorMessages;
+import cat.itacademy.exception.EntityNotFoundOnDBException;
 import cat.itacademy.message.success.TicketSuccessMessages;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Ticket;
@@ -42,7 +39,7 @@ public class TicketService {
             Ticket ticketDB = getLastTicket();
             Room room = roomService.getRoomById(ticket.getRoomId());
             System.out.println(String.format(TicketSuccessMessages.TICKET_CREATED_MESSAGE, room.getName(), ticketDB.getTotalPrice(), ticketDB.getDateCreationFormat()));
-        }catch (EntityNotFoundException | InvalidAttributeException e) {
+        }catch (EntityNotFoundOnDBException | InvalidAttributeException e) {
             throw e;
         } catch (Exception e) {
             Logger logger = Logger.getLogger(EscapeRoomService.class.getName());

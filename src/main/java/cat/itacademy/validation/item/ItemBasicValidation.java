@@ -8,7 +8,7 @@ import cat.itacademy.validation.ValidationStrategy;
 
 public class ItemBasicValidation implements ValidationStrategy<Item> {
     @Override
-    public void validate(Item item) throws InvalidAttributeException, NullObjectException{
+    public void validateAvailableInventory(Item item) throws InvalidAttributeException, NullObjectException{
         if (item == null) {
             throw new NullObjectException(ITEM_NULL_OBJECT);
         }
@@ -18,7 +18,7 @@ public class ItemBasicValidation implements ValidationStrategy<Item> {
         if (item.getMaterial() == null || item.getMaterial().isEmpty()) {
             throw new InvalidAttributeException(ITEM_MATERIAL_NULL_EMPTY);
         }
-        if (item.getQuantity() <= 0) {
+        if (item.getStock() <= 0) {
             throw new InvalidAttributeException(ITEM_QUANTITY_INVALID);
         }
     }

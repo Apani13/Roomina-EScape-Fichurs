@@ -10,6 +10,7 @@ import cat.itacademy.service.RoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,6 +32,9 @@ public class TicketTest {
         roomService.addRoom(new Room("room1", "intriga", 2));
         roomId = roomService.getLastRoom().getId();
 
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.prepareStatement("DELETE FROM client").executeUpdate();
+        }
     }
 
     @Test
