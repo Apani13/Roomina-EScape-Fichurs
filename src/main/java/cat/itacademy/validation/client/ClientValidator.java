@@ -1,7 +1,6 @@
 package cat.itacademy.validation.client;
 
 import cat.itacademy.exception.DuplicateException;
-import cat.itacademy.exception.EntityNotFoundException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.exception.NullObjectException;
 import cat.itacademy.model.Client;

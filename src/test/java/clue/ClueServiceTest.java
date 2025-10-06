@@ -34,7 +34,7 @@ public class ClueServiceTest {
     }
 
     private Clue newClue(String name, String theme, String desc, double price) {
-        return new Clue(name, theme, desc, price);
+        return new Clue(name, theme, desc);
     }
 
     @Test

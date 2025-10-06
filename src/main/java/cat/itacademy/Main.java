@@ -12,9 +12,5 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-        MainMenu mainMenu = new MainMenu();
-
-        mainMenu.mostrarInventarioDetallado();
-
     }
 }

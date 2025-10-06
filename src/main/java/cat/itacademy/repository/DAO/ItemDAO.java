@@ -10,21 +10,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ItemDAO {
 
     public void insert(Item item) throws SQLException {
-        String sql = "INSERT INTO item (name, material, quantity, price) VALUES(?, ?, ?, ?)";
+
+        String sql = "INSERT INTO item (name, material, stock, price) VALUES(?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, item.getName());
             stmt.setString(2, item.getMaterial());
-            stmt.setInt(3, item.getQuantity());
+            stmt.setInt(3, item.getStock());
             stmt.setDouble(4, item.getPrice());
-
             stmt.executeUpdate();
+
+            try (ResultSet keys = stmt.getGeneratedKeys()) {
+                if (keys.next()) {
+                    item.setId(keys.getInt(1));
+                }
+            }
         }
     }
 
@@ -77,4 +84,63 @@ public class ItemDAO {
             return 0;
         }
     }
+
+    public Optional<Item> getById(int id) throws SQLException {
+
+        String sql = "SELECT id, name, material, stock, price FROM item WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+
+                    Item item = new Item(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("material"),
+                            rs.getInt("stock"),
+                            rs.getDouble("price")
+                    );
+
+                    return Optional.of(item);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Item> getLastItem() throws SQLException {
+        String sql = "SELECT id, name, material, stock, price FROM item ORDER BY id DESC LIMIT 1";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if(rs.next()){
+                Item item = new Item(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("material"),
+                        rs.getInt("stock"),
+                        rs.getDouble("price")
+                );
+                return Optional.of(item);
+            }
+            return Optional.empty();
+        }
+    }
+
+   public void updateStock(int itemId, int stock) throws SQLException {
+       String sql = "UPDATE item SET stock = ? WHERE id = ?";
+       try (Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+           stmt.setInt(1, stock);
+           stmt.setInt(2, itemId);
+           stmt.executeUpdate();
+       }
+   }
+
 }

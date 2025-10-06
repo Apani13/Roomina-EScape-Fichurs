@@ -49,7 +49,7 @@ public class InventoryServiceTest {
     @Test
     public void whenGetInventory_thenShouldReturnCorrectInformation() throws SQLException {
         Room room = new Room("Indiana Jones", "Aventura", 5);
-        Clue clue = new Clue("Llave", "Aventura", "Una pista clave", 25.0);
+        Clue clue = new Clue("Llave", "Aventura", "Una pista clave");
         Item item = new Item("Palmera", "Plástico", 3);
 
         roomService.addRoom(room);

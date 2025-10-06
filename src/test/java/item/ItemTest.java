@@ -21,7 +21,7 @@ public class ItemTest {
         assertAll("Probando se crea un objeto de decoración con los atributos correctos",
                 () -> Assertions.assertEquals("Candle", item.getName()),
                 () -> Assertions.assertEquals("Plastic", item.getMaterial()),
-                () -> Assertions.assertEquals(10, item.getQuantity()));
+                () -> Assertions.assertEquals(10, item.getStock()));
     }
 
 }

@@ -1,6 +1,6 @@
 package cat.itacademy.validation.ticket;
 
-import cat.itacademy.exception.EntityNotFoundException;
+import cat.itacademy.exception.EntityNotFoundOnDBException;
 import static cat.itacademy.message.error.ClientErrorMessages.*;
 import static cat.itacademy.message.error.RoomErrorMessages.*;
 import cat.itacademy.model.Ticket;
@@ -20,12 +20,12 @@ public class TicketEntityExistsValidation implements ValidationStrategy<Ticket> 
     }
 
     @Override
-    public void validate(Ticket ticket) throws EntityNotFoundException, SQLException {
+    public void validate(Ticket ticket) throws EntityNotFoundOnDBException, SQLException {
         if(clientService.getClientById(ticket.getClientId()) == null){
-            throw new EntityNotFoundException(CLIENT_NOT_FOUND);
+            throw new EntityNotFoundOnDBException(CLIENT_NOT_FOUND);
         }
         if(roomService.getRoomById(ticket.getRoomId()) == null){
-            throw new EntityNotFoundException(ROOM_NOT_FOUND);
+            throw new EntityNotFoundOnDBException(ROOM_NOT_FOUND);
         }
     }
 }
