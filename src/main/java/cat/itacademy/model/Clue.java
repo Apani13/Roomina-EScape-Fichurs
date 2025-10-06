@@ -12,7 +12,7 @@ public class Clue {
         this.name = name;
         this.theme = theme;
         this.description = description;
-        this.price = 10.0;
+        this.price = 10.00;
     }
 
     public Clue(int id, String name, String theme, String description,  Integer roomId) {

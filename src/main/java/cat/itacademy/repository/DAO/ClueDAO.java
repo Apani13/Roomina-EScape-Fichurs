@@ -157,5 +157,15 @@ public class ClueDAO {
         }
         return 0.0;
     }
+    public void updateRoomIdClue(int roomId, int clueId) throws SQLException {
+        String sql = "UPDATE clue SET room_id = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, roomId);
+            stmt.setInt(2, clueId);
+            stmt.executeUpdate();
+        }
+    }
+
 }
 

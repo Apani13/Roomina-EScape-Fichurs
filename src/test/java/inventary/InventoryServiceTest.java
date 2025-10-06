@@ -55,7 +55,7 @@ public class InventoryServiceTest {
     public void whenGetAvailableInventory_thenShouldReturnCorrectInformation() throws SQLException {
         Room room = new Room("Indiana Jones", "Aventura", 5);
         Clue clue = new Clue("Llave", "Aventura", "Una pista clave");
-        Item item = new Item("Palmera", "plastico", 5);
+        Item item = new Item("Palmera", "Plástico", 3);
 
         roomService.addRoom(room);
         clueService.addClue(clue);
