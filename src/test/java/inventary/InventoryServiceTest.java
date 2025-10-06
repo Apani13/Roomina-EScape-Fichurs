@@ -6,14 +6,8 @@ import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
 import cat.itacademy.dto.completeInventory.*;
 import cat.itacademy.exception.EmptyListException;
-import cat.itacademy.model.Ticket;
-import cat.itacademy.repository.DAO.TicketDAO;
-import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.repository.util.DatabaseCleaner;
-import cat.itacademy.service.InventoryService;
-import cat.itacademy.service.RoomService;
-import cat.itacademy.service.ClueService;
-import cat.itacademy.service.ItemService;
+import cat.itacademy.service.*;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Clue;
 import cat.itacademy.model.Item;
@@ -21,7 +15,6 @@ import cat.itacademy.validation.inventory.InventoryEmptyValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -49,7 +42,7 @@ public class InventoryServiceTest {
     public void whenGetAvailableInventory_thenShouldReturnCorrectInformation() throws SQLException {
         Room room = new Room("Indiana Jones", "Aventura", 5);
         Clue clue = new Clue("Llave", "Aventura", "Una pista clave");
-        Item item = new Item("Palmera", "Plástico", 3);
+        Item item = new Item("Palmera", "Plastico", 3);
 
         roomService.addRoom(room);
         clueService.addClue(clue);
@@ -67,7 +60,7 @@ public class InventoryServiceTest {
 
         AvailableItemDTO itemDTO = inventory.getAvailableItems().get(0);
         assertEquals("Palmera", itemDTO.getName());
-        assertEquals(5, itemDTO.getQuantity());
+        assertEquals(3, itemDTO.getStock());
     }
 
     @Test
@@ -102,7 +95,7 @@ public class InventoryServiceTest {
 
         EntityItemDTO itemDTO = inventory.getAllItems().get(0);
         assertEquals("Palmera", itemDTO.getName());
-        assertEquals(15.0, itemDTO.getPrice());
+        assertEquals(5.0, itemDTO.getPrice());
 
     }
 
