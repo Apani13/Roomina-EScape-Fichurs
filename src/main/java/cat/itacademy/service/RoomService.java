@@ -1,7 +1,8 @@
 
 package cat.itacademy.service;
 
-import cat.itacademy.dto.completeInventory.EntityRoomDTO;
+import cat.itacademy.message.ui.RoomUIMessages;
+import cat.itacademy.repository.DAO.ClueDAO;
 import cat.itacademy.repository.DAO.RoomDAO;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.EmptyListException;
@@ -21,10 +22,12 @@ import java.util.Optional;
 
 public class RoomService {
     private RoomDAO roomDAO;
+    private ClueDAO clueDao;
     private RoomValidator roomValidator;
 
     public RoomService() {
         this.roomDAO =  new RoomDAO();
+        this.clueDao = new ClueDAO();
         this.roomValidator = new RoomValidator(List.of(
                 new RoomBasicValidation(),
                 new RoomDuplicateValidation(roomDAO)
@@ -72,7 +75,7 @@ public class RoomService {
     }*/
 
     public void addClueToRoom(int roomId, int clueId) throws SQLException {
-        roomDAO.updateRoomIdClue(roomId, clueId);
+        clueDao.updateRoomIdClue(roomId, clueId);
     }
 
     public Room getLastRoom() throws SQLException {

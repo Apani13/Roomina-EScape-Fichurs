@@ -1,6 +1,6 @@
 package cat.itacademy.validation.ticket;
 
-import cat.itacademy.exception.EntityNotFoundException;
+import cat.itacademy.exception.EntityNotFoundOnDBException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.exception.NullObjectException;
 import cat.itacademy.model.Ticket;
@@ -16,7 +16,7 @@ public class TicketValidator {
         this.strategies = strategies;
     }
 
-    public void validate(Ticket ticket) throws EntityNotFoundException, InvalidAttributeException, NullObjectException, SQLException {
+    public void validate(Ticket ticket) throws EntityNotFoundOnDBException, InvalidAttributeException, NullObjectException, SQLException {
         for (ValidationStrategy<Ticket> strategy : strategies) {
             strategy.validateAvailableInventory(ticket);
         }

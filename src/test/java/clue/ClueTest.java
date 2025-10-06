@@ -20,7 +20,7 @@ public class ClueTest {
                 () -> assertEquals("Grandma's Portrait", clue.getName()),
                 () -> assertEquals("Photo", clue.getTheme()),
                 () -> assertEquals("This photo has something written in the back...", clue.getDescription()),
-                () -> assertEquals(10.0, clue.getPrice())
+                () -> assertEquals(10.00, clue.getPrice())
         );
     }
 

@@ -1,7 +1,7 @@
 package ticket;
 
 import cat.itacademy.exception.InvalidAttributeException;
-import cat.itacademy.exception.EntityNotFoundException;
+import cat.itacademy.exception.EntityNotFoundOnDBException;
 import cat.itacademy.model.Client;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Ticket;
@@ -53,8 +53,8 @@ public class TicketServiceTest {
         clientService.addClient(new Client("luri", "luri@gmail.com", "98765432", true));
 
         assertAll(
-                ()->assertThrows(EntityNotFoundException.class, ()->ticketService.addTicket(new Ticket(100,1))),
-                ()->assertThrows(EntityNotFoundException.class, ()->ticketService.addTicket(new Ticket(clientService.getLastClient().getId(),100)))
+                ()->assertThrows(EntityNotFoundOnDBException.class, ()->ticketService.addTicket(new Ticket(100,1))),
+                ()->assertThrows(EntityNotFoundOnDBException.class, ()->ticketService.addTicket(new Ticket(clientService.getLastClient().getId(),100)))
         );
     }
 
