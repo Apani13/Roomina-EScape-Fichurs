@@ -1,11 +1,10 @@
 package cat.itacademy.service;
 
 import cat.itacademy.exception.EmptyListException;
-import cat.itacademy.repository.DAO.ClientDAO;
+import cat.itacademy.repository.daoImpl.ClientDaoImpl;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.InvalidAttributeException;
 import cat.itacademy.model.Client;
-import cat.itacademy.message.error.ClientErrorMessages;
 import cat.itacademy.message.success.ClienteSuccessMessages;
 import cat.itacademy.validation.client.ClientBasicValidation;
 import cat.itacademy.validation.client.ClientDuplicateValidation;
@@ -19,12 +18,12 @@ import java.util.logging.Logger;
 import static cat.itacademy.message.error.ClientErrorMessages.CLIENT_LIST_EMPTY;
 
 public class ClientService {
-    private ClientDAO clientDAO;
+    private ClientDaoImpl clientDAO;
     private ClientValidator clientValidator;
     private final NotificationService notificationService;
 
     public ClientService() {
-        this.clientDAO = new ClientDAO();
+        this.clientDAO = new ClientDaoImpl();
         this.clientValidator = new ClientValidator(List.of(
                 new ClientBasicValidation(),
                 new ClientDuplicateValidation(clientDAO)
@@ -54,7 +53,7 @@ public class ClientService {
     }
 
     public Client getLastClient() throws SQLException {
-        Optional<Client> client = clientDAO.getLastClient();
+        Optional<Client> client = clientDAO.getLast();
 
         if (client.isPresent()) {
             return client.get();

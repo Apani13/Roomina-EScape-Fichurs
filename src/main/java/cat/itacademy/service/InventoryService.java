@@ -5,25 +5,25 @@ import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
 import cat.itacademy.dto.completeInventory.*;
-import cat.itacademy.repository.DAO.ClueDAO;
-import cat.itacademy.repository.DAO.ItemDAO;
-import cat.itacademy.repository.DAO.RoomDAO;
-import cat.itacademy.repository.DAO.TicketDAO;
+import cat.itacademy.repository.daoImpl.ClueDaoImpl;
+import cat.itacademy.repository.daoImpl.ItemDaoImpl;
+import cat.itacademy.repository.daoImpl.RoomDaoImpl;
+import cat.itacademy.repository.daoImpl.TicketDaoImpl;
 import java.sql.SQLException;
 import java.util.List;
 
 public class InventoryService {
 
-    private RoomDAO roomDAO;
-    private ClueDAO clueDAO;
-    private ItemDAO itemDAO;
-    private TicketDAO ticketDAO;
+    private RoomDaoImpl roomDAO;
+    private ClueDaoImpl clueDAO;
+    private ItemDaoImpl itemDAO;
+    private TicketDaoImpl ticketDAO;
 
     public InventoryService() {
-        this.roomDAO = new RoomDAO();
-        this.clueDAO = new ClueDAO();
-        this.itemDAO = new ItemDAO();
-        this.ticketDAO = new TicketDAO();
+        this.roomDAO = new RoomDaoImpl();
+        this.clueDAO = new ClueDaoImpl();
+        this.itemDAO = new ItemDaoImpl();
+        this.ticketDAO = new TicketDaoImpl();
     }
 
     public AvailableInventoryDTO getAvailableInventory() throws SQLException {

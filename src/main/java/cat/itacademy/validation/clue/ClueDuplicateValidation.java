@@ -2,7 +2,7 @@ package cat.itacademy.validation.clue;
 
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.model.Clue;
-import cat.itacademy.repository.DAO.ClueDAO;
+import cat.itacademy.repository.daoImpl.ClueDaoImpl;
 import cat.itacademy.validation.ValidationStrategy;
 
 import java.sql.SQLException;
@@ -10,9 +10,9 @@ import java.sql.SQLException;
 import static cat.itacademy.message.error.ClueErrorMessages.CLUE_DUPLICATED;
 
 public class ClueDuplicateValidation implements ValidationStrategy<Clue> {
-    private ClueDAO clueDAO;
+    private ClueDaoImpl clueDAO;
 
-    public ClueDuplicateValidation(ClueDAO clueDAO) {
+    public ClueDuplicateValidation(ClueDaoImpl clueDAO) {
         this.clueDAO = clueDAO;
     }
 

@@ -3,12 +3,10 @@ package cat.itacademy.service;
 
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.completeInventory.EntityRoomDTO;
-import cat.itacademy.message.ui.RoomUIMessages;
-import cat.itacademy.repository.DAO.ClueDAO;
-import cat.itacademy.message.ui.RoomUIMessages;
+import cat.itacademy.repository.daoImpl.ClueDaoImpl;
 import cat.itacademy.model.Clue;
 import cat.itacademy.model.Item;
-import cat.itacademy.repository.DAO.RoomDAO;
+import cat.itacademy.repository.daoImpl.RoomDaoImpl;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.exception.InvalidAttributeException;
@@ -28,13 +26,13 @@ import java.util.Optional;
 import static cat.itacademy.message.error.InventoryErrorMessages.INVENTORY_EMPTY;
 
 public class RoomService {
-    private RoomDAO roomDAO;
-    private ClueDAO clueDao;
+    private RoomDaoImpl roomDAO;
+    private ClueDaoImpl clueDao;
     private RoomValidator roomValidator;
 
     public RoomService() {
-        this.roomDAO =  new RoomDAO();
-        this.clueDao = new ClueDAO();
+        this.roomDAO =  new RoomDaoImpl();
+        this.clueDao = new ClueDaoImpl();
         this.roomValidator = new RoomValidator(List.of(
                 new RoomBasicValidation(),
                 new RoomDuplicateValidation(roomDAO)
@@ -79,7 +77,7 @@ public class RoomService {
     }
 
     public Room getLastRoom() throws SQLException {
-        Optional<Room> room = roomDAO.getLastRoom();
+        Optional<Room> room = roomDAO.getLast();
         return room.orElse(null);
     }
 

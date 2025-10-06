@@ -1,8 +1,9 @@
-package cat.itacademy.repository.DAO;
+package cat.itacademy.repository.daoImpl;
 
 import cat.itacademy.dto.availableInventory.AvailableClueDTO;
 import cat.itacademy.dto.completeInventory.EntityClueDTO;
 import cat.itacademy.model.Clue;
+import cat.itacademy.repository.dao.ClueDao;
 import cat.itacademy.repository.DatabaseConnection;
 
 import java.sql.Connection;
@@ -14,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ClueDAO {
+public class ClueDaoImpl implements ClueDao {
 
+    @Override
     public void insert(Clue clue) throws SQLException {
         String sql = "INSERT INTO clue(name, theme, description, price) VALUES (?, ?, ?, ?)";
 
@@ -31,6 +33,7 @@ public class ClueDAO {
         }
     }
 
+    @Override
     public boolean existsByName(String name) throws SQLException {
         String sql = "SELECT COUNT(*) FROM clue WHERE name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -45,6 +48,7 @@ public class ClueDAO {
         return false;
     }
 
+    @Override
     public List<Clue> getAllNames() throws SQLException {
         List<Clue> clues = new ArrayList<>();
         String sql = "SELECT id, name FROM clue WHERE room_id IS NULL";
@@ -63,7 +67,8 @@ public class ClueDAO {
         return clues;
     }
 
-    public Optional<Clue> getLastClue() throws SQLException {
+    @Override
+    public Optional<Clue> getLast() throws SQLException {
         String sql = "SELECT id, name, theme, description, price, room_id FROM clue ORDER BY id DESC LIMIT 1";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -83,6 +88,8 @@ public class ClueDAO {
             return Optional.empty();
         }
     }
+
+    @Override
     public Optional<Clue> getById(int id) throws SQLException {
         String sql = "SELECT id, name, theme, description, price, room_id FROM clue WHERE id = ?";
 
@@ -107,6 +114,7 @@ public class ClueDAO {
         return Optional.empty();
     }
 
+    @Override
     public List<AvailableClueDTO> getAvailableClues() throws SQLException {
         List<AvailableClueDTO> clues = new ArrayList<>();
         String sql = "SELECT name, theme FROM clue WHERE room_id IS NULL";
@@ -126,6 +134,7 @@ public class ClueDAO {
         return clues;
     }
 
+    @Override
     public List<EntityClueDTO> getAllCluesNameAndPrice() throws SQLException {
         List<EntityClueDTO> clues = new ArrayList<>();
         String sql = "SELECT name, price FROM clue";
@@ -144,6 +153,8 @@ public class ClueDAO {
         }
         return clues;
     }
+
+    @Override
     public double getAllPrices() throws SQLException {
         String sql = "SELECT SUM(price) AS totalPrice FROM clue";
 
@@ -157,6 +168,8 @@ public class ClueDAO {
         }
         return 0.0;
     }
+
+    @Override
     public void updateRoomIdClue(int roomId, int clueId) throws SQLException {
         String sql = "UPDATE clue SET room_id = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();

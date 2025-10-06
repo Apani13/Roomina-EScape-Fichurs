@@ -1,11 +1,11 @@
-package cat.itacademy.repository.DAO;
+package cat.itacademy.repository.daoImpl;
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
-import cat.itacademy.dto.completeInventory.EntityClueDTO;
 import cat.itacademy.dto.completeInventory.EntityRoomDTO;
 import cat.itacademy.model.Clue;
 import cat.itacademy.model.Item;
 import cat.itacademy.model.Room;
 import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.repository.dao.RoomDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RoomDAO {
+public class RoomDaoImpl implements RoomDao {
 
+    @Override
     public void insert(Room room) throws SQLException {
         String sql = "INSERT INTO room (name, theme, level, price) VALUES(?, ?, ?, ?)";
 
@@ -32,6 +33,7 @@ public class RoomDAO {
         }
     }
 
+    @Override
     public boolean existsByName(String name) throws SQLException {
         String sql = "SELECT COUNT(*) FROM room WHERE name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -64,7 +66,8 @@ public class RoomDAO {
         return rooms;
     }
 
-    public Optional<Room> getLastRoom() throws SQLException {
+    @Override
+    public Optional<Room> getLast() throws SQLException {
         String sql = "SELECT id, name, theme, level, price, escape_room_id FROM room ORDER BY id DESC LIMIT 1";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -88,7 +91,7 @@ public class RoomDAO {
         }
     }
 
-
+    @Override
     public Optional<Room>  getById(int id) throws SQLException {
 
         String sql = "SELECT id, name, theme,level, price, escape_room_id FROM room WHERE id = ?";
@@ -120,6 +123,7 @@ public class RoomDAO {
         return Optional.empty();
     }
 
+    @Override
     public List<Room> getRoomsWithClues()throws SQLException {
         List<Room> rooms = new ArrayList<>();
         String sql = "SELECT DISTINCT r.id, r.name FROM room r JOIN clue c ON r.id = c.room_id";
@@ -137,6 +141,8 @@ public class RoomDAO {
         }
         return rooms;
     }
+
+
     public List<Room> getRoomsWithItems()throws SQLException {
         List<Room> rooms = new ArrayList<>();
         String sql = "SELECT DISTINCT r.id, r.name FROM room r JOIN item i ON r.id = i.room_id";
@@ -155,7 +161,8 @@ public class RoomDAO {
         return rooms;
     }
 
-    public void removeClueFromRoom(int clueId)throws SQLException {
+    @Override
+    public void removeClueFromRoom(int clueId) throws SQLException {
         String sql = "UPDATE clue SET room_id = NULL WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -166,6 +173,7 @@ public class RoomDAO {
         }
     }
 
+    @Override
     public void removeItemFromRoom(int itemId) throws SQLException {
         String sql = "UPDATE item SET room_id = NULL WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -177,6 +185,7 @@ public class RoomDAO {
         }
     }
 
+    @Override
     public List<AvailableRoomDTO> getAvailableRooms() throws SQLException {
         List<AvailableRoomDTO> rooms = new ArrayList<>();
         String sql = "SELECT name, theme FROM room WHERE escape_room_id IS NULL";
@@ -196,6 +205,7 @@ public class RoomDAO {
         return rooms;
     }
 
+    @Override
     public List<EntityRoomDTO> getAllRoomsNameAndPrice() throws SQLException {
         List<EntityRoomDTO> rooms = new ArrayList<>();
         String sql = "SELECT name, price FROM room";
@@ -215,6 +225,7 @@ public class RoomDAO {
         return rooms;
     }
 
+    @Override
     public double getAllPrices() throws SQLException {
         String sql = "SELECT SUM(price) AS totalPrice FROM room";
 
@@ -229,6 +240,7 @@ public class RoomDAO {
         return 0.0;
     }
 
+    @Override
     public List<Clue> getCluesByRoomId(int roomId) throws SQLException {
         List<Clue> clues = new ArrayList<>();
         String sql = "SELECT c.id, c.name " +
@@ -247,6 +259,7 @@ public class RoomDAO {
         return clues;
     }
 
+    @Override
     public List<Item> getItemsByRoomId(int itemId) throws SQLException {
         List<Item> items = new ArrayList<>();
         String sql = "SELECT i.id, i.name " +
