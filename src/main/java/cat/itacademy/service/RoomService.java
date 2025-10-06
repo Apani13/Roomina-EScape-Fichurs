@@ -80,21 +80,13 @@ public class RoomService {
 
     public Room getLastRoom() throws SQLException {
         Optional<Room> room = roomDAO.getLastRoom();
-        if(room.isPresent()){
-            return room.get();
-        } else {
-            return null;
-        }
+        return room.orElse(null);
     }
 
     public Room getRoomById(int id) throws SQLException {
         Optional<Room> room = roomDAO.getById(id);
 
-        if(room.isPresent()){
-            return room.get();
-        } else {
-            return null;
-        }
+        return room.orElse(null);
     }
 
     public List<Room> getRoomsWithClues() throws SQLException {

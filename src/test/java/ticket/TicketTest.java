@@ -22,7 +22,7 @@ public class TicketTest {
     @BeforeEach
     public void setUp() throws SQLException {
         ClientService clientService = new ClientService();
-        clientService.addClient(new Client("luri", "luri@gmail.com", "987654321", true));
+        clientService.addClient(new Client("luri", "luri@gmail.com", "987654321"));
         clientId = clientService.getLastClient().getId();
 
         RoomService roomService = new RoomService();
