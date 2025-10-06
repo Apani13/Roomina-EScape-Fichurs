@@ -7,6 +7,7 @@ import cat.itacademy.dto.AvailableRoomDTO;
 import cat.itacademy.dto.InventoryDTO;
 import cat.itacademy.exception.EmptyListException;
 import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.repository.util.DatabaseCleaner;
 import cat.itacademy.service.InventoryService;
 import cat.itacademy.service.RoomService;
 import cat.itacademy.service.ClueService;
@@ -36,14 +37,8 @@ public class InventoryServiceTest {
         roomService = new RoomService();
         clueService = new ClueService();
         itemService = new ItemService();
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            conn.prepareStatement("DELETE FROM clue").executeUpdate();
-            conn.prepareStatement("DELETE FROM item").executeUpdate();
-            conn.prepareStatement("DELETE FROM room").executeUpdate();
-            conn.prepareStatement("DELETE FROM escape_room").executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+        DatabaseCleaner.clearAllTables();
     }
 
     @Test
