@@ -2,11 +2,13 @@ package cat.itacademy.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import cat.itacademy.dto.availableInventory.AvailableClueDTO;
 import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 import cat.itacademy.exception.EmptyListException;
+import cat.itacademy.model.Room;
 import cat.itacademy.repository.DAO.ItemDAO;
 import cat.itacademy.exception.DuplicateException;
 import cat.itacademy.exception.InvalidAttributeException;
@@ -56,4 +58,27 @@ public class ItemService {
     }
     return itemDAO.getAvailableItems();
     }
+
+
+    public Item getItemById(int id) throws SQLException {
+
+       Optional<Item> item = itemDAO.getById(id);
+
+       if (item.isPresent()) {
+
+           return item.get();
+       } else {
+           return null;
+       }
+    }
+
+    public Item getLastItem() throws SQLException {
+        Optional<Item> item = itemDAO.getLastItem();
+        if(item.isPresent()){
+            return item.get();
+        } else {
+            return null;
+        }
+    }
+
 }

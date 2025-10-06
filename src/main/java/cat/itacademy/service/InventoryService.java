@@ -9,8 +9,6 @@ import cat.itacademy.repository.DAO.ClueDAO;
 import cat.itacademy.repository.DAO.ItemDAO;
 import cat.itacademy.repository.DAO.RoomDAO;
 import cat.itacademy.repository.DAO.TicketDAO;
-
-import javax.swing.text.html.parser.Entity;
 import java.sql.SQLException;
 import java.util.List;
 

@@ -6,9 +6,7 @@ import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.availableInventory.AvailableInventoryDTO;
 import cat.itacademy.dto.completeInventory.*;
 import cat.itacademy.exception.EmptyListException;
-import cat.itacademy.model.Ticket;
-import cat.itacademy.repository.DAO.TicketDAO;
-import cat.itacademy.repository.DatabaseConnection;
+import cat.itacademy.repository.util.DatabaseCleaner;
 import cat.itacademy.service.*;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Clue;
@@ -17,7 +15,6 @@ import cat.itacademy.validation.inventory.InventoryEmptyValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -37,23 +34,15 @@ public class InventoryServiceTest {
         roomService = new RoomService();
         clueService = new ClueService();
         itemService = new ItemService();
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            conn.prepareStatement("DELETE FROM clue").executeUpdate();
-            conn.prepareStatement("DELETE FROM ticket").executeUpdate();
-            conn.prepareStatement("DELETE FROM client").executeUpdate();
-            conn.prepareStatement("DELETE FROM item").executeUpdate();
-            conn.prepareStatement("DELETE FROM room").executeUpdate();
-            conn.prepareStatement("DELETE FROM escape_room").executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+        DatabaseCleaner.clearAllTables();
     }
 
     @Test
     public void whenGetAvailableInventory_thenShouldReturnCorrectInformation() throws SQLException {
         Room room = new Room("Indiana Jones", "Aventura", 5);
         Clue clue = new Clue("Llave", "Aventura", "Una pista clave");
-        Item item = new Item("Palmera", "plastico", 5);
+        Item item = new Item("Palmera", "Plastico", 3);
 
         roomService.addRoom(room);
         clueService.addClue(clue);
@@ -71,7 +60,7 @@ public class InventoryServiceTest {
 
         AvailableItemDTO itemDTO = inventory.getAvailableItems().get(0);
         assertEquals("Palmera", itemDTO.getName());
-        assertEquals(5, itemDTO.getQuantity());
+        assertEquals(3, itemDTO.getStock());
     }
 
     @Test
@@ -106,7 +95,7 @@ public class InventoryServiceTest {
 
         EntityItemDTO itemDTO = inventory.getAllItems().get(0);
         assertEquals("Palmera", itemDTO.getName());
-        assertEquals(15.0, itemDTO.getPrice());
+        assertEquals(5.0, itemDTO.getPrice());
 
     }
 

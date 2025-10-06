@@ -6,13 +6,21 @@ public class Item {
     private String name;
     private String material;
     private double price;
-    private int quantity;
+    private int stock;
 
-    public Item(String name, String material, int quantity) {
+    public Item(String name, String material, int stock) {
         this.name = name;
         this.material = material;
-        this.quantity = quantity;
-        this.price = 15.0;
+        this.stock = stock;
+        this.price = 5.0;
+    }
+
+    public Item(int id, String name, String material, int stock, double price) {
+        this.id = id;
+        this.name = name;
+        this.material = material;
+        this.stock = stock;
+        this.price = price;
     }
 
     public Item(int id, String name) {
@@ -20,25 +28,13 @@ public class Item {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getMaterial() { return material; }
+    public int getStock() { return stock; }
+    public double getPrice() { return price; }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
+    public void setId(int id) { this.id = id; }
 }
 
 

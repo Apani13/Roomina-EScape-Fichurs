@@ -1,7 +1,7 @@
 package ticket;
 
 import cat.itacademy.exception.InvalidAttributeException;
-import cat.itacademy.exception.EntityNotFoundException;
+import cat.itacademy.exception.EntityNotFoundOnDBException;
 import cat.itacademy.model.Client;
 import cat.itacademy.model.Room;
 import cat.itacademy.model.Ticket;
@@ -50,18 +50,18 @@ public class TicketServiceTest {
 
     @Test
     public void whenCreatedTicketWithFalseAttributes_thenRecordNotFoundExceptionIsThrown(){
-        clientService.addClient(new Client("luri", "luri@gmail.com", "98765432", true));
+        clientService.addClient(new Client("luri", "luri@gmail.com", "98765432"));
 
         assertAll(
-                ()->assertThrows(EntityNotFoundException.class, ()->ticketService.addTicket(new Ticket(100,1))),
-                ()->assertThrows(EntityNotFoundException.class, ()->ticketService.addTicket(new Ticket(clientService.getLastClient().getId(),100)))
+                ()->assertThrows(EntityNotFoundOnDBException.class, ()->ticketService.addTicket(new Ticket(100,1))),
+                ()->assertThrows(EntityNotFoundOnDBException.class, ()->ticketService.addTicket(new Ticket(clientService.getLastClient().getId(),100)))
         );
     }
 
     @Test
     public void shouldFillDateAndPrice_whenTicketIsCreated() throws SQLException {
 
-        clientService.addClient(new Client("luri", "luri@gmail.com", "98765432", true));
+        clientService.addClient(new Client("luri", "luri@gmail.com", "98765432"));
         roomService.addRoom(new Room("room1", "terror", 2));
         
         Client client = clientService.getLastClient();
@@ -76,6 +76,21 @@ public class TicketServiceTest {
         System.setOut(originalOut);
         LocalDateTime dateTime = LocalDateTime.now();
         LocalDate date = dateTime.toLocalDate();
+        System.out.println(
+                String.format(
+                        "==============================\n" +
+                                "         🎟️  TICKET DE ENTRADA\n" +
+                                "==============================\n" +
+                                "Sala: %s\n" +
+                                "Precio: %.2f €\n" +
+                                "Fecha: %s\n" +
+                                "==============================",
+                        room.getName(),
+                        room.getPrice(),
+                        date
+                )
+        );
+
         assertAll(
                 ()-> assertEquals(room.getPrice(), ticketDB.getTotalPrice()),
                 ()-> assertEquals(room.getId(), ticketDB.getRoomId()),

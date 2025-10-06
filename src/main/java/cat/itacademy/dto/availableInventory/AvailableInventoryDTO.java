@@ -51,7 +51,7 @@ public class AvailableInventoryDTO {
         sb.append("\n--- OBJECTES DISPONIBLES (").append(getTotalItemsUnits()).append(" unitats) ---\n");
         for (AvailableItemDTO item : availableItems) {
             sb.append("• ").append(item.getName())
-                    .append(" | Quantitat: ").append(item.getQuantity()).append("\n");
+                    .append(" | Quantitat: ").append(item.getStock()).append("\n");
         }
         return sb.toString();
     }

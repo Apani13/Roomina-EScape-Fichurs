@@ -4,6 +4,8 @@ package cat.itacademy.service;
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.completeInventory.EntityRoomDTO;
 import cat.itacademy.message.ui.RoomUIMessages;
+import cat.itacademy.repository.DAO.ClueDAO;
+import cat.itacademy.message.ui.RoomUIMessages;
 import cat.itacademy.model.Clue;
 import cat.itacademy.model.Item;
 import cat.itacademy.repository.DAO.RoomDAO;
@@ -27,10 +29,12 @@ import static cat.itacademy.message.error.InventoryErrorMessages.INVENTORY_EMPTY
 
 public class RoomService {
     private RoomDAO roomDAO;
+    private ClueDAO clueDao;
     private RoomValidator roomValidator;
 
     public RoomService() {
         this.roomDAO =  new RoomDAO();
+        this.clueDao = new ClueDAO();
         this.roomValidator = new RoomValidator(List.of(
                 new RoomBasicValidation(),
                 new RoomDuplicateValidation(roomDAO)
@@ -71,26 +75,18 @@ public class RoomService {
 
 
     public void addClueToRoom(int roomId, int clueId) throws SQLException {
-        roomDAO.updateRoomIdClue(roomId, clueId);
+        clueDao.updateRoomIdClue(roomId, clueId);
     }
 
     public Room getLastRoom() throws SQLException {
         Optional<Room> room = roomDAO.getLastRoom();
-        if(room.isPresent()){
-            return room.get();
-        } else {
-            return null;
-        }
+        return room.orElse(null);
     }
 
     public Room getRoomById(int id) throws SQLException {
         Optional<Room> room = roomDAO.getById(id);
 
-        if(room.isPresent()){
-            return room.get();
-        } else {
-            return null;
-        }
+        return room.orElse(null);
     }
 
     public List<Room> getRoomsWithClues() throws SQLException {

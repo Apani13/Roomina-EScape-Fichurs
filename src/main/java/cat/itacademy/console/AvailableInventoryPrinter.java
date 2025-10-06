@@ -27,7 +27,7 @@ public class AvailableInventoryPrinter {
         sb.append("\n--- OBJETOS DISPONIBLES (").append(inventory.getTotalItemsUnits()).append(" unidades) ---\n");
         for (AvailableItemDTO item : inventory.getAvailableItems()) {
             sb.append("• ").append(item.getName())
-                    .append(" | Cantidad: ").append(item.getQuantity()).append("\n");
+                    .append(" | Cantidad: ").append(item.getStock()).append("\n");
         }
         return sb.toString();
     }
