@@ -26,13 +26,12 @@ public class RoomItemService {
     }
 
     public void addItemToRoom(RoomItem roomItem) {
-
         Integer itemId = roomItem.getItemId();
         Integer roomId = roomItem.getRoomId();
 
         try {
             if (roomItem.getQuantity() <= 0) {
-                throw new InvalidAttributeException("Quantity must be > 0");
+                throw new InvalidAttributeException("La cantidad ha de ser mayor que 0");
             }
 
             if (roomId == null || roomId <= 0) {
@@ -60,9 +59,8 @@ public class RoomItemService {
                                                     );
             }
 
-            roomItemDAO.insert(roomItem);
+            roomItemDAO.insertOrUpdate(roomItem);
             reduceItemStock(itemId, roomItem.getQuantity());
-
 
             System.out.println(String.format(ITEM_ADDED_SUCCESS,
                     itemService.getItemById(itemId).getName()));
@@ -74,38 +72,24 @@ public class RoomItemService {
 
     public void removeItemFromRoom(int roomId, int itemId) throws SQLException{
         int quantity = roomItemDAO.getQuantity(roomId, itemId);
-
         roomItemDAO.deleteRoomItem(roomId, itemId);
-
         increaseItemStock(itemId, quantity);
-
     }
 
     public void reduceItemStock(int itemId, int numItemsAssigned) throws SQLException {
-
-        int updatedStock = (itemService.getItemById(itemId).getStock()) - numItemsAssigned;
-
+        int currentStock = itemDAO.getStock(itemId);
+        int updatedStock = currentStock - numItemsAssigned;
         itemDAO.updateStock(itemId, updatedStock);
-
     }
 
     public void increaseItemStock(int itemId, int numItemsAssigned) throws SQLException {
-
         int updatedStock = (itemService.getItemById(itemId).getStock()) + numItemsAssigned;
-
         itemDAO.updateStock(itemId, updatedStock);
-
     }
 
     public List<RoomItem> getAllItemsFromRoom(int roomId) throws SQLException {
         return roomItemDAO.getAllByRoomId(roomId);
     }
-
-    /*public RoomItem getRoomItemById(int roomId, int itemId) {
-
-        roomItemDAO.
-
-    }*/
 
 
 }

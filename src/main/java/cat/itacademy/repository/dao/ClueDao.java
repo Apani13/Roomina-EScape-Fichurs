@@ -2,6 +2,7 @@ package cat.itacademy.repository.dao;
 
 import cat.itacademy.dto.availableInventory.AvailableClueDTO;
 import cat.itacademy.dto.completeInventory.EntityClueDTO;
+import cat.itacademy.dto.usedInventory.UsedClueDTO;
 import cat.itacademy.model.Clue;
 import cat.itacademy.repository.crud.Create;
 import cat.itacademy.repository.crud.read.ExistsByName;
@@ -17,4 +18,6 @@ public interface ClueDao extends Create<Clue>, ExistsByName<Clue>, GetLast<Clue>
     List<EntityClueDTO> getAllCluesNameAndPrice() throws SQLException;
     double getAllPrices() throws SQLException;
     void updateRoomIdClue(int roomId, int clueId) throws SQLException;
+
+    List<UsedClueDTO> getUsedClues() throws SQLException;
 }

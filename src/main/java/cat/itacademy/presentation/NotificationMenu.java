@@ -1,5 +1,7 @@
 package cat.itacademy.presentation;
 
+import cat.itacademy.console.ConsoleUtils;
+
 import java.util.Scanner;
 
 public class NotificationMenu {
@@ -13,7 +15,6 @@ public class NotificationMenu {
         boolean backToMain = false;
 
         while (!backToMain) {
-            ConsoleUtils.clearScreen();
             System.out.println("🔔 GESTIÓN DE NOTIFICACIONES");
             System.out.println("1. Enviar Notificaciones a Usuarios");
             System.out.println("2. Emitir Certificado de Superación");

@@ -2,6 +2,7 @@ package cat.itacademy.repository.dao;
 
 import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 import cat.itacademy.dto.completeInventory.EntityItemDTO;
+import cat.itacademy.dto.usedInventory.UsedItemDTO;
 import cat.itacademy.model.Item;
 import cat.itacademy.repository.crud.Create;
 import cat.itacademy.repository.crud.read.ExistsByName;
@@ -16,5 +17,11 @@ public interface ItemDao extends Create<Item>, ExistsByName<Item>, GetById<Item>
     int getTotalAvailableItemsCount() throws SQLException;
     List<EntityItemDTO> getAllItemsNameAndPrice() throws SQLException;
     double getAllPrices() throws SQLException;
+    void assignItemToRoom(int roomId, int itemId, int quantity) throws SQLException;
+
     void updateStock(int itemId, int stock) throws SQLException;
+
+    List<UsedItemDTO> getUsedItems() throws SQLException;
+
+    int getTotalUsedItemsCount() throws SQLException;
 }

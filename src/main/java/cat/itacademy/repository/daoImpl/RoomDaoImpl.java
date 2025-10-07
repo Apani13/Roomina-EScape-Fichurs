@@ -1,6 +1,7 @@
 package cat.itacademy.repository.daoImpl;
 import cat.itacademy.dto.availableInventory.AvailableRoomDTO;
 import cat.itacademy.dto.completeInventory.EntityRoomDTO;
+import cat.itacademy.dto.usedInventory.UsedRoomDTO;
 import cat.itacademy.model.Clue;
 import cat.itacademy.model.Item;
 import cat.itacademy.model.Room;
@@ -32,6 +33,7 @@ public class RoomDaoImpl implements RoomDao {
             stmt.executeUpdate();
         }
     }
+    
 
     @Override
     public boolean existsByName(String name) throws SQLException {
@@ -92,9 +94,8 @@ public class RoomDaoImpl implements RoomDao {
     }
 
     @Override
-    public Optional<Room>  getById(int id) throws SQLException {
-
-        String sql = "SELECT id, name, theme,level, price, escape_room_id FROM room WHERE id = ?";
+    public Optional<Room> getById(int id) throws SQLException {
+        String sql = "SELECT id, name FROM escape_room WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -103,19 +104,10 @@ public class RoomDaoImpl implements RoomDao {
 
             try(ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    int escapeRoomId = rs.getInt("escape_room_id");
-                    boolean wasNull = rs.wasNull();
-
                     Room room = new Room(
                             rs.getInt("id"),
-                            rs.getString("name"),
-                            rs.getString("theme"),
-                            rs.getInt("level"),
-
-                            rs.getInt("price"),
-                            wasNull ? null : escapeRoomId
+                            rs.getString("name")
                     );
-
                     return Optional.of(room);
                 }
             }
@@ -162,24 +154,37 @@ public class RoomDaoImpl implements RoomDao {
     }
 
     @Override
-    public void removeClueFromRoom(int clueId) throws SQLException {
-        String sql = "UPDATE clue SET room_id = NULL WHERE id = ?";
+    public void removeClueFromRoom(int roomId, int clueId) throws SQLException {
+        String sql = "UPDATE clue SET room_id = NULL WHERE id = ? AND room_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, clueId);
+            stmt.setInt(2, roomId);
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void removeItemFromRoom(int roomId, int itemId) throws SQLException {
+        String sql = "DELETE FROM room_item WHERE room_id = ? AND item_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, clueId);
+            stmt.setInt(1, roomId);
+            stmt.setInt(2, itemId);
 
             stmt.executeUpdate();
         }
     }
 
     @Override
-    public void removeItemFromRoom(int itemId) throws SQLException {
-        String sql = "UPDATE item SET room_id = NULL WHERE id = ?";
+    public void increaseItemStock(int itemId, int quantity) throws SQLException {
+        String sql = "UPDATE item SET stock = stock + ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, itemId);
+            stmt.setInt(1, quantity);
+            stmt.setInt(2, itemId);
 
             stmt.executeUpdate();
         }
@@ -188,7 +193,7 @@ public class RoomDaoImpl implements RoomDao {
     @Override
     public List<AvailableRoomDTO> getAvailableRooms() throws SQLException {
         List<AvailableRoomDTO> rooms = new ArrayList<>();
-        String sql = "SELECT name, theme FROM room WHERE escape_room_id IS NULL";
+        String sql = "SELECT id, name, price, theme FROM room WHERE escape_room_id IS NULL";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -196,7 +201,9 @@ public class RoomDaoImpl implements RoomDao {
 
             while (rs.next()) {
                 AvailableRoomDTO room = new AvailableRoomDTO(
+                        rs.getInt("id"),
                         rs.getString("name"),
+                        rs.getDouble("price"),
                         rs.getString("theme")
                 );
                 rooms.add(room);
@@ -208,7 +215,7 @@ public class RoomDaoImpl implements RoomDao {
     @Override
     public List<EntityRoomDTO> getAllRoomsNameAndPrice() throws SQLException {
         List<EntityRoomDTO> rooms = new ArrayList<>();
-        String sql = "SELECT name, price FROM room";
+        String sql = "SELECT id, name, theme, price FROM room";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -216,7 +223,9 @@ public class RoomDaoImpl implements RoomDao {
 
             while (rs.next()) {
                 EntityRoomDTO room = new EntityRoomDTO(
+                        rs.getInt("id"),
                         rs.getString("name"),
+                        rs.getString("theme"),
                         rs.getDouble("price")
                 );
                 rooms.add(room);
@@ -278,4 +287,30 @@ public class RoomDaoImpl implements RoomDao {
         return items;
     }
 
+    @Override
+    public List<UsedRoomDTO> getUsedRooms() throws SQLException {
+        List<UsedRoomDTO> usedRooms = new ArrayList<>();
+        String sql = "SELECT r.id, r.name, r.theme, er.id as escape_room_id, er.name as escape_room_name " +
+                "FROM room r " +
+                "INNER JOIN escape_room er ON r.escape_room_id = er.id " +  // Cambiado: JOIN directo
+                "WHERE r.escape_room_id IS NOT NULL " +  // Añadido: solo salas asignadas
+                "ORDER BY r.id";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                UsedRoomDTO usedRoom = new UsedRoomDTO(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("theme"),
+                        rs.getInt("escape_room_id"),
+                        rs.getString("escape_room_name")
+                );
+                usedRooms.add(usedRoom);
+            }
+        }
+        return usedRooms;
+    }
 }

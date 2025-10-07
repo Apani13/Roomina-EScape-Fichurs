@@ -1,5 +1,8 @@
 package cat.itacademy.repository.daoImpl;
 
+import cat.itacademy.dto.availableInventory.AvailableEscapeRoomDTO;
+import cat.itacademy.dto.completeInventory.EntityEscapeRoomDTO;
+import cat.itacademy.dto.usedInventory.UsedEscapeRoomDTO;
 import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.repository.dao.EscapeRoomDao;
@@ -25,8 +28,46 @@ public class EscapeRoomDaoImpl implements EscapeRoomDao {
     }
 
     @Override
-    public List<EscapeRoom> findAll() throws SQLException {
-        List<EscapeRoom> escapeRooms = new ArrayList<>();
+    public void addRoomToEscapeRoom(int escapeRoomId, int roomId) throws SQLException {
+        String sql = "UPDATE room SET escape_room_id = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, escapeRoomId);
+            stmt.setInt(2, roomId);
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public List<UsedEscapeRoomDTO> getUsedEscapeRooms() throws SQLException {
+        List<UsedEscapeRoomDTO> usedEscapeRooms = new ArrayList<>();
+        String sql = "SELECT er.id, er.name, " +
+                "COUNT(r.id) as total_rooms " +
+                "FROM escape_room er " +
+                "INNER JOIN room r ON er.id = r.escape_room_id " +
+                "GROUP BY er.id, er.name " +
+                "ORDER BY er.id";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                UsedEscapeRoomDTO usedEscapeRoom = new UsedEscapeRoomDTO(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("total_rooms"),
+                        0
+                );
+                usedEscapeRooms.add(usedEscapeRoom);
+            }
+        }
+        return usedEscapeRooms;
+    }
+
+    @Override
+    public List<AvailableEscapeRoomDTO> findAll() throws SQLException {
+        List<AvailableEscapeRoomDTO> escapeRooms = new ArrayList<>();
         String sql = "SELECT id, name FROM escape_room";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -34,7 +75,7 @@ public class EscapeRoomDaoImpl implements EscapeRoomDao {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                escapeRooms.add(new EscapeRoom(
+                escapeRooms.add(new AvailableEscapeRoomDTO(
                         rs.getInt("id"),
                         rs.getString("name")
                 ));
@@ -43,6 +84,24 @@ public class EscapeRoomDaoImpl implements EscapeRoomDao {
         return escapeRooms;
     }
 
+    @Override
+    public List<EntityEscapeRoomDTO> findAllComplete() throws SQLException {
+        List<EntityEscapeRoomDTO> escapeRooms = new ArrayList<>();
+        String sql = "SELECT id, name FROM escape_room";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                escapeRooms.add(new EntityEscapeRoomDTO(
+                        rs.getInt("id"),
+                        rs.getString("name")
+                ));
+            }
+        }
+        return escapeRooms;
+    }
 
     public void update(EscapeRoom escapeRoom) throws SQLException {
         String sql = "UPDATE escape_room SET name = ? WHERE id = ?";
@@ -117,7 +176,7 @@ public class EscapeRoomDaoImpl implements EscapeRoomDao {
                 }
             }
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
@@ -151,11 +210,12 @@ public class EscapeRoomDaoImpl implements EscapeRoomDao {
     }
 
     @Override
-    public void removeRoomFromEscapeRoom(int roomId) throws SQLException {
-        String sql = "UPDATE room SET escape_room_id = NULL WHERE id = ?";
+    public void removeRoomFromEscapeRoom(int escapeRoomId, int roomId) throws SQLException {
+        String sql = "UPDATE room SET escape_room_id = NULL WHERE id = ? AND escape_room_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, roomId);
+            stmt.setInt(2, escapeRoomId);
             stmt.executeUpdate();
         }
     }

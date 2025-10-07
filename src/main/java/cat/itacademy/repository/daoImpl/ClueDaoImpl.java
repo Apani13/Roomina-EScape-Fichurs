@@ -2,6 +2,7 @@ package cat.itacademy.repository.daoImpl;
 
 import cat.itacademy.dto.availableInventory.AvailableClueDTO;
 import cat.itacademy.dto.completeInventory.EntityClueDTO;
+import cat.itacademy.dto.usedInventory.UsedClueDTO;
 import cat.itacademy.model.Clue;
 import cat.itacademy.repository.dao.ClueDao;
 import cat.itacademy.repository.DatabaseConnection;
@@ -117,7 +118,7 @@ public class ClueDaoImpl implements ClueDao {
     @Override
     public List<AvailableClueDTO> getAvailableClues() throws SQLException {
         List<AvailableClueDTO> clues = new ArrayList<>();
-        String sql = "SELECT name, theme FROM clue WHERE room_id IS NULL";
+        String sql = "SELECT id, name, price, theme FROM clue WHERE room_id IS NULL";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -125,7 +126,9 @@ public class ClueDaoImpl implements ClueDao {
 
             while (rs.next()) {
                 AvailableClueDTO clue = new AvailableClueDTO(
+                        rs.getInt("id"),
                         rs.getString("name"),
+                        rs.getDouble("price"),
                         rs.getString("theme")
                 );
                 clues.add(clue);
@@ -137,7 +140,7 @@ public class ClueDaoImpl implements ClueDao {
     @Override
     public List<EntityClueDTO> getAllCluesNameAndPrice() throws SQLException {
         List<EntityClueDTO> clues = new ArrayList<>();
-        String sql = "SELECT name, price FROM clue";
+        String sql = "SELECT id, name, theme, price FROM clue";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -145,7 +148,9 @@ public class ClueDaoImpl implements ClueDao {
 
             while(rs.next()) {
                 EntityClueDTO clue = new EntityClueDTO(
+                        rs.getInt("id"),
                         rs.getString("name"),
+                        rs.getString("theme"),
                         rs.getDouble("price")
                 );
                 clues.add(clue);
@@ -180,5 +185,31 @@ public class ClueDaoImpl implements ClueDao {
         }
     }
 
+    @Override
+    public List<UsedClueDTO> getUsedClues() throws SQLException {
+        List<UsedClueDTO> usedClues = new ArrayList<>();
+        String sql = "SELECT c.id, c.name, c.theme, c.room_id, r.name as room_name " +
+                "FROM clue c " +
+                "INNER JOIN room r ON c.room_id = r.id " +
+                "WHERE c.room_id IS NOT NULL " +
+                "ORDER BY c.id";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                UsedClueDTO usedClue = new UsedClueDTO(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("theme"),
+                        rs.getInt("room_id"),
+                        rs.getString("room_name")
+                );
+                usedClues.add(usedClue);
+            }
+        }
+        return usedClues;
+    }
 }
 

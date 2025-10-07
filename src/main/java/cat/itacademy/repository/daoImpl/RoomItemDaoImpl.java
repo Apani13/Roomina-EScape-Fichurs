@@ -36,6 +36,39 @@ public class RoomItemDaoImpl implements RoomItemDao {
     }
 
     @Override
+    public void insertOrUpdate(RoomItem roomItem) throws SQLException {
+        String checkSql = "SELECT quantity FROM room_item WHERE room_id = ? AND item_id = ?";
+        String insertSql = "INSERT INTO room_item (room_id, item_id, quantity) VALUES (?, ?, ?)";
+        String updateSql = "UPDATE room_item SET quantity = quantity + ? WHERE room_id = ? AND item_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+
+            checkStmt.setInt(1, roomItem.getRoomId());
+            checkStmt.setInt(2, roomItem.getItemId());
+
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next()) {
+                try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                    updateStmt.setInt(1, roomItem.getQuantity());
+                    updateStmt.setInt(2, roomItem.getRoomId());
+                    updateStmt.setInt(3, roomItem.getItemId());
+                    updateStmt.executeUpdate();
+                }
+            } else {
+                try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                    insertStmt.setInt(1, roomItem.getRoomId());
+                    insertStmt.setInt(2, roomItem.getItemId());
+                    insertStmt.setInt(3, roomItem.getQuantity());
+                    insertStmt.executeUpdate();
+                }
+            }
+        }
+    }
+
+
+    @Override
     public void deleteRoomItem(int roomId, int itemId) throws SQLException {
 
         try (Connection conn = DatabaseConnection.getConnection();

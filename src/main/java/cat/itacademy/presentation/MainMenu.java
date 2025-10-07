@@ -25,11 +25,11 @@ public class MainMenu {
         this.sc = new Scanner(System.in);
         this.inventoryMenu = new InventoryMenu(sc, inventoryService);
         this.notificationMenu = new NotificationMenu(sc);
+        this.salesTicketsMenu = new SalesTicketsMenu(sc);
         this.escapeRoomMenu = new EscapeRoomMenu(sc);
     }
 
     public void start() throws SQLException {
-        ConsoleUtils.clearScreen();
         System.out.println("🎮 BIENVENIDO/A AL SISTEMA DE ESCAPE ROOMS VIRTUALES 🎮");
 
         while (!exit) {
@@ -69,37 +69,6 @@ public class MainMenu {
                 System.out.println("👋 ¡Hasta pronto!");
             }
             default -> System.out.println("❌ Opción no válida");
-        }
-    }
-
-
-    public void showAvailableInventory() {
-        try {
-            AvailableInventoryDTO inventory = inventoryService.getAvailableInventory();
-            AvailableInventoryPrinter printer = new AvailableInventoryPrinter();
-            System.out.println(printer.printAvailableInventory(inventory));
-        } catch (SQLException e) {
-            System.out.println("Error al obtener el inventario: " + e.getMessage());
-        }
-    }
-
-    public void showTotalInventoryPrice() throws SQLException {
-        try{
-            CompleteInventoryDTO inventory =  inventoryService.getCompleteInventory();
-            CompleteInventoryPrinter printer = new CompleteInventoryPrinter();
-            System.out.printf(printer.printCompleteInventory(inventory));
-        } catch (SQLException e) {
-            System.out.println("Error al obtener el inventario: " + e.getMessage());
-        }
-    }
-
-    public void showTotalValueOfSales() throws SQLException {
-        try{
-            SalesPrinter printer = new SalesPrinter();
-            CompleteInventoryDTO inventory =  inventoryService.getCompleteInventory();
-            System.out.printf(printer.printSalesReport(inventory));
-        } catch (SQLException e) {
-            System.out.println("Error al obtener el inventario: " + e.getMessage());
         }
     }
 }

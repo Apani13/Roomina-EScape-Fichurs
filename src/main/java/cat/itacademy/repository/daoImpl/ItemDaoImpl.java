@@ -2,14 +2,13 @@ package cat.itacademy.repository.daoImpl;
 
 import cat.itacademy.dto.availableInventory.AvailableItemDTO;
 import cat.itacademy.dto.completeInventory.EntityItemDTO;
+import cat.itacademy.dto.usedInventory.UsedItemDTO;
+import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.model.Item;
 import cat.itacademy.repository.DatabaseConnection;
 import cat.itacademy.repository.dao.ItemDao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +17,9 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public void insert(Item item) throws SQLException {
-
         String sql = "INSERT INTO item (name, material, stock, price) VALUES(?, ?, ?, ?)";
-
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
 
             stmt.setString(1, item.getName());
             stmt.setString(2, item.getMaterial());
@@ -59,7 +56,7 @@ public class ItemDaoImpl implements ItemDao {
     @Override
     public List<AvailableItemDTO> getAvailableItems() throws SQLException {
         List<AvailableItemDTO> items = new ArrayList<>();
-        String sql = "SELECT name, stock FROM item WHERE id NOT IN (SELECT item_id FROM room_item)";
+        String sql = "SELECT id, name, price, stock FROM item WHERE stock > 0";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -67,7 +64,9 @@ public class ItemDaoImpl implements ItemDao {
 
             while (rs.next()) {
                 AvailableItemDTO item = new AvailableItemDTO(
+                        rs.getInt("id"),
                         rs.getString("name"),
+                        rs.getDouble("price"),
                         rs.getInt("stock")
                 );
                 items.add(item);
@@ -94,7 +93,7 @@ public class ItemDaoImpl implements ItemDao {
     @Override
     public List<EntityItemDTO> getAllItemsNameAndPrice() throws SQLException {
         List<EntityItemDTO> items = new ArrayList<>();
-        String sql = "SELECT name, price, stock FROM item";
+        String sql = "SELECT id, name, price, stock FROM item";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -102,6 +101,7 @@ public class ItemDaoImpl implements ItemDao {
 
             while(rs.next()) {
                 EntityItemDTO item = new EntityItemDTO(
+                        rs.getInt("id"),
                         rs.getString("name"),
                         rs.getDouble("price"),
                         rs.getInt("stock")
@@ -128,9 +128,8 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public Optional<Item> getById(int id) throws SQLException {
-
-        String sql = "SELECT id, name, material, stock, price FROM item WHERE id = ?";
+    public Optional<Item> getById(int id) throws SQLException {  // Cambia a Optional<Item>
+        String sql = "SELECT id, name, material, stock, price FROM item WHERE id = ?";  // Consulta de ITEM
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -139,15 +138,13 @@ public class ItemDaoImpl implements ItemDao {
 
             try(ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-
-                    Item item = new Item(
+                    Item item = new Item(  // Crea un Item, no EscapeRoom
                             rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("material"),
                             rs.getInt("stock"),
                             rs.getDouble("price")
                     );
-
                     return Optional.of(item);
                 }
             }
@@ -178,6 +175,18 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
+    public void assignItemToRoom(int roomId, int itemId, int quantity) throws SQLException {
+        String sql = "INSERT INTO room_item (room_id, item_id, quantity) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, roomId);
+            stmt.setInt(2, itemId);
+            stmt.setInt(3, quantity);
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
     public void updateStock(int itemId, int stock) throws SQLException {
        String sql = "UPDATE item SET stock = ? WHERE id = ?";
        try (Connection conn = DatabaseConnection.getConnection();
@@ -188,6 +197,62 @@ public class ItemDaoImpl implements ItemDao {
        }
    }
 
+    public int getStock(int itemId) throws SQLException {
+        String sql = "SELECT stock FROM item WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, itemId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("stock");
+            }
+            throw new SQLException("Item no encontrado");
+        }
+    }
+
+    @Override
+    public List<UsedItemDTO> getUsedItems() throws SQLException {
+        List<UsedItemDTO> usedItems = new ArrayList<>();
+        String sql = "SELECT i.id, i.name, i.stock, ri.room_id, r.name as room_name, ri.quantity as quantity_used " +
+                "FROM item i " +
+                "INNER JOIN room_item ri ON i.id = ri.item_id " +
+                "INNER JOIN room r ON ri.room_id = r.id " +
+                "ORDER BY i.id";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                UsedItemDTO usedItem = new UsedItemDTO(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("stock"),
+                        rs.getInt("room_id"),
+                        rs.getString("room_name"),
+                        rs.getInt("quantity_used")
+                );
+                usedItems.add(usedItem);
+            }
+        }
+        return usedItems;
+    }
+
+    @Override
+    public int getTotalUsedItemsCount() throws SQLException {
+        String sql = "SELECT COALESCE(SUM(ri.quantity), 0) as total_used " +
+                "FROM room_item ri";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt("total_used");
+            }
+            return 0;
+        }
+    }
 }
 
 

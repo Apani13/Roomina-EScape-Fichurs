@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface RoomItemDao extends Create<RoomItem> {
 
+    void insertOrUpdate(RoomItem roomItem) throws SQLException;
+
     void deleteRoomItem(int roomId, int itemId) throws SQLException;
     Integer getQuantity(int roomId, int itemId) throws SQLException;
     List<RoomItem> getAllByRoomId(int roomId) throws SQLException;

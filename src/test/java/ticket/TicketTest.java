@@ -19,6 +19,7 @@ public class TicketTest {
     private Ticket ticket;
     private int clientId;
     private int roomId;
+    private  int price;
 
     @BeforeEach
     public void setUp() throws SQLException {

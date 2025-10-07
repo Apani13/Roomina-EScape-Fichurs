@@ -31,6 +31,7 @@ public class TicketServiceTest {
         roomService = new RoomService();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.prepareStatement("DELETE FROM room_item").executeUpdate();
             conn.prepareStatement("DELETE FROM clue").executeUpdate();
             conn.prepareStatement("DELETE FROM ticket").executeUpdate();
             conn.prepareStatement("DELETE FROM client").executeUpdate();
@@ -49,7 +50,7 @@ public class TicketServiceTest {
     }
 
     @Test
-    public void whenCreatedTicketWithFalseAttributes_thenRecordNotFoundExceptionIsThrown(){
+    public void whenCreatedTicketWithFalseAttributes_thenRecordNotFoundExceptionIsThrown() throws SQLException {
         clientService.addClient(new Client("luri", "luri@gmail.com", "98765432"));
 
         assertAll(

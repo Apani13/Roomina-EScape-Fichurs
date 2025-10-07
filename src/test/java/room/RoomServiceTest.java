@@ -53,7 +53,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void whenCreatedRoomThatAlreadyExists_thenDuplicatedExceptionIsThrown()  {
+    public void whenCreatedRoomThatAlreadyExists_thenDuplicatedExceptionIsThrown() throws SQLException {
         Room room1 = new Room("Chucky", "Terror", 2);
         Room room2 = new Room("Chucky", "Terror", 2);
 
@@ -112,10 +112,9 @@ public class RoomServiceTest {
         roomService.addClueToRoom(roomid, clueid);
         assertAll(
                 ()->assertEquals(roomid, clueService.getClueById(clueid).getRoomId()),
-                ()->roomService.removeClueFromRoom(clueid),
+                ()->roomService.removeClueFromRoom(roomid, clueid),
                 ()->assertNull(clueService.getClueById(clueid).getRoomId())
         );
-
     }
 }
 

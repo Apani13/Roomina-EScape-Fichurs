@@ -38,7 +38,7 @@ public class ClueServiceTest {
     }
 
     @Test
-    void whenAddingValidClue_thenConfirmationMessageIsShown() {
+    void whenAddingValidClue_thenConfirmationMessageIsShown() throws SQLException {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
@@ -55,7 +55,7 @@ public class ClueServiceTest {
 
 
     @Test
-    void whenAddingDuplicateName_thenThrowsDuplicateClueException() {
+    void whenAddingDuplicateName_thenThrowsDuplicateClueException() throws SQLException {
         clueService.addClue(newClue("Retrato fantasma",
                 "susto",
                 "chan chan chan..."

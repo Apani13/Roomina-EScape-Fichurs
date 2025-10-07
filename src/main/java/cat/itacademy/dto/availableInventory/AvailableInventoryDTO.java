@@ -1,21 +1,28 @@
 package cat.itacademy.dto.availableInventory;
 
+import cat.itacademy.model.EscapeRoom;
+
 import java.util.List;
 
 public class AvailableInventoryDTO {
     private List<AvailableRoomDTO> availableRooms;
     private List<AvailableClueDTO> availableClues;
     private List<AvailableItemDTO> availableItems;
+    private List<AvailableEscapeRoomDTO> availableEscapeRooms;
     private int totalItemUnits;
 
-    public AvailableInventoryDTO(List<AvailableRoomDTO> availableRooms, List<AvailableClueDTO> availableClues,
+    public AvailableInventoryDTO(List<AvailableEscapeRoomDTO> availableEscapeRooms, List<AvailableRoomDTO> availableRooms, List<AvailableClueDTO> availableClues,
                                  List<AvailableItemDTO> availableItems, int totalItemUnits) {
+        this.availableEscapeRooms = availableEscapeRooms;
         this.availableRooms = availableRooms;
         this.availableClues = availableClues;
         this.availableItems = availableItems;
         this.totalItemUnits = totalItemUnits;
     }
 
+    public List<AvailableEscapeRoomDTO> getAvailableEscapeRooms() {
+        return availableEscapeRooms;
+    }
     public List<AvailableRoomDTO> getAvailableRooms() { return availableRooms; }
     public List<AvailableClueDTO> getAvailableClues() { return availableClues; }
     public List<AvailableItemDTO> getAvailableItems() { return availableItems; }
@@ -30,29 +37,5 @@ public class AvailableInventoryDTO {
         } else {
             return false;
         }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("=== INVENTARIO ACTUALIZADO ===\n");
-        sb.append("Cantidad disponible de cada elemento:\n\n");
-
-        sb.append("--- SALAS DISPONIBLES (").append(availableRooms.size()).append(") ---\n");
-        for (AvailableRoomDTO room : availableRooms) {
-            sb.append("• ").append(room.getName()).append(" | Temática: ").append(room.getTheme()).append("\n");
-        }
-
-        sb.append("\n--- PISTES DISPONIBLES (").append(availableClues.size()).append(") ---\n");
-        for (AvailableClueDTO clue : availableClues) {
-            sb.append("• ").append(clue.getName()).append(" | Temàtica: ").append(clue.getTheme()).append("\n");
-        }
-
-        sb.append("\n--- OBJECTES DISPONIBLES (").append(getTotalItemsUnits()).append(" unitats) ---\n");
-        for (AvailableItemDTO item : availableItems) {
-            sb.append("• ").append(item.getName())
-                    .append(" | Quantitat: ").append(item.getStock()).append("\n");
-        }
-        return sb.toString();
     }
 }
