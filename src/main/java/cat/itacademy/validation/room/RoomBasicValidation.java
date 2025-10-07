@@ -18,6 +18,7 @@ public class RoomBasicValidation implements ValidationStrategy<Room> {
         if (room.getTheme() == null || room.getTheme().isEmpty()) {
             throw new InvalidAttributeException(ROOM_THEME_NULL_EMPTY);
         }
+
         if (room.getLevel() <= 0 ) {
             throw new InvalidAttributeException(ROOM_LEVEL_INVALID);
         }

@@ -36,7 +36,7 @@ public class ClientServiceTest {
     }
 
     @Test
-    void whenCreatingClientThatAcceptsNotifications_thenConfirmationMessageIsShown() {
+    void whenCreatingClientThatAcceptsNotifications_thenConfirmationMessageIsShown() throws SQLException {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
@@ -52,7 +52,7 @@ public class ClientServiceTest {
     }
 
     @Test
-    void whenCreatingClientThatNotAcceptsNotifications_thenConfirmationMessageIsShown() {
+    void whenCreatingClientThatNotAcceptsNotifications_thenConfirmationMessageIsShown() throws SQLException {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
@@ -77,7 +77,7 @@ public class ClientServiceTest {
     }
 
     @Test
-    void whenCreatingDuplicateClient_thenDuplicateExceptionIsThrown() {
+    void whenCreatingDuplicateClient_thenDuplicateExceptionIsThrown() throws SQLException {
         Client client = new Client("luri", "luri@gmail.com", "698765432");
 
         clientService.addClient(client);

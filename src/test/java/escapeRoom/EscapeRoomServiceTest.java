@@ -39,7 +39,7 @@ public class EscapeRoomServiceTest {
     }
 
     @Test
-    void whenCreatingEscapeRoomWithValidData_thenConfirmationMessageIsShown() {
+    void whenCreatingEscapeRoomWithValidData_thenConfirmationMessageIsShown() throws SQLException {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
@@ -59,7 +59,7 @@ public class EscapeRoomServiceTest {
     }
 
     @Test
-    void whenCreatingDuplicateEscapeRoom_thenDuplicateEscapeRoomExceptionIsThrown() {
+    void whenCreatingDuplicateEscapeRoom_thenDuplicateEscapeRoomExceptionIsThrown() throws SQLException {
         EscapeRoom escapeRoom = new EscapeRoom("EscapeRoom1");
         escapeRoomService.addEscapeRoom(escapeRoom);
         assertThrows(DuplicateException.class, ()-> escapeRoomService.addEscapeRoom(escapeRoom));
@@ -99,7 +99,7 @@ public class EscapeRoomServiceTest {
         assertTrue(roomBeforeOpt != null);
         assertEquals(Integer.valueOf(escapeRoomId), roomBeforeOpt.getEscapeRoomId());
 
-        escapeRoomService.removeRoomFromEscapeRoom(roomId);
+        escapeRoomService.removeRoomFromEscapeRoom(escapeRoomId, roomId);
 
         Room roomAfterOpt = roomService.getRoomById(roomId);
 

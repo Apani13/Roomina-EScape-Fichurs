@@ -3,8 +3,8 @@ package cat.itacademy.dto.availableInventory;
 public class AvailableRoomDTO extends AvailableEntityDTO {
     private String theme;
 
-    public AvailableRoomDTO(String name, String theme) {
-        super(name);
+    public AvailableRoomDTO(int id, String name, double price, String theme) {
+        super(id, name, price);
         this.theme = theme;
     }
 

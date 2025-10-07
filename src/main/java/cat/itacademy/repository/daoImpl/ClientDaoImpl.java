@@ -1,6 +1,7 @@
 package cat.itacademy.repository.daoImpl;
 
 import cat.itacademy.model.Client;
+import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.repository.dao.ClientDao;
 import cat.itacademy.repository.DatabaseConnection;
 
@@ -118,7 +119,7 @@ public class ClientDaoImpl implements ClientDao {
 
     @Override
     public Optional<Client> getById(int id) throws SQLException {
-        String sql = "SELECT * FROM client WHERE id = ?";
+        String sql = "SELECT id, user_name, email, phone, accepts_notifications FROM client WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

@@ -6,8 +6,8 @@ public class EntityTicketDTO extends EntityDTO {
 
     private LocalDateTime date;
 
-    public EntityTicketDTO(LocalDateTime date, double price) {
-        super(price);
+    public EntityTicketDTO(int id, LocalDateTime date, double price) {
+        super(id,price);
         this.date = date;
     }
 

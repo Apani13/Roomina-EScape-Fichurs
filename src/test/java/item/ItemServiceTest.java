@@ -7,6 +7,8 @@ import cat.itacademy.service.ItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -36,7 +38,7 @@ public class ItemServiceTest {
 
 
     @Test
-    public void whenCreateItemAlreadyExists_thenThrownDuplicatedException() {
+    public void whenCreateItemAlreadyExists_thenThrownDuplicatedException() throws SQLException {
         Item item = new Item("Lámpara", "Plástico", 10);
         Item item1 = new Item("Lámpara", "Plástico", 10);
 

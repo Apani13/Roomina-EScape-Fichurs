@@ -32,21 +32,10 @@ public class ItemService {
         ));
     }
 
-    public void addItem(Item item) throws InvalidAttributeException, DuplicateException, NullObjectException {
-
-        try {
+    public void addItem(Item item) throws InvalidAttributeException, DuplicateException, NullObjectException, SQLException {
             itemValidator.validate(item);
-
             itemDAO.insert(item);
-         
             System.out.println(ItemSuccessMessages.ITEM_SUCCESS);
-
-        } catch (DuplicateException | InvalidAttributeException e) {
-            throw e;
-        } catch (Exception e) {
-            Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
-            logger.severe("Error inesperado: " + e.getMessage());
-        }
     }
 
     public List<AvailableItemDTO> getAvailableItems() throws SQLException {

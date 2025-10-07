@@ -61,7 +61,7 @@ public class TicketDaoImpl implements TicketDao {
     @Override
     public List<EntityTicketDTO> getAllTicketsNameAndPrice() throws SQLException {
         List<EntityTicketDTO> tickets = new ArrayList<>();
-        String sql = "SELECT date_creation, total_price FROM ticket";
+        String sql = "SELECT id, date_creation, total_price FROM ticket";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -69,6 +69,7 @@ public class TicketDaoImpl implements TicketDao {
 
             while(rs.next()) {
                 EntityTicketDTO ticket = new EntityTicketDTO(
+                        rs.getInt("id"),
                         rs.getTimestamp("date_creation").toLocalDateTime(),
                         rs.getDouble("total_price")
                 );

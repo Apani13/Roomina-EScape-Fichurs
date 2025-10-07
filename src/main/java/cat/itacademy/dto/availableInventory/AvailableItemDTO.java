@@ -3,8 +3,8 @@ package cat.itacademy.dto.availableInventory;
 public class AvailableItemDTO extends AvailableEntityDTO {
     private int stock;
 
-    public AvailableItemDTO(String name, int stock) {
-        super(name);
+    public AvailableItemDTO(int id, String name, double price, int stock) {
+        super(id, name, price);
         this.stock = stock;
     }
 

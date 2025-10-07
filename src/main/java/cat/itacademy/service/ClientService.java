@@ -31,25 +31,15 @@ public class ClientService {
         this.notificationService = new NotificationService();
     }
 
-    public void addClient(Client client) {
-        try {
+    public void addClient(Client client) throws SQLException {
             clientValidator.validate(client);
-
             clientDAO.insert(client);
-
             if (client.isAcceptsNotifications()) {
                 notificationService.addObserver(client);
             }
-
             Client lastClient = getLastClient();
-
             System.out.println(String.format(ClienteSuccessMessages.CLIENT_CREATED, lastClient.getUserName(), lastClient.getEmail(), lastClient.getPhone(), lastClient.isAcceptsNotifications()));
-        } catch (DuplicateException | InvalidAttributeException e) {
-            throw e;
-        } catch (Exception e) {
-            Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
-            logger.severe("Error inesperado: " + e.getMessage());
-        }
+
     }
 
     public Client getLastClient() throws SQLException {

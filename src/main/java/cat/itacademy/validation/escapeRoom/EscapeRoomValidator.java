@@ -6,6 +6,7 @@ import cat.itacademy.validation.ValidationStrategy;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class EscapeRoomValidator {
     private List<ValidationStrategy<EscapeRoom>> strategies;

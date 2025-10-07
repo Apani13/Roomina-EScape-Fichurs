@@ -1,6 +1,6 @@
 package cat.itacademy.repository.crud.read;
 
-import cat.itacademy.model.Client;
+import cat.itacademy.model.EscapeRoom;
 import cat.itacademy.repository.crud.Create;
 
 import java.sql.SQLException;

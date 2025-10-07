@@ -12,12 +12,9 @@ import cat.itacademy.validation.clue.ClueValidator;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import static cat.itacademy.message.error.ClueErrorMessages.*;
-import static cat.itacademy.message.ui.ClueUIMessages.*;
 import static cat.itacademy.message.success.ClueSuccessMessages.*;
-import static cat.itacademy.message.error.DBErrorMessages.ERROR_DB_UNEXPECTED_PROBLEM;
 
 public class ClueService {
 
@@ -33,43 +30,17 @@ public class ClueService {
         );
     }
 
-    public void addClue(Clue clue) throws DuplicateException, InvalidAttributeException {
-
-        try {
-            clueValidator.validate(clue);
-
-            clueDAO.insert(clue);
-
-            System.out.println(String.format(CLUE_CREATED, clue.getName()));
-
-        } catch (DuplicateException | InvalidAttributeException e) {
-            throw e;
-        } catch (Exception e) {
-            Logger logger = Logger.getLogger(EscapeRoomService.class.getName());
-            logger.severe(String.format(ERROR_DB_UNEXPECTED_PROBLEM, e.getMessage()));
-        }
+    public void addClue(Clue clue) throws DuplicateException, InvalidAttributeException, SQLException {
+        clueValidator.validate(clue);
+        clueDAO.insert(clue);
+        System.out.println(String.format(CLUE_CREATED, clue.getName()));
     }
 
     public List<Clue> getClues() throws SQLException {
         if(clueDAO.getAllNames().isEmpty()){
             throw new EmptyListException(CLUE_LIST_EMPTY);
         }
-
         return clueDAO.getAllNames();
-    }
-
-    public void showClue() throws SQLException {
-        if(clueDAO.getAllNames().isEmpty()){
-            throw new EmptyListException(CLUE_LIST_EMPTY);
-        }
-
-        System.out.println(CLUEUI_LIST_HEADER);
-
-        for(Clue clue: clueDAO.getAllNames()){
-            System.out.println(String.format(CLUEUI_LIST_BODY, clue.getId(), clue.getName()));
-        }
-
-        System.out.println(CLUEUI_LIST_FOOTER);
     }
 
     public Clue getLastClue() throws SQLException {
@@ -87,8 +58,6 @@ public class ClueService {
         }
         return clueDAO.getAvailableClues();
     }
-
-
 
     public Clue getClueById(int id) throws SQLException {
         Optional<Clue> clue = clueDAO.getById(id);

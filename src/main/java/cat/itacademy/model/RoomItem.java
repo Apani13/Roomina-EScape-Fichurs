@@ -15,11 +15,9 @@ public class RoomItem {
     public Integer getRoomId() {
         return roomId;
     }
-
     public Integer getItemId() {
         return itemId;
     }
-
     public int getQuantity() {
         return quantity;
     }
